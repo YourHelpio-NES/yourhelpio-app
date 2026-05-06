@@ -7,29 +7,7 @@
 ## Solution
 <!--- Describe how these changes solve the problem(s) -->
 
-## Тип змін
-- [ ] Нова фіча
-- [ ] Баг-фікс
-- [ ] Рефакторинг
-- [ ] Документація
-
-## Як протестувати
-<!-- Кроки для перевірки -->
-
-## Чеклист
-- [ ] Код відповідає стандартам проєкту
-- [ ] Я протестував(ла) зміни локально
-- [ ] Немає console.log у коді
-## 🔗 Links
-<!-- Related tickets, issues, designs, screenshots -->
-
-## 🧩 Problem
-<!-- What problem does this PR solve? -->
-
-## 🚀 Solution
-<!-- What was changed and how it solves the problem -->
-
-## 🧪 Type of change
+## Type of change
 - [ ] New feature
 - [ ] Bug fix
 - [ ] Refactoring
