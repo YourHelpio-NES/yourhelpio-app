@@ -6,12 +6,10 @@ import { COLORS } from '../assets/styles/colors';
 
 export default function RadioButton({
   value,
-  label,
   selected,
   setSelected,
 }: {
   value: string;
-  label: string;
   selected: RolesEnum | null;
   setSelected: Dispatch<SetStateAction<RolesEnum | null>>;
 }) {
@@ -31,7 +29,7 @@ export default function RadioButton({
       <Radio $selected={isSelected}>
         <RadioDot $visible={isSelected} />
       </Radio>
-      <TextBody $color={COLORS.text}>{label}</TextBody>
+      <TextBody $color={COLORS.text}>{value}</TextBody>
     </div>
   );
 }
