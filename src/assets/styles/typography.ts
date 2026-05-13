@@ -8,6 +8,7 @@ export const fontType = css`
 type BaseTextProps = {
   $color?: string;
   $underline?: boolean;
+  $lineThrough?: boolean;
   $italic?: boolean;
   $align?: 'left' | 'center' | 'right';
 };
@@ -20,12 +21,18 @@ export const BaseText = styled.p<BaseTextProps>`
   font-style: ${({ $italic }) => ($italic ? 'italic' : 'normal')};
   text-align: ${({ $align }) => $align || 'left'};
 
-  ${({ $underline, $color }) =>
+  ${({ $underline, $lineThrough, $color }) => [
     $underline &&
-    css`
-      text-decoration: underline 1px ${$color};
-      text-underline-offset: 3px;
-    `}
+      css`
+        text-decoration: underline 1px ${$color};
+        /* text-decoration: line-through; */
+        text-underline-offset: 3px;
+      `,
+    $lineThrough &&
+      css`
+        text-decoration: line-through 1px ${$color};
+      `,
+  ]}
 `;
 
 export const MainTitle = styled.h1`

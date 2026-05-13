@@ -4,16 +4,20 @@ import { COLORS } from '../../assets/styles/colors';
 import { TitleSection } from '../../components/title-section';
 import { SmallText, TextBody } from '../../assets/styles/typography';
 import Input from '../../components/input';
-import { useState } from 'react';
 import { InputTypeEnum } from '../../assets/shared/constants/input';
 import { Button } from '../../components/button';
 import { BasicBlock } from '../../components/blocks';
 import googleIcon from '../../assets/images/icons/google-icon.svg';
 import { useNavigate } from 'react-router-dom';
+import { useSignInForm } from '../../assets/shared/hooks/validators/useSignInForm';
+import { Controller } from 'react-hook-form';
 
 export default function SignInPage() {
-  const [email, setEmail] = useState<string>('');
-  const [password, setPassword] = useState<string>('');
+  const { form, onSubmit } = useSignInForm();
+  const {
+    control,
+    formState: { errors },
+  } = form;
 
   const navigate = useNavigate();
 
@@ -25,29 +29,56 @@ export default function SignInPage() {
           subtitle="Продовжуйте навчання за персоналізованим планом, сформованим за допомогою штучного інтелекту"
         />
         <BasicBlock className="align-items-end">
-          <Input
-            type={InputTypeEnum.EMAIL}
-            value={email}
-            setValue={setEmail}
-            label="Електронна пошта"
-            placeholder="Example@university.edu.ua"
-            // errorText="text of error"
+          <Controller
+            name="email"
+            control={control}
+            render={({ field }) => (
+              <Input
+                type={InputTypeEnum.EMAIL}
+                value={field.value}
+                setValue={field.onChange}
+                label="Електронна пошта"
+                placeholder="Example@university.edu.ua"
+                errorText={errors.email?.message}
+                onBlur={field.onBlur}
+              />
+            )}
           />
-          <Input
-            type={InputTypeEnum.PASSWORD}
-            value={password}
-            setValue={setPassword}
-            label="Пароль"
-            placeholder="Введіть пароль"
+          <Controller
+            name="password"
+            control={control}
+            render={({ field }) => (
+              <Input
+                type={InputTypeEnum.PASSWORD}
+                value={field.value}
+                setValue={field.onChange}
+                label="Пароль"
+                placeholder="Введіть пароль"
+                errorText={errors.password?.message}
+                onBlur={field.onBlur}
+              />
+            )}
           />
-          <Button type="text" width="auto" $bgColor={'transparent'} $txtColor={COLORS.accent}>
+          <Button
+            type="text"
+            width="auto"
+            $bgColor={'transparent'}
+            $txtColor={COLORS.accent}
+            onClick={() => navigate('/forgot-password')}
+          >
             <TextBody $label $color={COLORS.accent}>
               Забули пароль?
             </TextBody>
           </Button>
         </BasicBlock>
         <BasicBlock width="100%" className="align-items-center">
-          <Button type="large" width="65%" $brColor={COLORS.accent} $brWidth={'2'}>
+          <Button
+            type="large"
+            width="65%"
+            $brColor={COLORS.accent}
+            $brWidth={'2'}
+            onClick={onSubmit}
+          >
             <TextBody $label>Увійти</TextBody>
           </Button>
           <Button

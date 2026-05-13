@@ -1,35 +1,38 @@
 import type { Dispatch, SetStateAction } from 'react';
-import type { RolesEnum } from '../assets/shared/constants/roles';
 import styled from 'styled-components';
 import { TextBody } from '../assets/styles/typography';
 import { COLORS } from '../assets/styles/colors';
+import { DoneIcon } from '../assets/images/icons/done-icon';
 
-export default function RadioButton({
+export default function RadioButton<T extends string | boolean>({
   value,
   selected,
   setSelected,
+  type = 'value',
 }: {
-  value: string;
-  selected: RolesEnum | null;
-  setSelected: Dispatch<SetStateAction<RolesEnum | null>>;
+  value: T;
+  selected?: T | null;
+  setSelected?: Dispatch<SetStateAction<T | null>>;
+  label?: string;
+  type?: 'state' | 'value';
 }) {
-  const isSelected: boolean = selected === value;
+  const isSelected = selected === value;
 
   return (
     <div
       className="d-flex align-items-center gap-2 cursor-pointer"
-      key={value}
-      //   className={`role-option ${selected === value ? 'selected' : ''}`}
-      onClick={() => setSelected(value as RolesEnum)}
+      onClick={() => {
+        if (type === 'value') setSelected!(value!);
+      }}
       role="radio"
-      aria-checked={selected === value}
+      aria-checked={type === 'state' ? (value as boolean) : isSelected}
       tabIndex={0}
-      onKeyDown={(e) => e.key === 'Enter' && setSelected(value as RolesEnum)}
+      onKeyDown={(e) => e.key === 'Enter' && setSelected!(value!)}
     >
-      <Radio $selected={isSelected}>
-        <RadioDot $visible={isSelected} />
+      <Radio className={`${type === 'state' ? 'p-0' : ''}`} $selected={isSelected}>
+        {type === 'state' && value ? <DoneIcon /> : <div></div>}
       </Radio>
-      <TextBody $color={COLORS.text}>{value}</TextBody>
+      {value && <TextBody $color={COLORS.text}>{value}</TextBody>}
     </div>
   );
 }
@@ -44,17 +47,30 @@ const Radio = styled.div<{ $selected: boolean }>`
   justify-content: center;
   transition: border-color 0.15s;
   padding: 4px;
+
+  div {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background: ${COLORS.accent};
+    opacity: ${({ $selected }) => ($selected ? 1 : 0)};
+    transform: scale(${({ $selected }) => ($selected ? 1 : 0)});
+
+    transition:
+      transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1),
+      opacity 0.15s ease-out;
+  }
 `;
 
-const RadioDot = styled.div<{ $visible: boolean }>`
-  width: 100%;
-  height: 100%;
-  border-radius: 50%;
-  background: ${COLORS.accent};
-  opacity: ${({ $visible }) => ($visible ? 1 : 0)};
-  transform: scale(${({ $visible }) => ($visible ? 1 : 0)});
+// const RadioDot = styled.div<{ $visible: boolean }>`
+//   width: 100%;
+//   height: 100%;
+//   border-radius: 50%;
+//   background: ${COLORS.accent};
+//   opacity: ${({ $visible }) => ($visible ? 1 : 0)};
+//   transform: scale(${({ $visible }) => ($visible ? 1 : 0)});
 
-  transition:
-    transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1),
-    opacity 0.15s ease-out;
-`;
+//   transition:
+//     transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1),
+//     opacity 0.15s ease-out;
+// `;

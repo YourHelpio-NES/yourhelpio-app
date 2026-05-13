@@ -9,7 +9,7 @@ const pop = keyframes`
     opacity: 0;
   }
 
-  70% {
+  50% {
     transform: scale(1.2);
     opacity: 1;
   }
@@ -32,22 +32,33 @@ const HiddenCheckbox = styled.input.attrs({ type: 'checkbox' })`
 const CustomCheckbox = styled.div<{ checked: boolean }>`
   width: 24px;
   height: 24px;
-  border: 2px solid #7c3aed;
+
+  box-sizing: border-box;
+
+  border: 2px solid ${COLORS.secondary};
   border-radius: 6px;
-  object-fit: contain;
-  background: transparent;
-  cursor: pointer;
 
   display: flex;
   align-items: center;
   justify-content: center;
 
-  transition: all 0.25s ease;
+  flex-shrink: 0;
+
+  background: transparent;
+  cursor: pointer;
+
+  transition:
+    border-color 0.2s ease,
+    background-color 0.2s ease,
+    transform 0.15s ease;
+
+  &:active {
+    transform: scale(0.95);
+  }
 
   svg {
-    width: 100%;
-    height: 100%;
-    fill: none;
+    width: 18px;
+    height: 18px;
 
     animation: ${({ checked }) => (checked ? pop : 'none')} 0.25s ease;
   }
