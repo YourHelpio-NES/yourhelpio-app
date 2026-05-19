@@ -8,6 +8,7 @@ export const COLORS = {
   placeholder: 'rgba(1, 22, 39, 0.5)',
   lighterBg: '#FEFEFE',
   secondaryDark: '#656C69',
+  boxShadow: 'rgba(12, 12, 13, 0.1)',
   status: {
     success: '#2AA947',
     warning: '#F3B051',

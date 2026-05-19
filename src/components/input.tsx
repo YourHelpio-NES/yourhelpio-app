@@ -12,9 +12,18 @@ interface InputType {
   label?: string;
   errorText?: string;
   type: InputTypeEnum;
+  onBlur?: () => void;
 }
 
-export default function Input({ value, setValue, placeholder, label, errorText, type }: InputType) {
+export default function Input({
+  value,
+  setValue,
+  placeholder,
+  label,
+  errorText,
+  type,
+  onBlur,
+}: InputType) {
   const [showPassword, setShowPassword] = useState<boolean>(false);
 
   return (
@@ -36,6 +45,7 @@ export default function Input({ value, setValue, placeholder, label, errorText, 
           onChange={(e) => {
             setValue(e.target.value);
           }}
+          onBlur={onBlur}
           autoComplete={type.includes(InputTypeEnum.PASSWORD) ? 'current-password' : type}
         />
         {type.includes(InputTypeEnum.PASSWORD) && (

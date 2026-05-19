@@ -1,5 +1,16 @@
 @use './assets/fonts/font.scss';
 
 :root {
-    --main-font: 'Inter', sans-serif;
+  --main-font: 'Inter', sans-serif;
+}
+
+.go3958317564 {
+  justify-content: flex-end !important;
+}
+
+h1,
+h2,
+h3,
+p {
+  margin: 0;
 }
