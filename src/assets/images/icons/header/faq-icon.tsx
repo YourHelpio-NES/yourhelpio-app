@@ -17,7 +17,7 @@ export const FaqIcon = ({ color = COLORS.text, size = 22 }: ImageType) => {
         strokeLinecap="round"
         strokeLinejoin="round"
       />
-      <path
+      {/* <path
         d="M11.1753 13.9795H11.1836"
         stroke={color}
         strokeWidth="1.7"
@@ -30,7 +30,7 @@ export const FaqIcon = ({ color = COLORS.text, size = 22 }: ImageType) => {
         strokeWidth="1.3"
         strokeLinecap="round"
         strokeLinejoin="round"
-      />
+      /> */}
     </svg>
   );
 };

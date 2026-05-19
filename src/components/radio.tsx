@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { TextBody } from '../assets/styles/typography';
 import { COLORS } from '../assets/styles/colors';
 import { DoneIcon } from '../assets/images/icons/done-icon';
+import { BREAKPOINTS, media } from '../assets/styles/breakpoints';
 
 export default function RadioButton<T extends string | boolean>({
   value,
@@ -59,6 +60,11 @@ const Radio = styled.div<{ $selected: boolean }>`
     transition:
       transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1),
       opacity 0.15s ease-out;
+  }
+
+  ${media(BREAKPOINTS.xs)} {
+    width: 20px;
+    height: 20px;
   }
 `;
 

@@ -1,5 +1,6 @@
 import styled, { css } from 'styled-components';
 import { COLORS } from './colors';
+import { BREAKPOINTS, media } from './breakpoints';
 
 export const fontType = css`
   font-family: var(--main-font);
@@ -47,6 +48,14 @@ export const SubTitle = styled.h2`
   font-size: 1.75rem;
   font-weight: 700;
   line-height: 1.3;
+
+  ${media(BREAKPOINTS.md)} {
+    font-size: 1.65rem;
+  }
+
+  ${media(BREAKPOINTS.xs)} {
+    font-size: 1.55rem;
+  }
 `;
 
 export const CardTitle = styled.h3`
@@ -54,6 +63,13 @@ export const CardTitle = styled.h3`
   font-size: 1.375rem;
   font-weight: 600;
   line-height: 1.4;
+
+  ${media(BREAKPOINTS.md)} {
+    font-size: 1.275rem;
+  }
+  ${media(BREAKPOINTS.xs)} {
+    font-size: 1.175rem;
+  }
 `;
 
 /**
@@ -71,10 +87,18 @@ export const TextBody = styled(BaseText)<{ $medium?: boolean; $label?: boolean }
   font-size: 1rem;
   font-weight: ${({ $medium, $label }) => ($label ? 700 : $medium ? 600 : 400)};
   line-height: 1.5;
+
+  ${media(BREAKPOINTS.xs)} {
+    font-size: 0.9rem;
+  }
 `;
 
 export const SmallText = styled(BaseText)<{ $medium?: boolean }>`
   font-size: 0.875rem;
   font-weight: ${({ $medium }) => ($medium ? 600 : 400)};
   line-height: 1.5;
+
+  ${media(BREAKPOINTS.xs)} {
+    font-size: 0.675rem;
+  }
 `;

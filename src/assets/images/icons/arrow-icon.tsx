@@ -1,7 +1,20 @@
 import type { ImageType } from '../../shared/constants/image';
 import { COLORS } from '../../styles/colors';
 
-export const ArrowLeftIcon = ({ color = COLORS.text, size = 24 }: ImageType) => {
+export const ROTATION_ARROW_ICON = {
+  left: 0,
+  right: 180,
+  up: 90,
+  down: -90,
+} as const;
+
+export type DirectionArrowIcon = keyof typeof ROTATION_ARROW_ICON;
+
+export const ArrowIcon = ({
+  color = COLORS.text,
+  size = 24,
+  direction = 'left',
+}: ImageType & { direction?: DirectionArrowIcon }) => {
   return (
     <svg
       width={size}
@@ -9,6 +22,10 @@ export const ArrowLeftIcon = ({ color = COLORS.text, size = 24 }: ImageType) => 
       viewBox="0 0 24 24"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
+      style={{
+        transform: `rotate(${ROTATION_ARROW_ICON[direction]}deg)`,
+        transition: 'transform 0.2s ease',
+      }}
     >
       <path
         fillRule="evenodd"

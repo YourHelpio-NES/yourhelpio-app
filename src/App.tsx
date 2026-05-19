@@ -3,6 +3,7 @@ import SignInPage from './pages/auth/sign-in';
 import SignUpPage from './pages/auth/sign-up';
 import ForgotPasswordPage from './pages/auth/forgot-password';
 import DashboardPage from './pages/student/dashboard';
+import StudyPlanMainPage from './pages/student/study-plan';
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
       <Route path="student">
         <Route index element={<Navigate to="dashboard" replace />} />
         <Route path="dashboard" element={<DashboardPage />} />
+        <Route path="study-plan" element={<StudyPlanMainPage />} />
       </Route>
 
       <Route path="" element={<Navigate to="/sign-in" />} />

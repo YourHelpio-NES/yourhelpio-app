@@ -9,7 +9,7 @@ import { InputTypeEnum } from '../../assets/shared/constants/input';
 import { Button } from '../../components/button';
 import { BasicBlock } from '../../components/blocks';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeftIcon } from '../../assets/images/icons/arrow-left-icon';
+import { ArrowIcon } from '../../assets/images/icons/arrow-icon';
 
 export default function ForgotPasswordPage() {
   const [email, setEmail] = useState<string>('');
@@ -49,7 +49,7 @@ export default function ForgotPasswordPage() {
             $txtColor={COLORS.text}
             onClick={() => navigate(-1)}
           >
-            <ArrowLeftIcon />
+            <ArrowIcon />
             <TextBody $label>Назад</TextBody>
           </Button>
           <Button type="text" width="auto" $bgColor={'transparent'} $txtColor={COLORS.accent}>

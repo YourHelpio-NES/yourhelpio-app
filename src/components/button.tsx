@@ -1,5 +1,7 @@
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 import { COLORS } from '../assets/styles/colors';
+import { basicShadow, hoverBoxShadow } from './blocks';
+import { BREAKPOINTS, media } from '../assets/styles/breakpoints';
 
 export const Button = styled.button<{
   $bgColor?: string;
@@ -9,6 +11,7 @@ export const Button = styled.button<{
   $brWidth?: string;
   width?: string;
   type?: 'large' | 'small' | 'text';
+  $iconSize?: number;
   disabled?: boolean;
 }>`
   width: ${({ width }) => width ?? 'auto'};
@@ -56,10 +59,44 @@ export const Button = styled.button<{
 
   img,
   svg {
-    width: 24px;
-    height: 24px;
+    width: ${({ $iconSize }) => `${$iconSize ?? 24}px`};
+    height: ${({ $iconSize }) => `${$iconSize ?? 24}px`};
     opacity: ${({ disabled }) => (disabled ? 0.5 : 1)};
+  }
+
+  ${media(BREAKPOINTS.xs)} {
+    padding: ${({ type }) => (type === 'text' ? '0' : type === 'small' ? '4px 16px' : '8px 16px')};
   }
 `;
 
-export const boxShadow = css``;
+export const OpenCloseBtn = styled.button<{ $isCollapsed?: boolean }>`
+  border: none;
+  padding: 2px;
+  outline: none;
+  background-color: ${COLORS.background};
+  border-radius: 50%;
+  position: absolute;
+  right: -12px;
+  top: 68px;
+  border-right: 1px solid ${COLORS.boxShadow};
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  ${basicShadow};
+  z-index: 999;
+
+  transition: transform 280ms cubic-bezier(0.22, 1, 0.36, 1);
+
+  &:hover {
+    transform: translateY(-1px);
+    ${hoverBoxShadow};
+  }
+
+  &:active {
+    transform: translateY(-1px) scale(0.99);
+  }
+
+  svg {
+    flex-shrink: 1;
+  }
+`;

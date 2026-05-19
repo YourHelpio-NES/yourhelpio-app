@@ -1,80 +1,309 @@
 import AppLayout from '../../components/widgets/app/layout';
-import RadioButton from '../../components/radio';
 import { SimpleTable } from '../../components/table';
-import type { ColumnDef } from '@tanstack/react-table';
-import { CardTitle, TextBody } from '../../assets/styles/typography';
-import { BasicBlock } from '../../components/blocks';
+import { CardTitle, SmallText, TextBody } from '../../assets/styles/typography';
+import { actionEffect, BasicBlock, basicShadow, ButtonsRow } from '../../components/blocks';
 import { COLORS } from '../../assets/styles/colors';
-
-interface TaskRow {
-  id: string;
-  name: string;
-  day: string;
-  type: string;
-  questions: number;
-  completed: boolean;
-}
-
-const columns: ColumnDef<TaskRow>[] = [
-  {
-    accessorKey: 'stage',
-    cell: ({ row }) => <RadioButton value={row.original.completed} type="state" />,
-  },
-  {
-    accessorKey: 'name',
-    cell: ({ row }) => <TextBody $medium>{row.original.name}</TextBody>,
-  },
-  { accessorKey: 'day', cell: ({ row }) => <TextBody>{row.original.day}</TextBody> },
-  { accessorKey: 'type', cell: ({ row }) => <TextBody>{row.original.type}</TextBody> },
-  {
-    accessorKey: 'questions',
-    cell: ({ row }) => <TextBody>{row.original.questions} запитань</TextBody>,
-  },
-];
-
-const tasks: TaskRow[] = [
-  {
-    id: '1',
-    name: 'Алгоритми проєктування',
-    day: 'День 0',
-    type: 'Повторення',
-    questions: 8,
-    completed: true,
-  },
-  {
-    id: '2',
-    name: 'Математичний аналіз',
-    day: 'День 7',
-    type: 'Мікротест',
-    questions: 10,
-    completed: false,
-  },
-  {
-    id: '3',
-    name: 'Бази даних',
-    day: 'День 1',
-    type: 'Короткий контроль',
-    questions: 5,
-    completed: false,
-  },
-];
+import { useNavigate } from 'react-router-dom';
+import styled from 'styled-components';
+import { Button } from '../../components/button';
+import { coursesProgressData, extremelyRepeating, tasks } from '../../assets/shared/data/courses';
+import { BlocksElementIcon } from '../../assets/images/icons/blocks-element-icon';
+import { BREAKPOINTS, media } from '../../assets/styles/breakpoints';
+import { DifficultyEnum, difficultyTypeData } from '../../assets/shared/constants/course';
+import { StatusItem, StatusTypeItem } from '../../components/status-items';
+import { getColorByPercentage } from '../../assets/shared/utils/color';
+import { FaqIcon } from '../../assets/images/icons/header/faq-icon';
+import { CardCarousel } from '../../components/card-carousel';
+import taskTableCols from '../../assets/shared/utils/table/task-table-column';
 
 export default function DashboardPage() {
-  //   const navigate = useNavigate();
+  const navigate = useNavigate();
+
+  const sortedExtremelyRepeating = [...extremelyRepeating].sort(
+    (a, b) =>
+      difficultyTypeData[a.stateRepeating].order - difficultyTypeData[b.stateRepeating].order
+  );
 
   return (
-    <AppLayout>
-      <BasicBlock $bgColor={COLORS.lighterBg} width={'60%'}>
-        <CardTitle>Завдання на сьогодні</CardTitle>
-        <SimpleTable
-          data={tasks}
-          columns={columns}
-          // showHeader
-          onRowClick={() => {}}
-          isRowDisabled={(row) => row.completed}
-          //   onRowClick={(row) => {navigate(`/student/knowledge-tree/${row.id}`)}}
-        />
+    <AppLayout className="">
+      <BasicBlock width={'53%'}>
+        <TableBlock $bgColor={COLORS.lighterBg} $gap={'24px'}>
+          <span className="d-flex gap-2 align-items-end">
+            <CardTitle>Завдання на сьогодні</CardTitle>
+            <TextBody $label $color={COLORS.primary}>
+              (09.03.2026)
+            </TextBody>
+          </span>
+          <SimpleTable
+            data={tasks}
+            columns={taskTableCols}
+            // showHeader
+            // onRowClick={() => {}}
+            isRowDisabled={(row) => row.completed}
+            // onRowClick={(row) => {
+            //   navigate(`/student/knowledge-tree/${row.id}`);
+            // }}
+          />
+          <ButtonsRow>
+            <Button
+              type="large"
+              width=""
+              $brColor={COLORS.accent}
+              $brWidth={'2'}
+              onClick={() => navigate('/student/knowledge-tree')}
+            >
+              <TextBody $medium>Почати навчання</TextBody>
+            </Button>
+            <Button
+              type="large"
+              width=""
+              $bgColor={'transparent'}
+              $txtColor={COLORS.secondary}
+              $brColor={COLORS.secondary}
+              $brWidth={'2'}
+              onClick={() => navigate('/student/knowledge-tree')}
+            >
+              <TextBody $medium>Показати більше</TextBody>
+            </Button>
+          </ButtonsRow>
+        </TableBlock>
+        <TableBlock
+          $titleColor={COLORS.text}
+          $bgColor={'transparent'}
+          $brColor={COLORS.secondary}
+          $gap={'24px'}
+          className={'align-items-start'}
+        >
+          <CardTitle>Потребує повторення</CardTitle>
+
+          <span className="d-flex flex-wrap gap-2">
+            {sortedExtremelyRepeating.map((item) => (
+              <LineCard key={item.id}>
+                <StatusItem
+                  $type={StatusTypeItem.CIRCLE}
+                  $color={difficultyTypeData[item.stateRepeating ?? DifficultyEnum.HIGH].color}
+                />
+                <span>
+                  <TextBody $color={COLORS.text}>{item.theme}</TextBody>
+                  <TextBody $medium $color={COLORS.secondaryDark}>
+                    ({item.course})
+                  </TextBody>
+                </span>
+              </LineCard>
+            ))}
+          </span>
+          <Button
+            type="large"
+            width="auto"
+            $brColor={COLORS.accent}
+            $brWidth={'2'}
+            onClick={() => navigate('/student/knowledge-tree')}
+          >
+            <TextBody $medium>Почати повторення</TextBody>
+          </Button>
+        </TableBlock>
+      </BasicBlock>
+      <BasicBlock width={'45%'}>
+        <TableBlock
+          $titleColor={COLORS.accent}
+          $bgColor={'transparent'}
+          $brColor={COLORS.secondary}
+          $gap={'24px'}
+        >
+          <CardTitle>Прогрес по курсах</CardTitle>
+
+          <span className="d-flex flex-wrap gap-2">
+            {coursesProgressData.map((item) => (
+              <ProgressCard key={JSON.stringify(item)}>
+                <span className="flex-nowrap">
+                  <BlocksElementIcon />
+                  <TextBody $label>{item.title}</TextBody>
+                </span>
+                <span>
+                  <SmallText>Прогрес:</SmallText>
+                  <TextBody $label>{item.progress}%</TextBody>
+                </span>
+                <span>
+                  <SmallText>Тем завершено:</SmallText>
+                  <TextBody $label>
+                    {item.completedTopics} / {item.totalTopics}
+                  </TextBody>
+                </span>
+                <span>
+                  <SmallText>Середній результат:</SmallText>
+                  <TextBody $label $color={getColorByPercentage(item.averageResult)}>
+                    {item.averageResult}%
+                  </TextBody>
+                </span>
+              </ProgressCard>
+            ))}
+          </span>
+        </TableBlock>
+        <TableBlock $gap={'16px'} $bgColor={COLORS.lighterBg}>
+          <CardTitle>Моя активність</CardTitle>
+          <span className="d-flex justify-content-between flex-wrap gap-3">
+            <TextBody>🔥 4 дні підряд</TextBody>
+            <TextBody> ✔ 24 завдання </TextBody>
+            <span className="d-flex gap-2 align-items-center">
+              <TextBody>Успішність</TextBody>
+              <TextBody $medium $color={getColorByPercentage(80)}>
+                80%
+              </TextBody>
+            </span>
+          </span>
+        </TableBlock>
+        <TableBlock $bgColor={COLORS.lighterBg} $gap={'8px'} $titleColor={COLORS.primary}>
+          <span className="d-flex gap-3 align-items-center">
+            <FaqIcon size={24} color={COLORS.primary} />
+            <CardTitle>Рекомендація системи</CardTitle>
+          </span>
+          <CardCarousel
+            items={extremelyRepeating}
+            renderCard={(card) => (
+              <CarouselCardItem className="">
+                <span>
+                  <TextBody>{card.id}. Повторити тему</TextBody>
+                  <TextBody $medium>"{card.theme}"</TextBody>
+                </span>
+                <TextBody>Ваш рівень засвоєння: {card.learning}%</TextBody>
+                <Button
+                  type="small"
+                  width="auto"
+                  $bgColor={COLORS.background}
+                  $brColor={COLORS.secondary}
+                  $txtColor={COLORS.secondary}
+                  $brWidth={'2'}
+                  onClick={() => navigate('/student/knowledge-tree')}
+                >
+                  <TextBody $medium>Перейти</TextBody>
+                </Button>
+              </CarouselCardItem>
+            )}
+          />
+        </TableBlock>
       </BasicBlock>
     </AppLayout>
   );
 }
+
+const CarouselCardItem = styled.div`
+  padding: 0 40px;
+  background-color: transparent;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: start;
+
+  span {
+    display: flex;
+    gap: 4px;
+    width: 100%;
+    flex-wrap: wrap;
+  }
+`;
+
+const LineCard = styled.div`
+  width: 100%;
+  padding: 14px 24px;
+  display: flex;
+  min-width: 0;
+  overflow: hidden;
+  gap: 12px;
+  ${basicShadow};
+  border-radius: 12px;
+  background-color: ${COLORS.lighterBg};
+
+  ${actionEffect};
+
+  div {
+    margin-top: 1px;
+  }
+
+  span {
+    display: flex;
+    width: 100%;
+    flex-wrap: wrap;
+    gap: 12px;
+    row-gap: 6px;
+  }
+
+  ${media(BREAKPOINTS.ml)} {
+    padding: 14px 16px;
+  }
+`;
+
+export const TableBlock = styled(BasicBlock)<{
+  $brColor?: string;
+  $titleColor?: string;
+  $padding?: string;
+}>`
+  padding: ${({ $padding }) => $padding ?? '16px'};
+  border-radius: 12px;
+  /* gap: 24px; */
+  justify-content: space-between;
+  border: 1px solid ${({ $brColor }) => $brColor ?? 'transparent'};
+  ${basicShadow};
+  /* min-width: 0; */
+  overflow: hidden;
+
+  ${CardTitle} {
+    color: ${({ $titleColor }) => $titleColor ?? COLORS.text};
+  }
+
+  ${media(BREAKPOINTS.sm)} {
+    padding: 12px;
+    gap: 16px;
+  }
+`;
+
+const ProgressCard = styled.div`
+  flex: 0 1 calc(50% - 8px);
+  min-width: 0;
+  max-width: calc(50% - 8px);
+
+  background-color: ${COLORS.lighterBg};
+  ${basicShadow};
+
+  border-radius: 12px;
+  padding: 16px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 8px;
+
+  ${actionEffect};
+
+  ${SmallText} {
+    font-size: 0.94rem;
+    line-height: 0.6;
+  }
+
+  span {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    row-gap: 6px;
+    align-items: center;
+    width: 100%;
+
+    svg {
+      flex-shrink: 0;
+    }
+
+    &:first-child {
+      padding-bottom: 4px;
+      gap: 8px;
+    }
+  }
+
+  ${media(BREAKPOINTS.lg)} {
+    flex: 1 1 100%;
+    max-width: 100%;
+  }
+
+  ${media(BREAKPOINTS.ml)} {
+    flex: 0 1 calc(50% - 8px);
+    max-width: calc(50% - 8px);
+  }
+`;
