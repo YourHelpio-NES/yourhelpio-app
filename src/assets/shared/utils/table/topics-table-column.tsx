@@ -5,13 +5,13 @@ import { PasswordIcon } from '../../../images/icons/password-icon';
 import { DoneIcon } from '../../../images/icons/done-icon';
 import { COLORS } from '../../../styles/colors';
 
-const themesTableCols: ColumnDef<ThemeTableRow>[] = [
+const topicsTableCols: ColumnDef<ThemeTableRow>[] = [
   {
-    accessorKey: 'themeName',
+    accessorKey: 'topicName',
     cell: ({ row }) => (
       <span className="d-flex gap-3 align-items-center">
         <TextBody>{row.original.id}.</TextBody>
-        <TextBody $medium>{row.original.themeName}</TextBody>
+        <TextBody $medium>{row.original.topicName}</TextBody>
       </span>
     ),
     header: 'Тема',
@@ -36,4 +36,4 @@ const themesTableCols: ColumnDef<ThemeTableRow>[] = [
   },
 ];
 
-export default themesTableCols;
+export default topicsTableCols;

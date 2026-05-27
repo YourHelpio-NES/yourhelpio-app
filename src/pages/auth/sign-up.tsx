@@ -17,6 +17,7 @@ import { useSignUpForm } from '../../assets/shared/hooks/validators/useSignUpFor
 import { Controller } from 'react-hook-form';
 import showToast from '../../components/toast/show';
 import { ToastTypeEnum } from '../../assets/shared/constants/custom-toast';
+import { AuthForm, InputsLineBlock } from '../../components/widgets/form';
 
 export default function SignUpPage() {
   const { form, onSubmit } = useSignUpForm();
@@ -69,8 +70,8 @@ export default function SignUpPage() {
                 курси, створювати навчальні плани та контролювати прогрес студентів.
               </TextBody>
             )}
-            <BasicBlock $gap="24px">
-              <span className="d-flex gap-4">
+            <BasicBlock $gap={24}>
+              <InputsLineBlock>
                 <Controller
                   name="firstName"
                   control={control}
@@ -101,7 +102,7 @@ export default function SignUpPage() {
                     />
                   )}
                 />
-              </span>
+              </InputsLineBlock>
 
               <Controller
                 name="email"
@@ -119,7 +120,7 @@ export default function SignUpPage() {
                 )}
               />
 
-              <span className="d-flex gap-4">
+              <InputsLineBlock>
                 <Controller
                   name="password"
                   control={control}
@@ -150,7 +151,7 @@ export default function SignUpPage() {
                     />
                   )}
                 />
-              </span>
+              </InputsLineBlock>
 
               <Controller
                 name="confirmRules"
@@ -158,7 +159,7 @@ export default function SignUpPage() {
                 render={({ field }) => (
                   <Checkbox checked={field.value} setChecked={field.onChange}>
                     <TextBody
-                      className="w-100 d-flex flex-wrap align-items-center justify-content-start gap-0"
+                      className="w-100 d-flex flex-wrap justify-content-start column-gap-1"
                       $label
                       $color={COLORS.secondary}
                     >
@@ -168,7 +169,7 @@ export default function SignUpPage() {
                         width="auto"
                         $bgColor={'transparent'}
                         $txtColor={COLORS.accent}
-                        className="py-0"
+                        className="p-0"
                         // onClick={() => navigate('/')}
                       >
                         <TextBody $label $underline>
@@ -252,18 +253,6 @@ export default function SignUpPage() {
     </MainLayout>
   );
 }
-
-const AuthForm = styled.div`
-  width: 45%;
-  border: 3px solid ${COLORS.secondary};
-  border-radius: 24px;
-  padding: 60px;
-  margin: 16px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 40px;
-`;
 
 const AuthBodyBlock = styled.div`
   width: 100%;

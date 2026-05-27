@@ -1,7 +1,11 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { COLORS } from '../assets/styles/colors';
 import { basicShadow, hoverBoxShadow } from './blocks';
 import { BREAKPOINTS, media } from '../assets/styles/breakpoints';
+
+export const BUTTON_WIDTH = {
+  mainBig: '65%',
+};
 
 export const Button = styled.button<{
   $bgColor?: string;
@@ -62,6 +66,22 @@ export const Button = styled.button<{
     width: ${({ $iconSize }) => `${$iconSize ?? 24}px`};
     height: ${({ $iconSize }) => `${$iconSize ?? 24}px`};
     opacity: ${({ disabled }) => (disabled ? 0.5 : 1)};
+  }
+
+  ${media(BREAKPOINTS.sm)} {
+    ${({ width }) =>
+      width === BUTTON_WIDTH.mainBig &&
+      css`
+        width: 75%;
+      `}
+  }
+
+  ${media(BREAKPOINTS.xs)} {
+    ${({ width }) =>
+      width === BUTTON_WIDTH.mainBig &&
+      css`
+        width: 85%;
+      `}
   }
 
   ${media(BREAKPOINTS.xs)} {

@@ -32,21 +32,21 @@ export const extremelyRepeating = [
   {
     id: 1,
     course: 'Алгоритми проєктування',
-    theme: 'Динамічне програмування',
+    topic: 'Динамічне програмування',
     stateRepeating: DifficultyEnum.MEDIUM,
     learning: 42,
   },
   {
     id: 2,
     course: 'Бази даних',
-    theme: 'Нормалізація',
+    topic: 'Нормалізація',
     stateRepeating: DifficultyEnum.MEDIUM,
     learning: 55,
   },
   {
     id: 3,
     course: 'Математичний аналіз',
-    theme: 'Інтеграли',
+    topic: 'Інтеграли',
     stateRepeating: DifficultyEnum.HIGH,
     learning: 38,
   },
@@ -60,6 +60,7 @@ export const tasks: TaskTableRow[] = [
     type: 'Повторення',
     questions: 8,
     completed: true,
+    duration: 20,
   },
   {
     id: '2',
@@ -68,6 +69,7 @@ export const tasks: TaskTableRow[] = [
     type: 'Мікротест',
     questions: 10,
     completed: false,
+    duration: 5,
   },
   {
     id: '3',
@@ -76,81 +78,71 @@ export const tasks: TaskTableRow[] = [
     type: 'Короткий контроль',
     questions: 5,
     completed: false,
+    duration: 10,
   },
 ];
 
-export const themesTableData: ThemeTableRow[] = [
+export const topicsTableData: ThemeTableRow[] = [
   {
     id: '1',
-    themeName: 'Введення в алгоритми проєктування',
+    topicName: 'Введення в алгоритми проєктування',
     stage: 'День 14',
     progress: '100',
   },
   {
     id: '2',
-    themeName: 'Часова складність та нотація Big-O',
+    topicName: 'Часова складність та нотація Big-O',
     stage: 'День 14',
     progress: '100',
   },
   {
     id: '3',
-    themeName: 'Рекурсія та динамічне програмування',
+    topicName: 'Рекурсія та динамічне програмування',
     stage: 'День 7',
     progress: '90',
   },
   {
     id: '4',
-    themeName: 'Жадібні алгоритми',
+    topicName: 'Жадібні алгоритми',
     stage: 'День 7',
     progress: '90',
   },
   {
     id: '5',
-    themeName: 'Алгоритми сортування',
+    topicName: 'Алгоритми сортування',
     stage: 'День 3',
     progress: '45',
   },
   {
     id: '6',
-    themeName: 'Алгоритми пошуку',
+    topicName: 'Алгоритми пошуку',
     stage: 'День 1',
     progress: '0',
   },
   {
     id: '7',
-    themeName: 'Графові алгоритми',
-    // stage: "—",
+    topicName: 'Графові алгоритми',
     progress: '0',
   },
   {
     id: '8',
-    themeName: 'Дерева та структури даних',
-    // stage: "—",
-    // progress: "—",
+    topicName: 'Дерева та структури даних',
   },
   {
     id: '9',
-    themeName: 'Хеш-таблиці та хешування',
-    // stage: "—",
-    // progress: "—",
+    topicName: 'Хеш-таблиці та хешування',
   },
   {
     id: '10',
-    themeName: 'Алгоритми на рядках',
-    // stage: "—",
-    // progress: "—",
+    topicName: 'Алгоритми на рядках',
   },
   {
     id: '11',
-    themeName: 'Паралельні алгоритми',
-    // stage: "—",
-    // progress: "—",
+    topicName: 'Паралельні алгоритми',
   },
   {
     id: '12',
-    themeName: 'Апроксимаційні алгоритми',
-    // stage: "—",
-    // progress: "—",
+    topicName: 'Апроксимаційні алгоритми',
   },
 ];
 

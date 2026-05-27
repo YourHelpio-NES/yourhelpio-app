@@ -27,7 +27,7 @@ export default function DashboardPage() {
   return (
     <AppLayout className="">
       <BasicBlock width={'53%'}>
-        <TableBlock $bgColor={COLORS.lighterBg} $gap={'24px'}>
+        <TableBlock $bgColor={COLORS.lighterBg} $gap={24}>
           <span className="d-flex gap-2 align-items-end">
             <CardTitle>Завдання на сьогодні</CardTitle>
             <TextBody $label $color={COLORS.primary}>
@@ -37,12 +37,7 @@ export default function DashboardPage() {
           <SimpleTable
             data={tasks}
             columns={taskTableCols}
-            // showHeader
-            // onRowClick={() => {}}
             isRowDisabled={(row) => row.completed}
-            // onRowClick={(row) => {
-            //   navigate(`/student/knowledge-tree/${row.id}`);
-            // }}
           />
           <ButtonsRow>
             <Button
@@ -71,7 +66,7 @@ export default function DashboardPage() {
           $titleColor={COLORS.text}
           $bgColor={'transparent'}
           $brColor={COLORS.secondary}
-          $gap={'24px'}
+          $gap={24}
           className={'align-items-start'}
         >
           <CardTitle>Потребує повторення</CardTitle>
@@ -84,7 +79,7 @@ export default function DashboardPage() {
                   $color={difficultyTypeData[item.stateRepeating ?? DifficultyEnum.HIGH].color}
                 />
                 <span>
-                  <TextBody $color={COLORS.text}>{item.theme}</TextBody>
+                  <TextBody $color={COLORS.text}>{item.topic}</TextBody>
                   <TextBody $medium $color={COLORS.secondaryDark}>
                     ({item.course})
                   </TextBody>
@@ -108,7 +103,7 @@ export default function DashboardPage() {
           $titleColor={COLORS.accent}
           $bgColor={'transparent'}
           $brColor={COLORS.secondary}
-          $gap={'24px'}
+          $gap={24}
         >
           <CardTitle>Прогрес по курсах</CardTitle>
 
@@ -139,7 +134,7 @@ export default function DashboardPage() {
             ))}
           </span>
         </TableBlock>
-        <TableBlock $gap={'16px'} $bgColor={COLORS.lighterBg}>
+        <TableBlock $gap={16} $bgColor={COLORS.lighterBg}>
           <CardTitle>Моя активність</CardTitle>
           <span className="d-flex justify-content-between flex-wrap gap-3">
             <TextBody>🔥 4 дні підряд</TextBody>
@@ -152,7 +147,7 @@ export default function DashboardPage() {
             </span>
           </span>
         </TableBlock>
-        <TableBlock $bgColor={COLORS.lighterBg} $gap={'8px'} $titleColor={COLORS.primary}>
+        <TableBlock $bgColor={COLORS.lighterBg} $gap={8} $titleColor={COLORS.primary}>
           <span className="d-flex gap-3 align-items-center">
             <FaqIcon size={24} color={COLORS.primary} />
             <CardTitle>Рекомендація системи</CardTitle>
@@ -163,7 +158,7 @@ export default function DashboardPage() {
               <CarouselCardItem className="">
                 <span>
                   <TextBody>{card.id}. Повторити тему</TextBody>
-                  <TextBody $medium>"{card.theme}"</TextBody>
+                  <TextBody $medium>"{card.topic}"</TextBody>
                 </span>
                 <TextBody>Ваш рівень засвоєння: {card.learning}%</TextBody>
                 <Button
@@ -239,11 +234,9 @@ export const TableBlock = styled(BasicBlock)<{
 }>`
   padding: ${({ $padding }) => $padding ?? '16px'};
   border-radius: 12px;
-  /* gap: 24px; */
   justify-content: space-between;
   border: 1px solid ${({ $brColor }) => $brColor ?? 'transparent'};
   ${basicShadow};
-  /* min-width: 0; */
   overflow: hidden;
 
   ${CardTitle} {
@@ -253,6 +246,23 @@ export const TableBlock = styled(BasicBlock)<{
   ${media(BREAKPOINTS.sm)} {
     padding: 12px;
     gap: 16px;
+  }
+
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background-color: ${COLORS.background};
+    border: 1px solid ${COLORS.boxShadow};
+    border-radius: 100px;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background-color: ${COLORS.boxShadow};
+    border: 1px solid ${COLORS.secondary};
+    border-radius: 100px;
   }
 `;
 

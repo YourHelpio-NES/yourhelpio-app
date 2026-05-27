@@ -1,23 +1,23 @@
 import { useEffect, useState } from 'react';
 import { Select } from '../../components/dropdown';
 import AppLayout from '../../components/widgets/app/layout';
-import { extremelyRepeating, themesTableData } from '../../assets/shared/data/courses';
+import { extremelyRepeating, topicsTableData } from '../../assets/shared/data/courses';
 import { Controller } from 'react-hook-form';
 import { useFilterForm } from '../../assets/shared/hooks/validators/useFilterDropdown';
 import { BasicBlock, basicShadow } from '../../components/blocks';
 import { TextBody } from '../../assets/styles/typography';
 import { getColorByPercentage } from '../../assets/shared/utils/color';
 import { SimpleTable } from '../../components/table';
-import themesTableCols from '../../assets/shared/utils/table/themes-table-column';
 import { TableBlock } from './dashboard';
 import { COLORS } from '../../assets/styles/colors';
 import type { ThemeTableRow } from '../../assets/shared/utils/table/row-type';
 import { StatusItem } from '../../components/status-items';
 import styled from 'styled-components';
 import { BREAKPOINTS, media } from '../../assets/styles/breakpoints';
-import ThemeDetailsContent, { LabelValue } from '../../components/theme-details-content';
 import * as Dialog from '@radix-ui/react-dialog';
 import { CloseIcon } from '../../assets/images/icons/close-icon';
+import TopicDetailsContent, { LabelValue } from '../../components/topic-details-content';
+import topicsTableCols from '../../assets/shared/utils/table/topics-table-column';
 
 export default function StudyPlanMainPage() {
   const { form } = useFilterForm(extremelyRepeating[0].id.toString());
@@ -25,7 +25,7 @@ export default function StudyPlanMainPage() {
     control,
     formState: { errors },
   } = form;
-  const [activeRow, setActiveRow] = useState<ThemeTableRow>(themesTableData[0]);
+  const [activeRow, setActiveRow] = useState<ThemeTableRow>(topicsTableData[0]);
   const [isMobile, setIsMobile] = useState(() => window.innerWidth <= BREAKPOINTS.ml);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -36,7 +36,7 @@ export default function StudyPlanMainPage() {
   }, []);
 
   const handleRowClick = (row: ThemeTableRow) => {
-    setActiveRow(themesTableData.find((x) => x.id === row.id) ?? themesTableData[0]);
+    setActiveRow(topicsTableData.find((x) => x.id === row.id) ?? topicsTableData[0]);
     if (isMobile) setIsModalOpen(true);
   };
   return (
@@ -87,19 +87,16 @@ export default function StudyPlanMainPage() {
       <BodyTable>
         <BasicBlock>
           <SimpleTable
-            data={themesTableData}
-            columns={themesTableCols}
+            data={topicsTableData}
+            columns={topicsTableCols}
             showHeader
-            // onRowClick={() => {}}
-            // isRowDisabled={(row) => row.completed}
             getRowId={(row) => Number.parseInt(row.id)}
             activeRowId={Number.parseInt(activeRow.id)}
             onRowClick={handleRowClick}
           />
         </BasicBlock>
-        {!isMobile && <ThemeDetailsContent activeRow={activeRow} />}
+        {!isMobile && <TopicDetailsContent activeRow={activeRow} />}
 
-        {/* мобільний — модалка */}
         {isMobile && (
           <Dialog.Root open={isModalOpen} onOpenChange={setIsModalOpen}>
             <Dialog.Portal>
@@ -110,7 +107,7 @@ export default function StudyPlanMainPage() {
                     <CloseIcon size={22} />
                   </CloseButton>
                 </Dialog.Close>
-                <ThemeDetailsContent activeRow={activeRow} />
+                <TopicDetailsContent activeRow={activeRow} />
               </DialogContent>
             </Dialog.Portal>
           </Dialog.Root>
@@ -148,19 +145,17 @@ const BodyTable = styled(BasicBlock)`
         transform 0.25s ease;
     }
   }
+
   ${media(BREAKPOINTS.ml)} {
     gap: 36px;
   }
+
   ${media(BREAKPOINTS.ml)} {
     flex-direction: column;
     gap: 24px;
     & > * {
       width: 100%;
     }
-
-    /* &:last-child {
-        position: absolute;
-    } */
   }
 `;
 
@@ -175,7 +170,6 @@ const DialogOverlay = styled(Dialog.Overlay)`
 const DialogContent = styled(Dialog.Content)`
   position: fixed;
   bottom: 0;
-  /* left: 0; */
   right: 0;
   z-index: 101;
   background: ${COLORS.background};

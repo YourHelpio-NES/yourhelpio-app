@@ -67,16 +67,3 @@ const Radio = styled.div<{ $selected: boolean }>`
     height: 20px;
   }
 `;
-
-// const RadioDot = styled.div<{ $visible: boolean }>`
-//   width: 100%;
-//   height: 100%;
-//   border-radius: 50%;
-//   background: ${COLORS.accent};
-//   opacity: ${({ $visible }) => ($visible ? 1 : 0)};
-//   transform: scale(${({ $visible }) => ($visible ? 1 : 0)});
-
-//   transition:
-//     transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1),
-//     opacity 0.15s ease-out;
-// `;

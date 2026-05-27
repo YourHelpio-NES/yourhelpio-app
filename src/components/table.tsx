@@ -79,13 +79,8 @@ export function SimpleTable<TData extends RowData>({
 }
 
 const TableContainer = styled.div<{ $isHeader?: boolean }>`
-  /* display: block; */
   width: 100%;
-
   overflow-x: auto;
-  /* overflow-y: hidden; */
-
-  /* max-width: 100%; */
   scrollbar-width: thin;
 
   ${({ $isHeader }) =>
@@ -104,15 +99,7 @@ const TableContainer = styled.div<{ $isHeader?: boolean }>`
 const TableWrapper = styled.table`
   width: 100%;
   min-width: 100%;
-  /* max-width: 650px; */
   border-collapse: collapse;
-
-  ${media(BREAKPOINTS.ml)} {
-    /* min-width: 100%; */
-  }
-
-  th {
-  }
 `;
 
 const TableHeadCell = styled.th`
@@ -121,7 +108,6 @@ const TableHeadCell = styled.th`
   border-bottom: 1px solid ${COLORS.text};
 
   &:last-child {
-    /* padding-left: 0; */
     padding-right: 0;
   }
 `;
@@ -182,7 +168,6 @@ const TableCell = styled.td`
   }
 
   &:last-child {
-    /* padding-left: 0; */
     padding-right: 0;
   }
 

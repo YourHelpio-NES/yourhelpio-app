@@ -26,7 +26,6 @@ export const BaseText = styled.p<BaseTextProps>`
     $underline &&
       css`
         text-decoration: underline 1px ${$color};
-        /* text-decoration: line-through; */
         text-underline-offset: 3px;
       `,
     $lineThrough &&
@@ -41,6 +40,13 @@ export const MainTitle = styled.h1`
   font-size: 2.25rem;
   font-weight: 700;
   line-height: 1.2;
+
+  ${media(BREAKPOINTS.md)} {
+    font-size: 2rem;
+  }
+  ${media(BREAKPOINTS.md)} {
+    font-size: 1.8rem;
+  }
 `;
 
 export const SubTitle = styled.h2`

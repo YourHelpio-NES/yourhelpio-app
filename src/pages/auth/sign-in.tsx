@@ -1,4 +1,3 @@
-import styled from 'styled-components';
 import MainLayout from '../../components/widgets/layout';
 import { COLORS } from '../../assets/styles/colors';
 import { TitleSection } from '../../components/title-section';
@@ -11,6 +10,7 @@ import googleIcon from '../../assets/images/icons/google-icon.svg';
 import { useNavigate } from 'react-router-dom';
 import { useSignInForm } from '../../assets/shared/hooks/validators/useSignInForm';
 import { Controller } from 'react-hook-form';
+import { AuthForm } from '../../components/widgets/form';
 
 export default function SignInPage() {
   const { form, onSubmit } = useSignInForm();
@@ -28,7 +28,7 @@ export default function SignInPage() {
           title="Увійдіть до акаунту"
           subtitle="Продовжуйте навчання за персоналізованим планом, сформованим за допомогою штучного інтелекту"
         />
-        <BasicBlock className="align-items-end">
+        <BasicBlock>
           <Controller
             name="email"
             control={control}
@@ -65,6 +65,7 @@ export default function SignInPage() {
             $bgColor={'transparent'}
             $txtColor={COLORS.accent}
             onClick={() => navigate('/forgot-password')}
+            className={'ms-auto'}
           >
             <TextBody $label $color={COLORS.accent}>
               Забули пароль?
@@ -94,7 +95,7 @@ export default function SignInPage() {
               Продовжити з Google
             </TextBody>
           </Button>
-          <span className="w-100 d-flex align-items-center justify-content-center gap-1">
+          <span className="w-100 d-flex flex-wrap align-items-center justify-content-center gap-1">
             <TextBody $label $color={COLORS.secondary}>
               Ще не маєте облікового запису?
             </TextBody>
@@ -118,15 +119,3 @@ export default function SignInPage() {
     </MainLayout>
   );
 }
-
-const AuthForm = styled.div`
-  width: 45%;
-  border: 3px solid ${COLORS.secondary};
-  border-radius: 24px;
-  padding: 60px;
-  margin: 16px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 40px;
-`;

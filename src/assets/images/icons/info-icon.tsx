@@ -37,11 +37,11 @@ export const InfoIcon = ({ color = COLORS.status.info, size = 24 }: ImageType) =
           <path d="M-2.3999 -2.40002H26.4001V26.4H-2.3999V-2.40002Z" fill={color} />
         </g>
       </g>
-      {/* <defs>
+      <defs>
         <clipPath id="clip0_2974_5596">
-          <rect width="24" height="24" rx="12" fill="white" />
+          <rect width="24" height="24" rx="12" fill="none" />
         </clipPath>
-      </defs> */}
+      </defs>
     </svg>
   );
 };
