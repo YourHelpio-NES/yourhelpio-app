@@ -106,7 +106,7 @@ const SelectTrigger = styled(RadixSelect.Trigger)<{ $hasError?: boolean }>`
 `;
 
 const SelectContent = styled(RadixSelect.Content)`
-  width: var(--radix-select-trigger-width); /* ширина = тригер */
+  width: var(--radix-select-trigger-width);
   background-color: ${COLORS.lighterBg};
   border-radius: 12px;
   border: 1px solid ${COLORS.secondary};

@@ -13,7 +13,7 @@ type CardCarouselProps<T> = {
 
 export const CardCarousel = <T,>({ items, renderCard }: CardCarouselProps<T>) => {
   const [index, setIndex] = useState(0);
-  const [direction, setDirection] = useState(0); // -1 = prev, 1 = next
+  const [direction, setDirection] = useState(0);
 
   const goTo = (i: number, dir: number) => {
     const newIndex = ((i % items.length) + items.length) % items.length;

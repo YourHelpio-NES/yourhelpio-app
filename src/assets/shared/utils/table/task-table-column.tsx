@@ -18,6 +18,10 @@ const taskTableCols: ColumnDef<TaskTableRow>[] = [
     accessorKey: 'questions',
     cell: ({ row }) => <TextBody>{row.original.questions} запитань</TextBody>,
   },
+  {
+    accessorKey: 'duration',
+    cell: ({ row }) => <TextBody>{row.original.duration} хв</TextBody>,
+  },
 ];
 
 export default taskTableCols;

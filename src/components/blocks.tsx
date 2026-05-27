@@ -4,13 +4,13 @@ import { BREAKPOINTS, media } from '../assets/styles/breakpoints';
 
 export const BasicBlock = styled.div<{
   width?: string;
-  $gap?: string;
+  $gap?: number;
   $bgColor?: string;
   $direction?: 'column' | 'row';
 }>`
   display: flex;
   flex-direction: ${({ $direction }) => $direction ?? 'column'};
-  gap: ${({ $gap }) => $gap ?? '16px'};
+  gap: ${({ $gap }) => ($gap ? `${$gap}px` : '16px')};
   width: ${({ width }) => width ?? '100%'};
   background-color: ${({ $bgColor }) => $bgColor ?? COLORS.background};
 
@@ -21,7 +21,11 @@ export const BasicBlock = styled.div<{
   }
 
   ${media(BREAKPOINTS.md)} {
-    width: 100%;
+    gap: ${({ $gap }) => ($gap ? `${Math.max($gap - 4, 8)}px` : '12px')};
+  }
+
+  ${media(BREAKPOINTS.sm)} {
+    gap: ${({ $gap }) => ($gap ? `${Math.max($gap - 8, 8)}px` : '8px')};
   }
 `;
 

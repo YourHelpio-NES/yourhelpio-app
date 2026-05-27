@@ -77,7 +77,7 @@ export default function Panel({
               <PanelStyle $isCollapsed={isCollapsed}>
                 <img src={currentLogo} alt="logo" />
 
-                <BasicBlock $gap="2px">
+                <BasicBlock $gap={2}>
                   {Object.entries(panelItems).map(([key, item]) => {
                     const isActive = location.pathname.includes(key);
 

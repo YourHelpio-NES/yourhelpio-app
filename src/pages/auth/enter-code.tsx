@@ -13,7 +13,6 @@ import { ArrowIcon } from '../../assets/images/icons/arrow-icon';
 
 export default function ForgotPasswordPage() {
   const [email, setEmail] = useState<string>('');
-  // const [password, setPassword] = useState<string>('');
 
   const navigate = useNavigate();
 
@@ -24,14 +23,13 @@ export default function ForgotPasswordPage() {
           title="Забули пароль?"
           subtitle="Вкажіть свою електронну пошту для відновлення пароля."
         />
-        <BasicBlock className="">
+        <BasicBlock>
           <Input
             type={InputTypeEnum.EMAIL}
             value={email}
             setValue={setEmail}
             label="Електронна пошта"
             placeholder="Example@university.edu.ua"
-            // errorText="text of error"
           />
         </BasicBlock>
 

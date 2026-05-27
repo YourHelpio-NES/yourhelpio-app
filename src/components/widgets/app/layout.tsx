@@ -84,4 +84,21 @@ const PageLayout = styled.div`
     color: ${COLORS.background};
     background: ${COLORS.accent};
   }
+
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background-color: ${COLORS.background};
+    border: 1px solid ${COLORS.boxShadow};
+    border-radius: 100px;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background-color: ${COLORS.boxShadow};
+    border: 1px solid ${COLORS.secondary};
+    border-radius: 100px;
+  }
 `;

@@ -17,9 +17,11 @@ export default function Header({
   setIsCollapsed: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
   const location = useLocation();
-  const currentPathItem = location.pathname.split('/').at(-1);
-  const active = panelItems[currentPathItem as PanelItemEnum];
+  const currentPathItem = Object.keys(panelItems).find((key) => location.pathname.includes(key)) as
+    | PanelItemEnum
+    | undefined;
 
+  const active = currentPathItem ? panelItems[currentPathItem] : panelItems.dashboard;
   return (
     <HeaderStyle>
       {isBurger && (
@@ -80,6 +82,13 @@ const HeaderStyle = styled.header`
   ${media(BREAKPOINTS.ml)} {
     margin-bottom: 24px;
     padding: 14px 16px;
+  }
+
+  ${media(BREAKPOINTS.xs)} {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background-color: ${COLORS.background};
   }
 `;
 

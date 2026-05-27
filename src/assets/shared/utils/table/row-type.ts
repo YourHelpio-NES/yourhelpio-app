@@ -5,11 +5,12 @@ export interface TaskTableRow {
   type: string;
   questions: number;
   completed: boolean;
+  duration: number;
 }
 
 export interface ThemeTableRow {
   id: string;
-  themeName: string;
+  topicName: string;
   stage?: string;
   progress?: string;
 }

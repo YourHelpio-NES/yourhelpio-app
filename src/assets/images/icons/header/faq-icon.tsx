@@ -17,20 +17,6 @@ export const FaqIcon = ({ color = COLORS.text, size = 22 }: ImageType) => {
         strokeLinecap="round"
         strokeLinejoin="round"
       />
-      {/* <path
-        d="M11.1753 13.9795H11.1836"
-        stroke={color}
-        strokeWidth="1.7"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-      <path
-        d="M8.84619 7.90199C8.84628 7.47945 8.9609 7.06484 9.17786 6.70225C9.39482 6.33967 9.706 6.04267 10.0783 5.84285C10.4506 5.64303 10.8701 5.54786 11.2922 5.56746C11.7143 5.58706 12.1232 5.72071 12.4753 5.95417C12.8275 6.18764 13.1098 6.51221 13.2922 6.89334C13.4747 7.27447 13.5504 7.69793 13.5113 8.11865C13.4722 8.53938 13.3198 8.94165 13.0703 9.28267C12.8209 9.6237 12.4836 9.89072 12.0945 10.0553C11.6185 10.2582 11.1837 10.6584 11.1837 11.1746"
-        stroke={color}
-        strokeWidth="1.3"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      /> */}
     </svg>
   );
 };
