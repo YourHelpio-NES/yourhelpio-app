@@ -9,6 +9,7 @@ export const COLORS = {
   lighterBg: '#FEFEFE',
   secondaryDark: '#656C69',
   boxShadow: 'rgba(12, 12, 13, 0.1)',
+  overlay: 'rgba(142, 149, 146, 0.3)',
   status: {
     success: '#2AA947',
     warning: '#F3B051',

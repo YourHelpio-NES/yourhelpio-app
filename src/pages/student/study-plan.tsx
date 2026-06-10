@@ -117,7 +117,7 @@ export default function StudyPlanMainPage() {
   );
 }
 
-const BodyTable = styled(BasicBlock)`
+export const BodyTable = styled(BasicBlock)`
   gap: 60px;
   flex-direction: row;
   flex-wrap: wrap;

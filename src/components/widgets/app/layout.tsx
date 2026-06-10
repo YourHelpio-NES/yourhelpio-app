@@ -9,9 +9,9 @@ import { BREAKPOINTS, media } from '../../../assets/styles/breakpoints';
 import { useEffect, useState } from 'react';
 
 const AppLayout: React.FC<React.PropsWithChildren<LayoutProps>> = ({ className, children }) => {
-  const [isCollapsed, setIsCollapsed] = useState<boolean>(() => {
-    return localStorage.getItem('collapsed-panel') === 'false';
-  });
+  const [isCollapsed, setIsCollapsed] = useState(
+    () => localStorage.getItem('collapsed-panel') === 'true'
+  );
   const [isMobile, setIsMobile] = useState(() => window.innerWidth <= BREAKPOINTS.xs);
 
   useEffect(() => {
