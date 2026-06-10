@@ -104,7 +104,7 @@ export const LabelValue = ({ label, children }: LabelValueProps) => (
   </LabelValueStyle>
 );
 
-const LabelValueStyle = styled.span`
+export const LabelValueStyle = styled.span`
   gap: 16px;
   ${media(BREAKPOINTS.ml)} {
     gap: 8px;

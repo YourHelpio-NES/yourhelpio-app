@@ -23,6 +23,7 @@ export const Button = styled.button<{
     disabled ? COLORS.secondary : ($bgColor ?? COLORS.accent)};
   color: ${({ disabled, $txtColor }) =>
     disabled ? COLORS.text : ($txtColor ?? COLORS.background)};
+  box-sizing: border-box;
   border: ${({ type, disabled, $brColor, $brWidth }) =>
     type === 'text'
       ? 'none'
@@ -30,7 +31,7 @@ export const Button = styled.button<{
 
   border-radius: ${({ $brRadius }) => `${$brRadius ?? 24}px`};
 
-  padding: ${({ type }) => (type === 'text' ? '4px' : type === 'small' ? '6px 20px' : '12px 24px')};
+  padding: ${({ type }) => (type === 'text' ? '4px' : type === 'small' ? '6px 20px' : '11px 24px')};
 
   outline: none;
   transition: all 300ms cubic-bezier(0.25, 0.1, 0.25, 1);

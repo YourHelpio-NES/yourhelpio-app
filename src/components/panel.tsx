@@ -3,7 +3,7 @@ import { panelItems } from '../assets/shared/constants/panel';
 import { COLORS } from '../assets/styles/colors';
 import { TextBody } from '../assets/styles/typography';
 import logo from '../assets/images/logo.png';
-import smallLogo from '../../public/favicon.svg';
+import smallLogo from '../assets/images/small-logo.svg';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { BasicBlock } from './blocks';
 import { useEffect, useState } from 'react';

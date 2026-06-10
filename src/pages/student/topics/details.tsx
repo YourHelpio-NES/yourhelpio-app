@@ -151,7 +151,7 @@ const StageList = styled.div`
   width: 100%;
 `;
 
-const StageInfo = styled.div`
+export const StageInfo = styled.div`
   flex: 1;
   min-width: 0;
 
@@ -169,7 +169,7 @@ const StageInfo = styled.div`
   }
 `;
 
-const StageCard = styled.div`
+export const StageCard = styled.div`
   flex: 0 1 calc(50% - 8px);
   min-width: 0;
 

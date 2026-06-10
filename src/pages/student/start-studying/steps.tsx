@@ -1,4 +1,4 @@
-import { SessionIcon } from '../../../assets/images/icons/header/session-icon';
+import { StudyQuestionCardIcon } from '../../../assets/images/icons/study-question-card-icon';
 import { testSessionMock } from '../../../assets/shared/data/test-session';
 import { topicDetailsMock } from '../../../assets/shared/data/topic';
 import { useTestSession } from '../../../assets/shared/hooks/useSession';
@@ -23,22 +23,27 @@ export default function StudyingStep() {
     handleSkip,
     handleBack,
     getQuestionStatus,
+    pendingAction,
+    setPendingAction,
+    confirmLastAction,
   } = useTestSession(testSessionMock);
 
   return (
     <AppLayout>
       <BasicBlock width="100%">
-        <BasicBlock $bgColor="transparent" $gap={4}>
+        <BasicBlock $bgColor="transparent" $gap={12}>
           <LinkTitle
             firstTitle={topicDetailsMock.title[0]}
             secondTitle={topicDetailsMock.title[1]}
           />
           <LabelValue label="Етап:">
-            <TextBody $medium>{testSessionMock.stage}</TextBody>
+            <TextBody $label $color={COLORS.accent}>
+              {testSessionMock.stage}
+            </TextBody>
           </LabelValue>
           <span className="d-flex gap-2 align-items-center">
-            <SessionIcon size={20} color={COLORS.secondary} />
-            <TextBody $color={COLORS.secondary}>{testSessionMock.moduleTitle}</TextBody>
+            <StudyQuestionCardIcon size={28} color={COLORS.secondaryDark} />
+            <TextBody $color={COLORS.text}>{testSessionMock.moduleTitle}</TextBody>
           </span>
         </BasicBlock>
 
@@ -54,6 +59,9 @@ export default function StudyingStep() {
           onSkip={handleSkip}
           onBack={handleBack}
           isLast={isLast}
+          pendingAction={pendingAction}
+          setPendingAction={setPendingAction}
+          confirmLastAction={confirmLastAction}
         />
       </BasicBlock>
     </AppLayout>

@@ -8,6 +8,9 @@ import StudySessionMainPage from './pages/student/study-session';
 import TopicsDetailsStudentPage from './pages/student/topics/details';
 import MaterialDetailsTopicPage from './pages/student/topics/material';
 import StudyingStep from './pages/student/start-studying/steps';
+import NotFound from './pages/not-found';
+import StudyingResult from './pages/student/start-studying/result';
+import CurriculumTreeMainPage from './pages/curriculum-tree-main';
 
 function App() {
   return (
@@ -19,6 +22,7 @@ function App() {
         <Route index element={<Navigate to="dashboard" replace />} />
         <Route path="dashboard" element={<DashboardPage />} />
         <Route path="study-plan" element={<StudyPlanMainPage />} />
+        <Route path="knowledge-tree" element={<CurriculumTreeMainPage />} />
         <Route path="study-session">
           <Route index element={<Navigate to="main" replace />} />
           <Route path="main" element={<StudySessionMainPage />} />
@@ -30,10 +34,12 @@ function App() {
             <Route path="materials" element={<MaterialDetailsTopicPage />} />
           </Route>
           <Route path="studying" element={<StudyingStep />} />
+          <Route path="results" element={<StudyingResult />} />
         </Route>
       </Route>
 
       <Route path="" element={<Navigate to="/sign-in" />} />
+      <Route path="*" element={<NotFound />} />
     </Routes>
   );
 }
