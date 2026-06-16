@@ -126,7 +126,7 @@ export default function StudyingResult() {
   );
 }
 
-const ErrorsBlock = styled(BasicBlock)`
+export const ErrorsBlock = styled(BasicBlock)<{ $titleColor?: string }>`
   width: 35%;
   background-color: ${COLORS.lighterBg};
   border-radius: 24px;
@@ -135,18 +135,22 @@ const ErrorsBlock = styled(BasicBlock)`
   gap: 24px;
 
   ${CardTitle} {
-    color: ${COLORS.status.error};
+    color: ${({ $titleColor }) => ($titleColor ? $titleColor : COLORS.status.error)};
   }
 
   div[data-class='error-items'] {
     flex-direction: column;
-    /* padding: 24px; */
     gap: 24px;
+  }
+
+  ${media(1250)} {
+    &[data-type='add-faq-block'] {
+      flex-grow: 1;
+    }
   }
 
   ${media(BREAKPOINTS.ml)} {
     width: 100%;
-    /* gap: 16px; */
 
     div[data-class='error-items'] {
       flex-direction: row;
@@ -175,7 +179,6 @@ const ErrorsBlock = styled(BasicBlock)`
 `;
 
 const CardBody = styled.span`
-  /* d-flex flex-wrap gap-2 align-items-start */
   display: flex;
   flex-wrap: wrap;
   gap: 12px;

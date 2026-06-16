@@ -57,7 +57,7 @@ export default function Input({
   );
 }
 
-const InputStyle = styled.span`
+export const InputStyle = styled.span`
   display: flex;
   flex-direction: column;
   gap: 8px;

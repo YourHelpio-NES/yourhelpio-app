@@ -10,7 +10,10 @@ import MaterialDetailsTopicPage from './pages/student/topics/material';
 import StudyingStep from './pages/student/start-studying/steps';
 import NotFound from './pages/not-found';
 import StudyingResult from './pages/student/start-studying/result';
-import CurriculumTreeMainPage from './pages/curriculum-tree-main';
+import CurriculumTreeMainPage from './pages/student/curriculum-tree-main';
+import FaqPage from './pages/student/faq';
+import SettingsPage from './pages/settings';
+import NotificationPage from './pages/notification';
 
 function App() {
   return (
@@ -36,6 +39,9 @@ function App() {
           <Route path="studying" element={<StudyingStep />} />
           <Route path="results" element={<StudyingResult />} />
         </Route>
+        <Route path={'faq'} element={<FaqPage />} />
+        <Route path={'settings'} element={<SettingsPage />} />
+        <Route path={'notifications'} element={<NotificationPage />} />
       </Route>
 
       <Route path="" element={<Navigate to="/sign-in" />} />

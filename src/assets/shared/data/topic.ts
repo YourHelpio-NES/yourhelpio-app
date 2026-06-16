@@ -1,3 +1,5 @@
+import type { FaqQuestion } from '../../../components/faq-accordion';
+import { FilterTypesFaq } from '../constants/faq-types';
 import {
   StudyDayEnum,
   StudyStatusEnum,
@@ -76,3 +78,27 @@ export const topicDetailsMock = {
     },
   ] as StudyStage[],
 };
+
+export const FAQ_QUESTIONS: FaqQuestion[] = [
+  {
+    id: 0,
+    question: 'Що таке тип даних?',
+    type: FilterTypesFaq.THEORY,
+    topic: null,
+    answer: null,
+  },
+  {
+    id: 1,
+    question: 'Для чого використовується Boolean?',
+    type: FilterTypesFaq.THEORY,
+    topic: 'Алгоритми проєктування',
+    answer: 'Для перевірки умов. Має лише два значення: true або false.',
+  },
+  {
+    id: 2,
+    question: 'Чому важливо правильно обирати тип даних?',
+    type: FilterTypesFaq.PRACTICE,
+    topic: null,
+    answer: null,
+  },
+];

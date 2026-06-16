@@ -1,13 +1,13 @@
 import styled from 'styled-components';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { PanelItemEnum, panelItems } from '../../../assets/shared/constants/panel';
-import { CardTitle, TextBody } from '../../../assets/styles/typography';
+import { CardTitle } from '../../../assets/styles/typography';
 import { COLORS } from '../../../assets/styles/colors';
 import { BREAKPOINTS, media } from '../../../assets/styles/breakpoints';
 import { BurgerIcon } from '../../../assets/images/icons/burger-icon';
 import { NotificationIcon } from '../../../assets/images/icons/notification-icon';
-import { Button } from '../../button';
-import { UserIcon } from '../../../assets/images/icons/user';
+import { UserProfileDropdown } from '../../profile-dropdown';
+import { FileIcon } from '../../../assets/images/icons/file-icon';
 
 export default function Header({
   isBurger,
@@ -21,7 +21,13 @@ export default function Header({
     | PanelItemEnum
     | undefined;
 
-  const active = currentPathItem ? panelItems[currentPathItem] : panelItems.dashboard;
+  const navigate = useNavigate();
+
+  const active = currentPathItem
+    ? panelItems[currentPathItem]
+    : location.pathname.includes('notifications')
+      ? { name: 'Сповіщення', icon: FileIcon }
+      : panelItems.dashboard;
   return (
     <HeaderStyle>
       {isBurger && (
@@ -38,18 +44,24 @@ export default function Header({
         <CardTitle>{active.name}</CardTitle>
       </HeaderTitle>
       <HeaderTitle>
-        <NotificationIcon size={28} isItems />
-        <Button
-          className="gap-2"
-          $bgColor={COLORS.lighterBg}
-          $iconSize={32}
-          $txtColor={COLORS.text}
-        >
-          <UserIcon isCircle circleColor={COLORS.accent} color={COLORS.background} size={32} />
-          <TextBody $color={COLORS.text} $label>
-            Username
-          </TextBody>
-        </Button>
+        <span onClick={() => navigate('/student/notifications')}>
+          <NotificationIcon
+            color={location.pathname.includes('notifications') ? COLORS.accent : COLORS.text}
+            size={28}
+            isItems
+          />
+        </span>
+        <UserProfileDropdown
+          user={{
+            firstName: 'Олена',
+            fullName: 'Мельник Олена Ігорівна',
+            email: 'o.i.melnyk@rcit.urk.education',
+            role: 'к.т.н., доц., доцент. кандидат технічних наук',
+          }}
+          onLogout={() => {
+            // очистити токен, редірект на /login
+          }}
+        />
       </HeaderTitle>
     </HeaderStyle>
   );

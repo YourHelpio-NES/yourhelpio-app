@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { COLORS } from '../assets/styles/colors';
 import { basicShadow } from './blocks';
-import { TextBody } from '../assets/styles/typography';
+import { SmallText, TextBody } from '../assets/styles/typography';
 import * as RadixSelect from '@radix-ui/react-select';
 import { useState } from 'react';
 import { ChevronIcon } from '../assets/images/icons/chevron-icon';
@@ -18,18 +18,32 @@ interface SelectProps {
   disabled?: boolean;
   errorText?: string;
   label?: string;
+  sublabel?: string;
+  labelColor?: string;
+  width?: string;
 }
 
-export const Select = ({ options, value, onChange, disabled, errorText, label }: SelectProps) => {
+export const Select = ({
+  options,
+  value,
+  onChange,
+  disabled,
+  errorText,
+  label,
+  sublabel,
+  labelColor,
+  width,
+}: SelectProps) => {
   const [open, setOpen] = useState<boolean>(false);
 
   return (
-    <SelectWrapper>
+    <SelectWrapper $width={width}>
       {label && (
-        <TextBody $label $color={COLORS.secondary}>
+        <TextBody $label $color={labelColor ?? COLORS.secondary}>
           {label}
         </TextBody>
       )}
+      {sublabel && <SmallText $color={labelColor ?? COLORS.secondary}>{sublabel}</SmallText>}
 
       <RadixSelect.Root
         value={value}
@@ -70,11 +84,11 @@ export const Select = ({ options, value, onChange, disabled, errorText, label }:
   );
 };
 
-const SelectWrapper = styled.div`
+export const SelectWrapper = styled.div<{ $width?: string }>`
   display: flex;
   flex-direction: column;
   gap: 6px;
-  width: auto;
+  width: ${({ $width }) => $width ?? 'auto'};
 `;
 
 const SelectTrigger = styled(RadixSelect.Trigger)<{ $hasError?: boolean }>`

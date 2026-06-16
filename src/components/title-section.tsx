@@ -39,15 +39,17 @@ export const LinkTitle = ({
   linkTo,
 }: {
   firstTitle: string;
-  secondTitle: string;
+  secondTitle?: string;
   linkTo?: string;
 }) => {
   return (
     <LinkTitleStyle>
       <SubTitle>{firstTitle}</SubTitle>
-      <Link to={linkTo ?? ''}>
-        <SubTitle>({secondTitle})</SubTitle>
-      </Link>
+      {secondTitle && (
+        <Link to={linkTo ?? ''}>
+          <SubTitle>({secondTitle})</SubTitle>
+        </Link>
+      )}
     </LinkTitleStyle>
   );
 };
