@@ -1,5 +1,5 @@
 import styled, { css } from 'styled-components';
-import { panelItems } from '../assets/shared/constants/panel';
+import { panelStudentItems, panelTeacherItems } from '../assets/shared/constants/panel';
 import { COLORS } from '../assets/styles/colors';
 import { TextBody } from '../assets/styles/typography';
 import logo from '../assets/images/logo.png';
@@ -28,6 +28,8 @@ export default function Panel({
   const isOverlay = (isMobile || isCompact) && !isCollapsed;
 
   const navigate = useNavigate();
+
+  const isRoleTeacher = location.pathname.includes('teacher');
 
   useEffect(() => {
     const handleResize = () => {
@@ -78,25 +80,29 @@ export default function Panel({
                 <img src={currentLogo} alt="logo" />
 
                 <BasicBlock $gap={2}>
-                  {Object.entries(panelItems).map(([key, item]) => {
-                    const isActive = location.pathname.includes(key);
+                  {Object.entries(isRoleTeacher ? panelTeacherItems : panelStudentItems).map(
+                    ([key, item]) => {
+                      const isActive = location.pathname.includes(key);
 
-                    return (
-                      <PanelItem
-                        key={key}
-                        $active={isActive}
-                        $isCollapsed={isCollapsed}
-                        onClick={() => navigate(`/student/${key}`)}
-                      >
-                        {item.icon({
-                          color: isActive ? COLORS.background : COLORS.text,
-                          size: 24,
-                        })}
+                      return (
+                        <PanelItem
+                          key={key}
+                          $active={isActive}
+                          $isCollapsed={isCollapsed}
+                          onClick={() =>
+                            navigate(`/${isRoleTeacher ? 'teacher' : 'student'}/${key}`)
+                          }
+                        >
+                          {item.icon({
+                            color: isActive ? COLORS.background : COLORS.text,
+                            size: 24,
+                          })}
 
-                        {!isCollapsed && <TextBody $medium>{item.name}</TextBody>}
-                      </PanelItem>
-                    );
-                  })}
+                          {!isCollapsed && <TextBody $medium>{item.name}</TextBody>}
+                        </PanelItem>
+                      );
+                    }
+                  )}
                 </BasicBlock>
               </PanelStyle>
 

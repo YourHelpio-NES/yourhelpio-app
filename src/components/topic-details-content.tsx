@@ -2,18 +2,24 @@ import styled from 'styled-components';
 import { BlocksElementIcon } from '../assets/images/icons/blocks-element-icon';
 import { DoneIcon } from '../assets/images/icons/done-icon';
 import { PasswordIcon } from '../assets/images/icons/password-icon';
-import { DifficultyEnum, difficultyTypeData } from '../assets/shared/constants/course';
+import {
+  DifficultyEnum,
+  difficultyTypeData,
+  type WeakTopic,
+} from '../assets/shared/constants/course';
 import { keywordsTheme, learningOutcomesTheme } from '../assets/shared/data/courses';
 import { getColorByPercentage } from '../assets/shared/utils/color';
 import type { ThemeTableRow } from '../assets/shared/utils/table/row-type';
 import { COLORS } from '../assets/styles/colors';
-import { CardTitle, TextBody } from '../assets/styles/typography';
+import { CardTitle, SmallText, TextBody } from '../assets/styles/typography';
 import { TableBlock } from '../pages/student/dashboard';
 import { BasicBlock } from './blocks';
 import { Button } from './button';
 import { StatusItem, StatusTypeItem } from './status-items';
 import { BREAKPOINTS, media } from '../assets/styles/breakpoints';
 import { AnimatePresence, motion } from 'framer-motion';
+import type { TopicDetailTeacher } from '../assets/shared/constants/details-course';
+import { StatusTopicButton } from './row-table-action';
 
 export default function TopicDetailsContent({ activeRow }: { activeRow: ThemeTableRow }) {
   return (
@@ -74,6 +80,116 @@ export default function TopicDetailsContent({ activeRow }: { activeRow: ThemeTab
   );
 }
 
+export function TopicTeacherLargeDetailsContent({ activeRow }: { activeRow: TopicDetailTeacher }) {
+  return (
+    <AnimatePresence mode="wait">
+      <motion.div
+        key={activeRow?.id}
+        initial={{ opacity: 0, y: 12 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, y: -12 }}
+        transition={{ duration: 0.2 }}
+      >
+        <TableBlock
+          className="align-items-start"
+          $padding="28px"
+          $gap={24}
+          $bgColor={COLORS.lighterBg}
+        >
+          <span className="d-flex w-100 gap-3 align-items-start justify-content-between">
+            <span className="d-flex gap-2 align-items-start">
+              <BlocksElementIcon size={28} />
+              <CardTitle>Тема «{activeRow.topicName}»</CardTitle>
+            </span>
+            <StatusTopicButton status={activeRow.status} width="auto" />
+          </span>
+          <TextBlock>{activeRow.description}</TextBlock>
+
+          <ResultStudyingBlock
+            learningOutcomesArr={activeRow.learningOutcomes.map((item): string => item.text)}
+          />
+          <GeneralKeywords keywordsArr={activeRow.keyTerms} />
+
+          <span className="d-flex w-100 gap-1 align-items-center">
+            <Button
+              className="mt-3"
+              type="large"
+              width="auto"
+              $txtColor={COLORS.background}
+              $brWidth={'1'}
+            >
+              <TextBody $medium>Перейти до теми</TextBody>
+            </Button>
+            <Button
+              className="mt-3"
+              type="large"
+              width="auto"
+              $bgColor={'transparent'}
+              $txtColor={COLORS.accent}
+              $brColor={COLORS.accent}
+              $brWidth={'2'}
+            >
+              <TextBody $medium>Перейти до теми</TextBody>
+            </Button>
+          </span>
+        </TableBlock>
+      </motion.div>
+    </AnimatePresence>
+  );
+}
+
+export function TopicTeacherSmallDetailsContent({ activeRow }: { activeRow: WeakTopic }) {
+  return (
+    <AnimatePresence mode="wait">
+      <motion.div
+        key={activeRow?.id}
+        initial={{ opacity: 0, y: 12 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, y: -12 }}
+        transition={{ duration: 0.2 }}
+      >
+        <TableBlock
+          className="align-items-start"
+          $padding="28px"
+          $gap={12}
+          $bgColor={COLORS.lighterBg}
+        >
+          <span className="d-flex gap-2 align-items-start">
+            <BlocksElementIcon size={28} />
+            <CardTitle>Тема «{activeRow.title}»</CardTitle>
+          </span>
+          <span className="w-100 d-flex align-items-center ">
+            <LabelValue label="% засвоєння:">
+              <TextBody $medium $color={getColorByPercentage(activeRow.masteryPercent)}>
+                {activeRow.masteryPercent ?? '—'}%
+              </TextBody>
+            </LabelValue>
+            <Button
+              $bgColor={'transparent'}
+              $txtColor={COLORS.secondary}
+              $brWidth={'2'}
+              $brColor={COLORS.secondary}
+              width="auto"
+              type={'small'}
+            >
+              <SmallText className="text-nowrap" $medium>
+                {activeRow.course}
+              </SmallText>
+            </Button>
+          </span>
+          <LabelValue label="Кількість студентів:">
+            <TextBody $medium>{activeRow.studentCount}</TextBody>
+          </LabelValue>
+          <TextBlock>{activeRow.description}</TextBlock>
+          <Button type="large" width="auto" $txtColor={COLORS.background} $brWidth={'1'}>
+            <TextBody $medium>Перейти до теми</TextBody>
+          </Button>
+        </TableBlock>
+      </motion.div>
+    </AnimatePresence>
+  );
+}
+
 export const LabelSection = ({ label, children }: { label: string; children: React.ReactNode }) => (
   <LabelSectionStyle className="w-100 d-flex flex-column align-items-start">
     <TextBody $medium>{label}</TextBody>
@@ -99,7 +215,7 @@ interface LabelValueProps {
 
 export const LabelValue = ({ label, children }: LabelValueProps) => (
   <LabelValueStyle className={`w-100 d-flex align-items-center`}>
-    <TextBody $medium>{label}</TextBody>
+    <TextBody>{label}</TextBody>
     {children}
   </LabelValueStyle>
 );
@@ -109,6 +225,12 @@ export const LabelValueStyle = styled.span`
   ${media(BREAKPOINTS.ml)} {
     gap: 8px;
   }
+`;
+
+const TextBlock = styled(TextBody)`
+  padding: 16px;
+  border-radius: 16px;
+  background-color: ${COLORS.background};
 `;
 
 export function ResultStudyingBlock({ learningOutcomesArr }: { learningOutcomesArr: string[] }) {

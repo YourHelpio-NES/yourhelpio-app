@@ -4,6 +4,12 @@ import { TextBody } from '../../../styles/typography';
 import { PasswordIcon } from '../../../images/icons/password-icon';
 import { DoneIcon } from '../../../images/icons/done-icon';
 import { COLORS } from '../../../styles/colors';
+import { type TopicDetailTeacherRow } from '../../constants/details-course';
+import {
+  RowTableActions,
+  StatusTopicButton,
+  type TopicTableMeta,
+} from '../../../../components/row-table-action';
 
 const topicsTableCols: ColumnDef<ThemeTableRow>[] = [
   {
@@ -37,3 +43,34 @@ const topicsTableCols: ColumnDef<ThemeTableRow>[] = [
 ];
 
 export default topicsTableCols;
+
+export const topicsTeacherTableCol: ColumnDef<TopicDetailTeacherRow>[] = [
+  {
+    accessorKey: 'topicName',
+    cell: ({ row }) => (
+      <span className="d-flex gap-3 align-items-center">
+        <TextBody>{row.original.id}.</TextBody>
+        <TextBody $medium>{row.original.topicName}</TextBody>
+      </span>
+    ),
+    header: 'Тема',
+  },
+  {
+    accessorKey: 'status',
+    cell: ({ row }) => <StatusTopicButton status={row.original.status} />,
+    header: 'Статус',
+  },
+  {
+    id: 'actions',
+    header: '',
+    cell: ({ row, table }) => {
+      const meta = table.options.meta as TopicTableMeta;
+      return (
+        <RowTableActions
+          onEdit={() => meta.onEdit(row.original)}
+          onDelete={() => meta.onDelete(row.original)}
+        />
+      );
+    },
+  },
+];

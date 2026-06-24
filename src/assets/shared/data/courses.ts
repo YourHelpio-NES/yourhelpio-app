@@ -1,4 +1,4 @@
-import { DifficultyEnum } from '../constants/course';
+import { DifficultyEnum, type WeakTopic } from '../constants/course';
 import type { TaskTableRow, ThemeTableRow } from '../utils/table/row-type';
 
 export const coursesProgressData = [
@@ -165,4 +165,111 @@ export const keywordsTheme: string[] = [
   'розділяй і володарюй',
   'стабільне сортування',
   'in-place сортування',
+];
+
+export const WEAK_TOPICS: WeakTopic[] = [
+  {
+    id: 1,
+    title: 'Типи даних',
+    course: 'Алгоритми проєктування',
+    masteryPercent: 45,
+    weeklyDelta: -10,
+    studentCount: 31,
+    description:
+      'Тема для студентів допоможе визначити тему тип даних, теорія, як їх використовувати на практиці та вміти вільно пояснити всі терміни по темі.',
+  },
+  {
+    id: 2,
+    title: 'Boolean',
+    course: 'Алгоритми проєктування',
+    masteryPercent: 48,
+    weeklyDelta: null,
+    studentCount: 28,
+    description:
+      'Студенти мають розуміти логічний тип даних Boolean, вміти використовувати його в умовних виразах та пояснювати різницю між true і false.',
+  },
+  {
+    id: 3,
+    title: 'Інтеграли',
+    course: 'Математичний аналіз',
+    masteryPercent: 55,
+    weeklyDelta: null,
+    studentCount: 24,
+    description:
+      'Тема охоплює визначені та невизначені інтеграли. Студенти мають навчитися застосовувати основні методи інтегрування та розуміти геометричний зміст інтеграла.',
+  },
+  {
+    id: 4,
+    title: 'Нормалізація',
+    course: 'Бази даних',
+    masteryPercent: 65,
+    weeklyDelta: null,
+    studentCount: 19,
+    description:
+      'Студенти вивчають нормальні форми баз даних (1НФ–3НФ), вміють визначати надлишковість даних та приводити таблиці до нормалізованого вигляду.',
+  },
+];
+
+export const topicsTeacherTableData: ThemeTableRow[] = [
+  {
+    id: '1',
+    topicName: 'Введення в алгоритми проєктування',
+    stage: 'День 14',
+    progress: '100',
+  },
+  {
+    id: '2',
+    topicName: 'Часова складність та нотація Big-O',
+    stage: 'День 14',
+    progress: '100',
+  },
+  {
+    id: '3',
+    topicName: 'Рекурсія та динамічне програмування',
+    stage: 'День 7',
+    progress: '90',
+  },
+  {
+    id: '4',
+    topicName: 'Жадібні алгоритми',
+    stage: 'День 7',
+    progress: '90',
+  },
+  {
+    id: '5',
+    topicName: 'Алгоритми сортування',
+    stage: 'День 3',
+    progress: '45',
+  },
+  {
+    id: '6',
+    topicName: 'Алгоритми пошуку',
+    stage: 'День 1',
+    progress: '0',
+  },
+  {
+    id: '7',
+    topicName: 'Графові алгоритми',
+    progress: '0',
+  },
+  {
+    id: '8',
+    topicName: 'Дерева та структури даних',
+  },
+  {
+    id: '9',
+    topicName: 'Хеш-таблиці та хешування',
+  },
+  {
+    id: '10',
+    topicName: 'Алгоритми на рядках',
+  },
+  {
+    id: '11',
+    topicName: 'Паралельні алгоритми',
+  },
+  {
+    id: '12',
+    topicName: 'Апроксимаційні алгоритми',
+  },
 ];

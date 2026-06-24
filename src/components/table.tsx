@@ -10,6 +10,7 @@ import { TextBody } from '../assets/styles/typography';
 import styled, { css } from 'styled-components';
 import { COLORS } from '../assets/styles/colors';
 import { BREAKPOINTS, media } from '../assets/styles/breakpoints';
+import type { TopicTableMeta } from './row-table-action';
 
 interface SimpleTableProps<TData extends RowData> {
   data: TData[];
@@ -19,6 +20,7 @@ interface SimpleTableProps<TData extends RowData> {
   activeRowId?: number;
   onRowClick?: (row: TData) => void;
   isRowDisabled?: (row: TData) => boolean;
+  meta?: TopicTableMeta;
 }
 
 export function SimpleTable<TData extends RowData>({
@@ -29,11 +31,13 @@ export function SimpleTable<TData extends RowData>({
   activeRowId,
   onRowClick,
   isRowDisabled,
+  meta,
 }: SimpleTableProps<TData>) {
   const table = useReactTable({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
+    meta: meta,
   });
 
   return (

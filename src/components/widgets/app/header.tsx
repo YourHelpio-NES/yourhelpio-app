@@ -1,6 +1,11 @@
 import styled from 'styled-components';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { PanelItemEnum, panelItems } from '../../../assets/shared/constants/panel';
+import {
+  PanelItemStudentEnum,
+  PanelItemTeacherEnum,
+  panelStudentItems,
+  panelTeacherItems,
+} from '../../../assets/shared/constants/panel';
 import { CardTitle } from '../../../assets/styles/typography';
 import { COLORS } from '../../../assets/styles/colors';
 import { BREAKPOINTS, media } from '../../../assets/styles/breakpoints';
@@ -17,17 +22,21 @@ export default function Header({
   setIsCollapsed: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
   const location = useLocation();
-  const currentPathItem = Object.keys(panelItems).find((key) => location.pathname.includes(key)) as
-    | PanelItemEnum
-    | undefined;
+  const isRoleTeacher = location.pathname.includes('teacher');
+
+  const currentPathItem = Object.keys(isRoleTeacher ? panelTeacherItems : panelStudentItems).find(
+    (key) => location.pathname.includes(key)
+  ) as (PanelItemTeacherEnum | PanelItemStudentEnum) | undefined;
 
   const navigate = useNavigate();
 
   const active = currentPathItem
-    ? panelItems[currentPathItem]
+    ? isRoleTeacher
+      ? panelTeacherItems[currentPathItem as PanelItemTeacherEnum]
+      : panelStudentItems[currentPathItem as PanelItemStudentEnum]
     : location.pathname.includes('notifications')
       ? { name: 'Сповіщення', icon: FileIcon }
-      : panelItems.dashboard;
+      : (isRoleTeacher ? panelTeacherItems : panelStudentItems).dashboard;
   return (
     <HeaderStyle>
       {isBurger && (

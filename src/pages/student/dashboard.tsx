@@ -16,7 +16,7 @@ import { FaqIcon } from '../../assets/images/icons/header/faq-icon';
 import { CardCarousel } from '../../components/card-carousel';
 import taskTableCols from '../../assets/shared/utils/table/task-table-column';
 
-export default function DashboardPage() {
+export default function DashboardStudentPage() {
   const navigate = useNavigate();
 
   const sortedExtremelyRepeating = [...extremelyRepeating].sort(
@@ -266,7 +266,7 @@ export const TableBlock = styled(BasicBlock)<{
   }
 `;
 
-const ProgressCard = styled.div`
+export const ProgressCard = styled.div`
   flex: 0 1 calc(50% - 8px);
   min-width: 0;
   max-width: calc(50% - 8px);

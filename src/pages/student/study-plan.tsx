@@ -39,6 +39,7 @@ export default function StudyPlanMainPage() {
     setActiveRow(topicsTableData.find((x) => x.id === row.id) ?? topicsTableData[0]);
     if (isMobile) setIsModalOpen(true);
   };
+
   return (
     <AppLayout>
       <BasicBlock width="55%">
@@ -159,7 +160,7 @@ export const BodyTable = styled(BasicBlock)`
   }
 `;
 
-const DialogOverlay = styled(Dialog.Overlay)`
+export const DialogOverlay = styled(Dialog.Overlay)`
   position: fixed;
   inset: 0;
   backdrop-filter: blur(1px);
@@ -167,7 +168,7 @@ const DialogOverlay = styled(Dialog.Overlay)`
   z-index: 100;
 `;
 
-const DialogContent = styled(Dialog.Content)`
+export const DialogContent = styled(Dialog.Content)`
   position: fixed;
   bottom: 0;
   right: 0;
@@ -252,7 +253,7 @@ const DialogContent = styled(Dialog.Content)`
   }
 `;
 
-const CloseButton = styled.button`
+export const CloseButton = styled.button`
   position: absolute;
   top: 7px;
   left: 7px;

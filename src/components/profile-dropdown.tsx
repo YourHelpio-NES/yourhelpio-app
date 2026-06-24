@@ -17,6 +17,7 @@ import { UserIcon } from '../assets/images/icons/user';
 import { SmallText, TextBody } from '../assets/styles/typography';
 import { basicShadow } from './blocks';
 import { ExitIcon } from '../assets/images/icons/exit-icon';
+import { Divider } from '../pages/notification';
 
 interface User {
   firstName: string;
@@ -49,13 +50,6 @@ const DropdownCard = styled.div<{ $visible: boolean }>`
   ${Button} {
     margin-left: auto;
   }
-`;
-
-const Divider = styled.div`
-  height: 1px;
-  background: ${COLORS.boxShadow};
-  margin: 8px 0;
-  width: 100%;
 `;
 
 export const UserProfileDropdown = ({ user, onLogout }: UserProfileDropdownProps) => {

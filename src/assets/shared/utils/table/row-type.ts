@@ -14,3 +14,11 @@ export interface ThemeTableRow {
   stage?: string;
   progress?: string;
 }
+
+export interface WeakTopicTableRow {
+  id: number;
+  title: string;
+  course: string;
+  masteryPercent: number;
+  weeklyDelta: number | null;
+}

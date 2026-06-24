@@ -2,7 +2,8 @@ import { Navigate, Route, Routes } from 'react-router-dom';
 import SignInPage from './pages/auth/sign-in';
 import SignUpPage from './pages/auth/sign-up';
 import ForgotPasswordPage from './pages/auth/forgot-password';
-import DashboardPage from './pages/student/dashboard';
+import DashboardStudentPage from './pages/student/dashboard';
+import DashboardPageTeacher from './pages/teacher/dashboard';
 import StudyPlanMainPage from './pages/student/study-plan';
 import StudySessionMainPage from './pages/student/study-session';
 import TopicsDetailsStudentPage from './pages/student/topics/details';
@@ -14,6 +15,10 @@ import CurriculumTreeMainPage from './pages/student/curriculum-tree-main';
 import FaqPage from './pages/student/faq';
 import SettingsPage from './pages/settings';
 import NotificationPage from './pages/notification';
+import MainCoursesPageTeacher from './pages/teacher/courses/main';
+import MainDetailsCoursePage from './pages/teacher/courses/details/main';
+import OverviewDetailsCourseTab from './pages/teacher/courses/details/overview';
+import TopicsDetailsCourseTab from './pages/teacher/courses/details/topics';
 
 function App() {
   return (
@@ -23,7 +28,7 @@ function App() {
       <Route path="forgot-password" element={<ForgotPasswordPage />} />
       <Route path="student">
         <Route index element={<Navigate to="dashboard" replace />} />
-        <Route path="dashboard" element={<DashboardPage />} />
+        <Route path="dashboard" element={<DashboardStudentPage />} />
         <Route path="study-plan" element={<StudyPlanMainPage />} />
         <Route path="knowledge-tree" element={<CurriculumTreeMainPage />} />
         <Route path="study-session">
@@ -42,6 +47,20 @@ function App() {
         <Route path={'faq'} element={<FaqPage />} />
         <Route path={'settings'} element={<SettingsPage />} />
         <Route path={'notifications'} element={<NotificationPage />} />
+      </Route>
+
+      <Route path="teacher">
+        <Route index element={<Navigate to="dashboard" replace />} />
+        <Route path="dashboard" element={<DashboardPageTeacher />} />
+        <Route path="courses">
+          <Route index element={<Navigate to="main" replace />} />
+          <Route path="main" element={<MainCoursesPageTeacher />} />
+          <Route path="details" element={<MainDetailsCoursePage />}>
+            <Route index element={<Navigate to="overview" replace />} />
+            <Route path="overview" element={<OverviewDetailsCourseTab />} />
+            <Route path="topics" element={<TopicsDetailsCourseTab />} />
+          </Route>
+        </Route>
       </Route>
 
       <Route path="" element={<Navigate to="/sign-in" />} />

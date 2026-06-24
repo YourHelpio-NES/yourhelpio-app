@@ -75,9 +75,10 @@ const Group = styled.div`
   margin-bottom: 1rem;
 `;
 
-const Divider = styled.div`
+export const Divider = styled.div`
   height: 0.5px;
   background: ${COLORS.boxShadow};
+  width: 100%;
   margin-bottom: 1rem;
 `;
 
