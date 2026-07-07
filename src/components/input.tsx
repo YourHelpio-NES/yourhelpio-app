@@ -1,4 +1,4 @@
-import { useState, type Dispatch, type SetStateAction } from 'react';
+import { useRef, useState, type Dispatch, type SetStateAction } from 'react';
 import { InputTypeEnum } from '../assets/shared/constants/input';
 import { fontType, SmallText, TextBody } from '../assets/styles/typography';
 import styled from 'styled-components';
@@ -12,9 +12,18 @@ interface InputType {
   label?: string;
   errorText?: string;
   type: InputTypeEnum;
+  onBlur?: () => void;
 }
 
-export default function Input({ value, setValue, placeholder, label, errorText, type }: InputType) {
+export default function Input({
+  value,
+  setValue,
+  placeholder,
+  label,
+  errorText,
+  type,
+  onBlur,
+}: InputType) {
   const [showPassword, setShowPassword] = useState<boolean>(false);
 
   return (
@@ -36,6 +45,7 @@ export default function Input({ value, setValue, placeholder, label, errorText, 
           onChange={(e) => {
             setValue(e.target.value);
           }}
+          onBlur={onBlur}
           autoComplete={type.includes(InputTypeEnum.PASSWORD) ? 'current-password' : type}
         />
         {type.includes(InputTypeEnum.PASSWORD) && (
@@ -47,7 +57,7 @@ export default function Input({ value, setValue, placeholder, label, errorText, 
   );
 }
 
-const InputStyle = styled.span`
+export const InputStyle = styled.span`
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -93,5 +103,51 @@ const InputStyle = styled.span`
   ${SmallText} {
     color: ${COLORS.status.error};
     margin-top: -4px;
+  }
+`;
+
+export function Textarea({
+  value,
+  setValue,
+}: {
+  value: string;
+  setValue: Dispatch<SetStateAction<string>>;
+}) {
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+  const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setValue(e.target.value);
+
+    const el = textareaRef.current;
+    if (!el) return;
+
+    el.style.height = '0px';
+    el.style.height = `${el.scrollHeight}px`;
+  };
+
+  return <TextareaStyle ref={textareaRef} value={value} onChange={handleChange} />;
+}
+
+export const TextareaStyle = styled.textarea`
+  width: 100%;
+  max-height: none;
+  overflow-y: hidden;
+  resize: none;
+  border: 1px solid ${COLORS.secondary};
+  padding: 10px 20px;
+  border-radius: 32px;
+  ${TextBody.componentStyle.rules};
+
+  background: ${COLORS.lighterBg};
+  color: ${COLORS.text};
+
+  &:focus {
+    outline: none;
+    border-color: ${COLORS.primary};
+  }
+  &:focus-within {
+    border-color: ${COLORS.primary};
+    box-shadow: 0 0 0 4px ${COLORS.primaryShadow};
+    transition: all 0.3s cubic-bezier(0.075, 0.82, 0.165, 1);
   }
 `;
