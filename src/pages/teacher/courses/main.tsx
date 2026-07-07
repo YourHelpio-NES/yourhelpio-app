@@ -17,11 +17,13 @@ import * as Dialog from '@radix-ui/react-dialog';
 import { CloseIcon } from '../../../assets/images/icons/close-icon';
 import { weakTopicTeacherColumns } from '../../../assets/shared/utils/table/weak-topic-teacher-column';
 import type { WeakTopic } from '../../../assets/shared/constants/course';
+import { useNavigate } from 'react-router-dom';
 
 export default function MainCoursesPageTeacher() {
   const [isMobile, setIsMobile] = useState(() => window.innerWidth <= BREAKPOINTS.ml);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [activeRow, setActiveRow] = useState<WeakTopic>(WEAK_TOPICS[0]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth <= BREAKPOINTS.ml);
@@ -37,7 +39,13 @@ export default function MainCoursesPageTeacher() {
   return (
     <AppLayout>
       <BasicBlock className="align-items-start" $gap={24}>
-        <Button type={'large'} $bgColor={COLORS.background} $txtColor={COLORS.accent} $brWidth="2">
+        <Button
+          type={'large'}
+          $bgColor={COLORS.background}
+          $txtColor={COLORS.accent}
+          $brWidth="2"
+          onClick={() => navigate('/teacher/courses/create')}
+        >
           <PlusIcon color={COLORS.accent} />
           <TextBody $medium>Додати курс</TextBody>
         </Button>
@@ -103,7 +111,7 @@ export default function MainCoursesPageTeacher() {
   );
 }
 
-const CourseCard = styled(ProgressCard)`
+export const CourseCard = styled(ProgressCard)`
   flex: 0 1 calc(33% - 8px);
   max-width: calc(33% - 8px);
 

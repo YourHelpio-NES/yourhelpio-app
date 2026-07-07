@@ -4,12 +4,16 @@ import { TextBody } from '../../../styles/typography';
 import { PasswordIcon } from '../../../images/icons/password-icon';
 import { DoneIcon } from '../../../images/icons/done-icon';
 import { COLORS } from '../../../styles/colors';
-import { type TopicDetailTeacherRow } from '../../constants/details-course';
+import {
+  type TopicDetailTeacherRow,
+  type TopicProblemTeacherRow,
+} from '../../constants/details-course';
 import {
   RowTableActions,
   StatusTopicButton,
   type TopicTableMeta,
 } from '../../../../components/row-table-action';
+import { getColorByPercentage } from '../color';
 
 const topicsTableCols: ColumnDef<ThemeTableRow>[] = [
   {
@@ -72,5 +76,32 @@ export const topicsTeacherTableCol: ColumnDef<TopicDetailTeacherRow>[] = [
         />
       );
     },
+  },
+];
+
+export const topicsProblemTeacherTableCol: ColumnDef<TopicProblemTeacherRow>[] = [
+  {
+    accessorKey: 'topicName',
+    cell: ({ row }) => (
+      <span className="d-flex gap-3 align-items-center">
+        <TextBody>{row.original.id}.</TextBody>
+        <TextBody $medium>{row.original.topicName}</TextBody>
+      </span>
+    ),
+    header: 'Тема',
+  },
+  {
+    accessorKey: 'group',
+    cell: ({ row }) => <TextBody>{row.original.group}</TextBody>,
+    header: 'Група',
+  },
+  {
+    id: 'level',
+    header: 'Рівень засвоєння',
+    cell: ({ row }) => (
+      <TextBody $medium $color={getColorByPercentage(row.original.level)}>
+        {row.original.level}%
+      </TextBody>
+    ),
   },
 ];

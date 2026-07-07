@@ -18,7 +18,7 @@ import { InputTypeEnum } from '../../assets/shared/constants/input';
 import { useFilterForm } from '../../assets/shared/hooks/validators/useFilterDropdown';
 import { Select } from '../../components/dropdown';
 
-export default function FaqPage() {
+export default function FaqStudentPage() {
   const [filterType, setFilterType] = useState<string>(FilterTypesFaq.ALL);
   const [selectCourse, setSelectCourse] = useState<string>(extremelyRepeating[0].course);
 
@@ -35,6 +35,7 @@ export default function FaqPage() {
   } = selectForm;
 
   const [questionType, setQuestionType] = useState<string>('');
+  const [searchValue, setSearchValue] = useState<string>('');
 
   return (
     <AppLayout>
@@ -45,6 +46,17 @@ export default function FaqPage() {
             <TextBody>Знайдіть відповіді на найпоширеніші питання щодо курсу</TextBody>
           </span>
           <BasicBlock $gap={12}>
+            <span className="d-flex gap-2 pb-2">
+              <Input
+                value={searchValue}
+                setValue={setSearchValue}
+                type={InputTypeEnum.TEXT}
+                placeholder="Пошук питання..."
+              />
+              <Button>
+                <TextBody>Пошук</TextBody>
+              </Button>
+            </span>
             <span className="d-flex flex-wrap gap-1">
               {Object.entries(FilterTypesFaq).map((item, key) => (
                 <Button

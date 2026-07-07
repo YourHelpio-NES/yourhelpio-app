@@ -286,13 +286,13 @@ export const ProgressCard = styled.div`
 
   ${SmallText} {
     font-size: 0.94rem;
-    line-height: 0.6;
+    line-height: 1;
   }
 
   span {
     display: flex;
     flex-wrap: wrap;
-    gap: 4px;
+    gap: 8px;
     row-gap: 6px;
     align-items: center;
     width: 100%;

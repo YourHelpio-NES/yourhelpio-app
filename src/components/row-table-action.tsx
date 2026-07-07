@@ -22,6 +22,8 @@ import { EditIcon } from '../assets/images/icons/edit-icon';
 import { SmallText, TextBody } from '../assets/styles/typography';
 import { DeleteIcon } from '../assets/images/icons/delete-icon';
 import { DotsIcon } from '../assets/images/icons/dots-icon';
+import type { StudentStatus } from '../assets/shared/constants/student';
+import { STUDENT_STATUS_LABEL } from '../assets/shared/data/topic-students';
 
 interface RowActionsProps {
   onEdit: () => void;
@@ -191,6 +193,38 @@ export const StatusTopicButton = ({
     >
       <SmallText className="text-nowrap" $medium>
         {status ?? '—'}
+      </SmallText>
+    </Button>
+  );
+};
+
+export const StudentStatusButton = ({
+  status,
+  width = '100%',
+}: {
+  status: StudentStatus;
+  width?: string;
+}) => {
+  const activeColor =
+    status === 'completed'
+      ? COLORS.status.success
+      : status === 'in_progress'
+        ? COLORS.status.warning
+        : status === 'not_started'
+          ? COLORS.secondary
+          : status === 'not_assigned' && COLORS.status.error;
+  return (
+    <Button
+      $bgColor={'transparent'}
+      $txtColor={activeColor || COLORS.secondary}
+      $brColor={activeColor || COLORS.secondary}
+      $brWidth={'2'}
+      width={width}
+      type="small"
+      className={width === '100%' ? 'px-2' : ''}
+    >
+      <SmallText className="text-nowrap" $medium>
+        {STUDENT_STATUS_LABEL[status] ?? '—'}
       </SmallText>
     </Button>
   );

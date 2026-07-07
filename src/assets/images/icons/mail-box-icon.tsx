@@ -13,14 +13,14 @@ export const MailBoxIcon = ({ color = COLORS.text, size = 26 }: ImageType) => {
       <path
         d="M16.25 4.875H4.46875C3.93003 4.875 3.41337 5.08901 3.03244 5.46994C2.65151 5.85087 2.4375 6.36753 2.4375 6.90625V19.0938C2.4375 19.6325 2.65151 20.1491 3.03244 20.5301C3.41337 20.911 3.93003 21.125 4.46875 21.125H21.4668C22.0055 21.125 22.5221 20.911 22.9031 20.5301C23.284 20.1491 23.498 19.6325 23.498 19.0938V12.1367"
         stroke={color}
-        stroke-linecap="round"
-        stroke-linejoin="round"
+        strokeLinecap="round"
+        strokeLinejoin="round"
       />
       <path
         d="M5.6875 8.125L13 13.8125L17.418 10.4777"
         stroke={color}
-        stroke-linecap="round"
-        stroke-linejoin="round"
+        strokeLinecap="round"
+        strokeLinejoin="round"
       />
       <path
         d="M21.935 8.93828C23.2798 8.93828 24.3699 7.84811 24.3699 6.50332C24.3699 5.15853 23.2798 4.06836 21.935 4.06836C20.5902 4.06836 19.5 5.15853 19.5 6.50332C19.5 7.84811 20.5902 8.93828 21.935 8.93828Z"

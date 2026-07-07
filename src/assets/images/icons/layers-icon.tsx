@@ -14,8 +14,8 @@ export const LayersIcon = ({ color = COLORS.text, size = 24 }) => {
         fill={color}
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M2 8C2 8.494 2.993 8.89 4.979 9.685L7.787 10.809C9.773 11.603 10.767 12 12 12C13.233 12 14.227 11.603 16.213 10.809L19.021 9.685C21.007 8.891 22 8.494 22 8C22 7.506 21.007 7.11 19.021 6.315L16.213 5.192C14.227 4.397 13.233 4 12 4C10.767 4 9.773 4.397 7.787 5.192L4.98 6.315C2.993 7.109 2 7.506 2 8Z"
         fill={color}
       />

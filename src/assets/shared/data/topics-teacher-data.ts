@@ -1,4 +1,8 @@
-import { TopicDetailsStatusEnum, type TopicDetailTeacher } from '../constants/details-course';
+import {
+  TopicDetailsStatusEnum,
+  TopicMaterialEnum,
+  type TopicDetailTeacher,
+} from '../constants/details-course';
 
 export const TOPIC_DETAILS_TEACHER: TopicDetailTeacher[] = [
   {
@@ -31,8 +35,8 @@ export const TOPIC_DETAILS_TEACHER: TopicDetailTeacher[] = [
     keyTerms: ['алгоритм', 'псевдокод', 'блок-схема', 'виконавець', 'інструкція', 'крок'],
     keyTermsVerified: true,
     materials: [
-      { id: 1, fileName: 'intro-slides.pptx', isVerified: true },
-      { id: 2, fileName: 'lecture1.pdf', isVerified: true },
+      { id: 1, fileName: 'intro-slides.pptx', verified: TopicMaterialEnum.DONE },
+      { id: 2, fileName: 'lecture1.pdf', verified: TopicMaterialEnum.DONE },
     ],
     materialsNote: 'Файли завантажено успішно, дані згенеровано та підтверджено.',
   },
@@ -79,8 +83,8 @@ export const TOPIC_DETAILS_TEACHER: TopicDetailTeacher[] = [
     ],
     keyTermsVerified: true,
     materials: [
-      { id: 1, fileName: 'big-o-slides.pptx', isVerified: true },
-      { id: 2, fileName: 'lecture2.pdf', isVerified: true },
+      { id: 1, fileName: 'big-o-slides.pptx', verified: TopicMaterialEnum.DONE },
+      { id: 2, fileName: 'lecture2.pdf', verified: TopicMaterialEnum.PROCESS },
     ],
     materialsNote: 'Файли завантажено успішно, дані згенеровано та підтверджено.',
   },
@@ -116,8 +120,8 @@ export const TOPIC_DETAILS_TEACHER: TopicDetailTeacher[] = [
     ],
     keyTermsVerified: true,
     materials: [
-      { id: 1, fileName: 'recursion-slides.pptx', isVerified: true },
-      { id: 2, fileName: 'lecture3.pdf', isVerified: true },
+      { id: 1, fileName: 'recursion-slides.pptx', verified: TopicMaterialEnum.CANCEL },
+      { id: 2, fileName: 'lecture3.pdf', verified: TopicMaterialEnum.DONE },
     ],
     materialsNote: 'Файли завантажено успішно, дані згенеровано та підтверджено.',
   },
@@ -158,8 +162,8 @@ export const TOPIC_DETAILS_TEACHER: TopicDetailTeacher[] = [
     ],
     keyTermsVerified: true,
     materials: [
-      { id: 1, fileName: 'greedy-slides.pptx', isVerified: true },
-      { id: 2, fileName: 'lecture4.pdf', isVerified: true },
+      { id: 1, fileName: 'greedy-slides.pptx', verified: TopicMaterialEnum.DONE },
+      { id: 2, fileName: 'lecture4.pdf', verified: TopicMaterialEnum.DONE },
     ],
     materialsNote: 'Файли завантажено успішно, дані згенеровано та підтверджено.',
   },
@@ -204,7 +208,7 @@ export const TOPIC_DETAILS_TEACHER: TopicDetailTeacher[] = [
       'порівняння',
     ],
     keyTermsVerified: false,
-    materials: [{ id: 1, fileName: 'sorting-slides.pptx', isVerified: false }],
+    materials: [{ id: 1, fileName: 'sorting-slides.pptx', verified: TopicMaterialEnum.PROCESS }],
     materialsNote: 'Матеріали на перевірці.',
   },
   {

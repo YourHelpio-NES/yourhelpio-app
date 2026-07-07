@@ -6,6 +6,7 @@ import { StyledTab, TabList } from '../../../../components/tabs-list';
 import AppLayout from '../../../../components/widgets/app/layout';
 import styled from 'styled-components';
 import { BasicBlock } from '../../../../components/blocks';
+import { BREAKPOINTS, media } from '../../../../assets/styles/breakpoints';
 
 export default function MainDetailsCoursePage() {
   console.log(location.pathname);
@@ -63,6 +64,18 @@ const MainTabsBody = styled(BasicBlock)`
 
     ${CardTitle} {
       color: ${COLORS.text};
+    }
+
+    ${media(BREAKPOINTS.ml)} {
+      padding: 18px;
+      padding-bottom: 32px;
+      gap: 18px;
+    }
+
+    ${media(BREAKPOINTS.sm)} {
+      padding: 14px;
+      padding-bottom: 24px;
+      gap: 14px;
     }
   }
 `;

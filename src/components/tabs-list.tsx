@@ -4,6 +4,7 @@ import { TextBody } from '../assets/styles/typography';
 import { COLORS } from '../assets/styles/colors';
 import { motion } from 'framer-motion';
 import { basicShadow } from './blocks';
+import { BREAKPOINTS, media } from '../assets/styles/breakpoints';
 
 export const TabList = styled.div`
   display: flex;
@@ -13,6 +14,21 @@ export const TabList = styled.div`
   border-radius: 12px;
   padding: 16px;
   ${basicShadow};
+
+  ${media(BREAKPOINTS.ml)} {
+    overflow-x: auto;
+    scrollbar-width: none; /* Firefox */
+    -webkit-overflow-scrolling: touch;
+
+    &::-webkit-scrollbar {
+      display: none; /* Chrome/Safari */
+    }
+  }
+
+  ${media(BREAKPOINTS.sm)} {
+    padding: 10px;
+    gap: 6px;
+  }
 `;
 
 export const StyledTab = styled(NavLink)<{ $color: string }>`
@@ -54,6 +70,24 @@ export const StyledTab = styled(NavLink)<{ $color: string }>`
   ${TextBody} {
     max-width: 95%;
     color: ${COLORS.text};
+  }
+
+  ${media(BREAKPOINTS.ml)} {
+    /* flex-grow: 0; */
+    padding: 8px 16px;
+    flex-shrink: 0;
+    white-space: nowrap;
+  }
+
+  /* На мобільному: ховаємо текст лейблу, лишаємо тільки іконку — компактний таб-бар */
+  ${media(BREAKPOINTS.sm)} {
+    padding: 10px;
+    gap: 8px;
+
+    svg {
+      width: 20px;
+      height: 20px;
+    }
   }
 `;
 

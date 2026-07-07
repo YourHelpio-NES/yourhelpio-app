@@ -261,7 +261,7 @@ const AuthBodyBlock = styled.div`
   gap: 40px;
 `;
 
-const RadioBlock = styled(BasicBlock)<{ $disable?: boolean }>`
+export const RadioBlock = styled(BasicBlock)<{ $disable?: boolean }>`
   width: 100%;
   border-radius: 24px;
   border: 1px solid ${COLORS.secondary};

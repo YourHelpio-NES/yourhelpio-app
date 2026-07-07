@@ -67,6 +67,7 @@ export const Button = styled.button<{
     width: ${({ $iconSize }) => `${$iconSize ?? 24}px`};
     height: ${({ $iconSize }) => `${$iconSize ?? 24}px`};
     opacity: ${({ disabled }) => (disabled ? 0.5 : 1)};
+    flex-shrink: 0;
   }
 
   ${media(BREAKPOINTS.sm)} {

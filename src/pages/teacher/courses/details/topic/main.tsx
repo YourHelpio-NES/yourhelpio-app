@@ -1,27 +1,35 @@
 import { useEffect, useState } from 'react';
-import { PlusIcon } from '../../../../assets/images/icons/plus-icon';
-import { topicsTeacherTableCol } from '../../../../assets/shared/utils/table/topics-table-column';
-import { COLORS } from '../../../../assets/styles/colors';
-import { TextBody } from '../../../../assets/styles/typography';
-import { BasicBlock } from '../../../../components/blocks';
-import { Button } from '../../../../components/button';
-import { SimpleTable } from '../../../../components/table';
-import { BodyTable, CloseButton, DialogContent, DialogOverlay } from '../../../student/study-plan';
+import { PlusIcon } from '../../../../../assets/images/icons/plus-icon';
+import { topicsTeacherTableCol } from '../../../../../assets/shared/utils/table/topics-table-column';
+import { COLORS } from '../../../../../assets/styles/colors';
+import { TextBody } from '../../../../../assets/styles/typography';
+import { BasicBlock } from '../../../../../components/blocks';
+import { Button } from '../../../../../components/button';
+import { SimpleTable } from '../../../../../components/table';
+import {
+  BodyTable,
+  CloseButton,
+  DialogContent,
+  DialogOverlay,
+} from '../../../../student/study-plan';
 import * as Dialog from '@radix-ui/react-dialog';
-import type { ThemeTableRow } from '../../../../assets/shared/utils/table/row-type';
-import { BREAKPOINTS } from '../../../../assets/styles/breakpoints';
-import { TopicTeacherLargeDetailsContent } from '../../../../components/topic-details-content';
-import { CloseIcon } from '../../../../assets/images/icons/close-icon';
-import { TOPIC_DETAILS_TEACHER } from '../../../../assets/shared/data/topics-teacher-data';
+import type { ThemeTableRow } from '../../../../../assets/shared/utils/table/row-type';
+import { BREAKPOINTS } from '../../../../../assets/styles/breakpoints';
+import { TopicTeacherLargeDetailsContent } from '../../../../../components/topic-details-content';
+import { CloseIcon } from '../../../../../assets/images/icons/close-icon';
+import { TOPIC_DETAILS_TEACHER } from '../../../../../assets/shared/data/topics-teacher-data';
 import type {
   TopicDetailTeacher,
   TopicDetailTeacherRow,
-} from '../../../../assets/shared/constants/details-course';
+} from '../../../../../assets/shared/constants/details-course';
+import { useNavigate } from 'react-router-dom';
 
 export default function TopicsDetailsCourseTab() {
   const [activeRow, setActiveRow] = useState<TopicDetailTeacher>(TOPIC_DETAILS_TEACHER[0]);
   const [isMobile, setIsMobile] = useState(() => window.innerWidth <= BREAKPOINTS.ml);
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth <= BREAKPOINTS.ml);
@@ -62,7 +70,17 @@ export default function TopicsDetailsCourseTab() {
             onRowClick={handleRowClick}
           />
         </BasicBlock>
-        {!isMobile && <TopicTeacherLargeDetailsContent activeRow={activeRow} />}
+        {!isMobile && (
+          <TopicTeacherLargeDetailsContent
+            activeRow={activeRow}
+            clickNavigate={() =>
+              navigate(`/teacher/courses/details/topics/details?id=${activeRow.id}`)
+            }
+            clickNavigateEdit={() =>
+              navigate(`/teacher/courses/details/topics/update?id=${activeRow.id}`)
+            }
+          />
+        )}
 
         {isMobile && (
           <Dialog.Root open={isModalOpen} onOpenChange={setIsModalOpen}>
@@ -74,7 +92,15 @@ export default function TopicsDetailsCourseTab() {
                     <CloseIcon size={22} />
                   </CloseButton>
                 </Dialog.Close>
-                <TopicTeacherLargeDetailsContent activeRow={activeRow} />
+                <TopicTeacherLargeDetailsContent
+                  activeRow={activeRow}
+                  clickNavigate={() =>
+                    navigate(`/teacher/courses/details/topics/details?id=${activeRow.id}`)
+                  }
+                  clickNavigateEdit={() =>
+                    navigate(`/teacher/courses/details/topics/update?id=${activeRow.id}`)
+                  }
+                />
               </DialogContent>
             </Dialog.Portal>
           </Dialog.Root>
