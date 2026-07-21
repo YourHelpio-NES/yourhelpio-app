@@ -1,8 +1,9 @@
-import { useState } from 'react';
-import { TOPICS } from './curriculum-tree';
+import { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { SmallText, TextBody } from '../assets/styles/typography';
+import { TextBody } from '../assets/styles/typography';
 import { COLORS } from '../assets/styles/colors';
+import type { CourseProgressResponse } from '../api/courses/details.types';
+import { useTopicDetailsStudent } from '../assets/shared/hooks/useTopicDetailsStudent';
 
 const RootLabel = styled(TextBody)`
   color: ${COLORS.text};
@@ -37,31 +38,6 @@ const AccLabel = styled(TextBody)<{ $done?: boolean; $active?: boolean }>`
   color: ${({ $done, $active }) =>
     $active ? COLORS.accent : $done ? COLORS.text : COLORS.secondaryDark};
   transition: color 0.2s;
-`;
-
-const AccRight = styled.span`
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  flex-shrink: 0;
-`;
-
-const Badge = styled(SmallText)<{ $variant: 'done' | 'active' }>`
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  padding: 4px 10px;
-  border-radius: 20px;
-  background: ${({ $variant }) => ($variant === 'done' ? '#EAF3DE' : '#FAECE7')};
-  color: ${({ $variant }) => ($variant === 'done' ? COLORS.status.success : COLORS.accent)};
-`;
-
-const Chevron = styled.span<{ $open: boolean }>`
-  display: inline-flex;
-  font-size: 22px;
-  color: ${COLORS.secondary};
-  transition: transform 0.25s ease;
-  transform: ${({ $open }) => ($open ? 'rotate(180deg)' : 'rotate(0deg)')};
 `;
 
 const AccBody = styled.div<{ $open: boolean }>`
@@ -104,54 +80,75 @@ const SubDot = styled.span<{ $active?: boolean }>`
   flex-shrink: 0;
 `;
 
-export const MobileTopicTree = () => {
-  const [opened, setOpened] = useState<number | null>(2);
+export const MobileTopicTree = ({
+  course,
+  courseTitle,
+}: {
+  course: CourseProgressResponse;
+  courseTitle: string;
+}) => {
+  const [opened, setOpened] = useState<number | null>(() => course.topics[0]?.topic_id ?? null);
+  const { topic, fetchTopic } = useTopicDetailsStudent();
 
-  const toggle = (id: number) => setOpened((prev) => (prev === id ? null : id));
+  const toggle = (id: number) => {
+    setOpened((prev) => (prev === id ? null : id));
+    if (id) {
+      void fetchTopic(id);
+    }
+  };
+
+  useEffect(() => {
+    if (course.topics.length > 0) {
+      void fetchTopic(course.topics[0].topic_id);
+    }
+  }, [course.topics, fetchTopic]);
 
   return (
     <ItemsBlock>
-      <RootLabel $label>Алгоритми проєктування</RootLabel>
+      <RootLabel $label>{courseTitle}</RootLabel>
 
-      {TOPICS.map((topic) => {
-        const label = topic.label.join(' ');
-        const isOpen = opened === topic.id;
+      {course.topics.length > 0 ? (
+        course.topics.map((item) => {
+          const isOpen = opened === item.topic_id;
 
-        return (
-          <AccItem key={topic.id}>
-            <AccHeader
-              onClick={() => toggle(topic.id)}
-              aria-expanded={isOpen}
-              aria-controls={`acc-body-${topic.id}`}
-            >
-              <AccLabel $medium data-label $done={topic.done} $active={opened === topic.id}>
-                {label}
-              </AccLabel>
+          return (
+            <AccItem key={item.topic_id}>
+              <AccHeader
+                onClick={() => toggle(item.topic_id)}
+                aria-expanded={isOpen}
+                aria-controls={`acc-body-${item.topic_id}`}
+              >
+                <AccLabel $medium data-label $active={opened === item.topic_id}>
+                  {item.title}
+                </AccLabel>
 
-              <AccRight>
-                {topic.done && <Badge $variant="done">✓ Завершено</Badge>}
-                {opened === topic.id && !topic.done && <Badge $variant="active">Активна</Badge>}
+                {/* <AccRight>
+                {item.done && <Badge $variant="done">✓ Завершено</Badge>}
+                {opened === item.id && !item.done && <Badge $variant="active">Активна</Badge>}
                 <Chevron $open={isOpen} aria-hidden="true">
                   ›
                 </Chevron>
-              </AccRight>
-            </AccHeader>
+              </AccRight> */}
+              </AccHeader>
 
-            <AccBody $open={isOpen} id={`acc-body-${topic.id}`} role="region">
-              <AccInner>
-                <SubList>
-                  {topic.subtopics.map((sub) => (
-                    <SubItem key={sub}>
-                      <SubDot $active={opened === topic.id && !topic.done} />
-                      <TextBody>{sub}</TextBody>
-                    </SubItem>
-                  ))}
-                </SubList>
-              </AccInner>
-            </AccBody>
-          </AccItem>
-        );
-      })}
+              <AccBody $open={isOpen} id={`acc-body-${item.topic_id}`} role="region">
+                <AccInner>
+                  <SubList>
+                    {topic?.passport.outcomes.map((sub) => (
+                      <SubItem key={sub}>
+                        <SubDot $active={opened === item.topic_id} />
+                        <TextBody>{sub}</TextBody>
+                      </SubItem>
+                    ))}
+                  </SubList>
+                </AccInner>
+              </AccBody>
+            </AccItem>
+          );
+        })
+      ) : (
+        <TextBody>У цьому курсі немає тем</TextBody>
+      )}
     </ItemsBlock>
   );
 };

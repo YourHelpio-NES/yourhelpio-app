@@ -6,15 +6,12 @@ import { BasicBlock } from '../../../components/blocks';
 import { COLORS } from '../../../assets/styles/colors';
 import { CardTitle } from '../../../assets/styles/typography';
 
-import { topicDetailsMock } from '../../../assets/shared/data/topic';
-import { LinkTitle } from '../../../components/title-section';
-
 export default function MaterialDetailsTopicPage() {
   //   const { id } = useSearchParams();
 
   return (
     <AppLayout>
-      <LinkTitle firstTitle={topicDetailsMock.title[0]} secondTitle={topicDetailsMock.title[1]} />
+      {/* <LinkTitle firstTitle={topicDetailsMock.title[0]} secondTitle={topicDetailsMock.title[1]} /> */}
       <MaterialBlock $bgColor={COLORS.lighterBg}>
         <CardTitle>Теоретичний матеріал</CardTitle>
         <MarkdownRenderer content={theoreticalMaterialMock} />

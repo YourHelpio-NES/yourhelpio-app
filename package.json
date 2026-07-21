@@ -17,6 +17,7 @@
     "@radix-ui/react-popover": "^1.1.19",
     "@radix-ui/react-select": "^2.2.6",
     "@tanstack/react-table": "^8.21.3",
+    "axios": "^1.18.1",
     "bootstrap": "^5.3.8",
     "framer-motion": "^12.38.0",
     "react": "^19.2.5",
@@ -24,7 +25,8 @@
     "react-hot-toast": "^2.6.0",
     "react-markdown": "^10.1.0",
     "react-router-dom": "^7.14.2",
-    "styled-components": "^6.4.1"
+    "styled-components": "^6.4.1",
+    "zustand": "^5.0.14"
   },
   "lint-staged": {
     "src/**/*.{js,jsx,ts,tsx}": [

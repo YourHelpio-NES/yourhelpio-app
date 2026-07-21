@@ -1,10 +1,9 @@
 import styled from 'styled-components';
-import { topicDetailsMock } from '../../../assets/shared/data/topic';
-import { CardTitle, TextBody } from '../../../assets/styles/typography';
+import { CardTitle, SmallText, TextBody } from '../../../assets/styles/typography';
 import { BasicBlock, basicShadow } from '../../../components/blocks';
 import AppLayout from '../../../components/widgets/app/layout';
 import { COLORS } from '../../../assets/styles/colors';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import {
   GeneralKeywords,
   LabelValue,
@@ -12,99 +11,207 @@ import {
 } from '../../../components/topic-details-content';
 import { getColorByPercentage } from '../../../assets/shared/utils/color';
 import { DoneIcon } from '../../../assets/images/icons/done-icon';
-import { PasswordIcon } from '../../../assets/images/icons/password-icon';
 import { SparklesIcon } from '../../../assets/images/icons/sparkles-icon';
-import { StatusItem, StatusTypeItem } from '../../../components/status-items';
 import { Button } from '../../../components/button';
 import { BREAKPOINTS, media } from '../../../assets/styles/breakpoints';
-import { studyDayLabels, StudyStatusEnum } from '../../../assets/shared/constants/topicDays';
 import { LinkTitle } from '../../../components/title-section';
+import { useTopicDetailsStudent } from '../../../assets/shared/hooks/useTopicDetailsStudent';
+import { useEffect } from 'react';
+import { useCourseDetailsStudent } from '../../../assets/shared/hooks/useCourseDetailsStudent';
+import { useLearningStages } from '../../../assets/shared/hooks/useLearningStages';
+import {
+  studyDayLabels,
+  StudyStatusEnumCode,
+  StudyTypeEnumCode,
+} from '../../../assets/shared/constants/topicDays';
+import { StudyStatusEnum } from '../../../api/courses/learning-stages.types';
+import { useCourseMaterials } from '../../../assets/shared/hooks/useCourseMaterials';
+import { useDownloadMaterial } from '../../../assets/shared/hooks/useDownloadCourseMaterial';
+import {
+  FileIconWrap,
+  FileInfo,
+  FileList,
+  FileTop,
+} from '../../../components/upload-file/component';
+import { getFileIconByText } from '../../../components/upload-file/functionality';
+
+import pdfIcon from '../../../assets/images/icons/pdf-file.png';
+import docsIcon from '../../../assets/images/icons/docs-file.png';
+import attachIcon from '../../../assets/images/icons/attach-icon.png';
+import imageIcon from '../../../assets/images/icons/image-icon.png';
+import linkIcon from '../../../assets/images/icons/link-icon.png';
+import { FileUploadIcon } from '../../../assets/images/icons/file-upload-icon';
+import { TableBlock } from '../dashboard';
 
 export default function TopicsDetailsStudentPage() {
-  //   const { id } = useSearchParams();
+  const [searchParams] = useSearchParams();
+  const id = searchParams.get('id');
+
   const navigate = useNavigate();
+  const { topic, isLoading: topicLoader, fetchTopic } = useTopicDetailsStudent();
+  const { course, fetchCourse, isLoading: courseLoader } = useCourseDetailsStudent();
+  const topicCourse = course?.topics.find((x) => x.topic_id === topic?.id);
+  const stages = useLearningStages({
+    currentStage: topicCourse?.stage ?? 0,
+    inRemediation: topicCourse?.in_remediation ?? true,
+  });
+
+  const { materials, isLoading: materialLoader, refetch } = useCourseMaterials();
+  const { download, isLoading: isDownloading } = useDownloadMaterial();
+
+  useEffect(() => {
+    if (id) {
+      void fetchTopic(Number(id));
+    }
+  }, [id, fetchTopic]);
+
+  useEffect(() => {
+    if (topic?.course_id) {
+      void fetchCourse(topic.course_id);
+    }
+  }, [topic?.course_id, fetchCourse]);
+
+  useEffect(() => {
+    if (course?.course_id) {
+      void refetch(course.course_id);
+    }
+  }, [course?.course_id, refetch]);
+
+  if (!topic) {
+    return (
+      <AppLayout>
+        <TextBody>Не вдалося завантажити тему</TextBody>
+      </AppLayout>
+    );
+  }
 
   return (
-    <AppLayout>
+    <AppLayout loadingState={courseLoader || topicLoader || materialLoader || isDownloading}>
       <WrapBlock>
         <DetailsBlock $gap={24} className="p-0">
           <LinkTitle
-            firstTitle={topicDetailsMock.title[0]}
-            secondTitle={topicDetailsMock.title[1]}
+            firstTitle={topic.title}
+            linkTo={`/student/study-plan?course=${course?.course_id}`}
           />
           <LabelValue label="Прогрес:">
-            {topicDetailsMock.progress ? (
-              <span className="d-flex gap-2 align-items-center">
-                <TextBody $medium $color={getColorByPercentage(topicDetailsMock.progress)}>
-                  {topicDetailsMock.progress}%
-                </TextBody>
-                {topicDetailsMock.progress === 100 && (
-                  <DoneIcon size={28} color={COLORS.status.success} />
-                )}
-              </span>
-            ) : (
-              <PasswordIcon size={24} />
-            )}
-          </LabelValue>
-          <ResultStudyingBlock learningOutcomesArr={topicDetailsMock.learningOutcomes} />
-          <GeneralKeywords keywordsArr={topicDetailsMock.keywords} />
-        </DetailsBlock>
-        <DetailsBlock
-          className="align-items-start"
-          $bgColor={COLORS.lighterBg}
-          $gap={24}
-          $titleColor={COLORS.accent}
-        >
-          <span className="d-flex gap-2 align-items-center">
-            <SparklesIcon />
-            <CardTitle>Коротко про тему</CardTitle>
-          </span>
-          <BasicBlock $bgColor={'transparent'} $gap={8}>
-            <TextBody>{topicDetailsMock.shortInfo.description}</TextBody>
-            <span>
-              {topicDetailsMock.shortInfo.items.map((item) => (
-                <span className="d-flex gap-2 align-items-center" key={item}>
-                  <StatusItem
-                    $size={12}
-                    $type={StatusTypeItem.CIRCLE}
-                    $color={COLORS.secondaryDark}
-                  />
-                  <TextBody>{item}</TextBody>
-                </span>
-              ))}
+            {/* {topicDetailsMock.progress ? ( */}
+            <span className="d-flex gap-2 align-items-center">
+              <TextBody $medium $color={getColorByPercentage(topicCourse?.progress_pct ?? 0)}>
+                {topicCourse?.progress_pct}/100
+              </TextBody>
+              {topicCourse?.progress_pct === 100 && (
+                <DoneIcon size={28} color={COLORS.status.success} />
+              )}
             </span>
-          </BasicBlock>
-          <TextBody $medium>{topicDetailsMock.shortInfo.conclusion}</TextBody>
-          <Button
-            type="large"
-            width="auto"
-            $bgColor={'transparent'}
-            $txtColor={COLORS.accent}
-            $brColor={COLORS.accent}
-            $brWidth={'2'}
-            onClick={() => navigate(`/student/study-session/topics/materials?id=1`)}
+            {/* ) : (
+              <PasswordIcon size={24} />
+            )} */}
+          </LabelValue>
+          <ResultStudyingBlock learningOutcomesArr={topic.passport.outcomes} />
+          <GeneralKeywords keywordsArr={topic.passport.keywords} />
+        </DetailsBlock>
+        <DetailsBlock $gap={24} className="p-0">
+          <TableBlock
+            className="align-items-start"
+            $bgColor={COLORS.lighterBg}
+            $gap={24}
+            $titleColor={COLORS.accent}
           >
-            <TextBody $medium>Читати повністю матеріал</TextBody>
-          </Button>
+            <span className="d-flex gap-2 align-items-center">
+              <SparklesIcon />
+              <CardTitle>Коротко про тему</CardTitle>
+            </span>
+            <TextBody>{topic.passport.summary}</TextBody>
+          </TableBlock>
+
+          <TableBlock
+            className="align-items-start"
+            $bgColor={COLORS.lighterBg}
+            $gap={12}
+            $titleColor={COLORS.accent}
+          >
+            <span className="d-flex gap-2 align-items-center">
+              <CardTitle>Матеріали курсу</CardTitle>
+            </span>
+            {materials.length > 0 && (
+              <FileList className={'w-100'}>
+                {materials.map((f) => {
+                  const icon = getFileIconByText(f.file_path);
+                  return (
+                    <FileTop
+                      style={{
+                        border: `1px solid ${COLORS.boxShadow}`,
+                        padding: '8px',
+                        borderRadius: '8px',
+                      }}
+                    >
+                      <FileIconWrap
+                        $type={icon}
+                        src={
+                          icon === 'pdf'
+                            ? pdfIcon
+                            : icon === 'docs'
+                              ? docsIcon
+                              : icon === 'image'
+                                ? imageIcon
+                                : icon === 'link'
+                                  ? linkIcon
+                                  : attachIcon
+                        }
+                      />
+                      <FileInfo>
+                        <SmallText $medium>
+                          {f.filename}
+                          {f.status === 'indexed' && (
+                            <DoneIcon color={COLORS.status.success} size={22} />
+                          )}
+                        </SmallText>
+                        <SmallText $color={COLORS.placeholder}>
+                          {new Date(f.uploaded_at).toLocaleDateString('uk-UA')}
+                        </SmallText>
+                      </FileInfo>
+                      {f.status === 'pending' && <SmallText>Завантажується</SmallText>}
+
+                      {!(isDownloading || f.status !== 'indexed') && (
+                        <Button
+                          $bgColor={'transparent'}
+                          $brColor={'transparent'}
+                          width="auto"
+                          $brRadius={'8'}
+                          $iconSize={24}
+                          $type={'small'}
+                          className="p-0"
+                          style={{ transform: 'rotate(180deg)' }}
+                          onClick={() => download(course!.course_id, f.id, f.filename)}
+                        >
+                          <FileUploadIcon color={COLORS.placeholder} size={20} />
+                        </Button>
+                      )}
+                    </FileTop>
+                  );
+                })}
+              </FileList>
+            )}
+          </TableBlock>
         </DetailsBlock>
       </WrapBlock>
       <DetailsBlock $gap={24} $titleColor={COLORS.accent} className="px-0">
         <CardTitle>Етапи навчання</CardTitle>
         <StageList>
-          {topicDetailsMock.stages.map((item) => (
-            <StageCard>
+          {stages.map((item, index) => (
+            <StageCard key={index}>
               <StageInfo>
                 <TextBody $label>{studyDayLabels[item.day]}</TextBody>
 
                 <span>
                   <TextBody>{item.module}</TextBody>
                   <TextBody>—</TextBody>
-                  <TextBody $medium>{item.type}</TextBody>
+                  <TextBody $medium>{StudyTypeEnumCode[item.type]}</TextBody>
                 </span>
               </StageInfo>
 
               <Button
-                type="large"
+                $type="large"
                 width=""
                 $bgColor={
                   item.status === StudyStatusEnum.COMPLETED
@@ -130,7 +237,7 @@ export default function TopicsDetailsStudentPage() {
                 }}
               >
                 <span className="d-flex gap-2 align-items-center">
-                  <TextBody $medium>{item.status}</TextBody>
+                  <TextBody $medium>{StudyStatusEnumCode[item.status]}</TextBody>
                   {item.status === StudyStatusEnum.COMPLETED && (
                     <DoneIcon size={24} color={COLORS.text} />
                   )}

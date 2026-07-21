@@ -44,7 +44,7 @@ export default function TopicsDetailsCourseTab() {
 
   return (
     <>
-      <Button type={'large'} $bgColor={COLORS.lighterBg} $txtColor={COLORS.accent} $brWidth="2">
+      <Button $type={'large'} $bgColor={COLORS.lighterBg} $txtColor={COLORS.accent} $brWidth="2">
         <PlusIcon color={COLORS.accent} />
         <TextBody $medium>Додати тему</TextBody>
       </Button>

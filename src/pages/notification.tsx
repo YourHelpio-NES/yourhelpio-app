@@ -31,7 +31,7 @@ export default function NotificationPage() {
             $txtColor={activeFilter === item.value ? COLORS.lighterBg : COLORS.text}
             $brColor={activeFilter === item.value ? COLORS.secondary : COLORS.text}
             width="auto"
-            type={'small'}
+            $type={'small'}
             key={key}
             onClick={() => setActiveFilter(item.value)}
           >

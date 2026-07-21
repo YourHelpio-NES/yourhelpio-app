@@ -59,7 +59,7 @@ export const CardCarousel = <T,>({ items, renderCard }: CardCarouselProps<T>) =>
       </AnimatePresence>
 
       <ArrowButton
-        type={'text'}
+        $type={'text'}
         $bgColor={COLORS.primaryShadow}
         onClick={prev}
         $iconSize={20}
@@ -69,7 +69,7 @@ export const CardCarousel = <T,>({ items, renderCard }: CardCarouselProps<T>) =>
       </ArrowButton>
 
       <ArrowButton
-        type={'text'}
+        $type={'text'}
         $bgColor={COLORS.primaryShadow}
         onClick={next}
         $iconSize={20}

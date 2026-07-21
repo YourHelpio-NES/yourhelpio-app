@@ -1,6 +1,5 @@
 import { StudyQuestionCardIcon } from '../../../assets/images/icons/study-question-card-icon';
 import { testSessionMock } from '../../../assets/shared/data/test-session';
-import { topicDetailsMock } from '../../../assets/shared/data/topic';
 import { useTestSession } from '../../../assets/shared/hooks/useSession';
 import { COLORS } from '../../../assets/styles/colors';
 import { TextBody } from '../../../assets/styles/typography';
@@ -33,8 +32,8 @@ export default function StudyingStep() {
       <BasicBlock width="100%">
         <BasicBlock $bgColor="transparent" $gap={12}>
           <LinkTitle
-            firstTitle={topicDetailsMock.title[0]}
-            secondTitle={topicDetailsMock.title[1]}
+            firstTitle={'topicDetailsMock.title[0]'}
+            secondTitle={'topicDetailsMock.title[1]'}
           />
           <LabelValue label="Етап:">
             <TextBody $label $color={COLORS.accent}>

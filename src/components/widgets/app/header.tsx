@@ -13,6 +13,8 @@ import { BurgerIcon } from '../../../assets/images/icons/burger-icon';
 import { NotificationIcon } from '../../../assets/images/icons/notification-icon';
 import { UserProfileDropdown } from '../../profile-dropdown';
 import { FileIcon } from '../../../assets/images/icons/file-icon';
+import { useAuthStore } from '../../../store/auth.store';
+import { roles } from '../../../assets/shared/constants/roles';
 
 export default function Header({
   isBurger,
@@ -27,6 +29,10 @@ export default function Header({
   const currentPathItem = Object.keys(isRoleTeacher ? panelTeacherItems : panelStudentItems).find(
     (key) => location.pathname.includes(key)
   ) as (PanelItemTeacherEnum | PanelItemStudentEnum) | undefined;
+
+  const logout = useAuthStore((state) => state.logout);
+
+  const user = useAuthStore((state) => state.user!);
 
   const navigate = useNavigate();
 
@@ -62,13 +68,13 @@ export default function Header({
         </span>
         <UserProfileDropdown
           user={{
-            firstName: 'Олена',
-            fullName: 'Мельник Олена Ігорівна',
-            email: 'o.i.melnyk@rcit.urk.education',
-            role: 'к.т.н., доц., доцент. кандидат технічних наук',
+            firstName: user.full_name.split(' ')[0],
+            fullName: user.full_name,
+            email: user.email,
+            role: roles.find((x) => x.value === user.role)?.label ?? roles[0].label,
           }}
           onLogout={() => {
-            // очистити токен, редірект на /login
+            logout();
           }}
         />
       </HeaderTitle>

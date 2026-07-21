@@ -7,9 +7,7 @@ import {
   difficultyTypeData,
   type WeakTopic,
 } from '../assets/shared/constants/course';
-import { keywordsTheme, learningOutcomesTheme } from '../assets/shared/data/courses';
 import { getColorByPercentage } from '../assets/shared/utils/color';
-import type { ThemeTableRow } from '../assets/shared/utils/table/row-type';
 import { COLORS } from '../assets/styles/colors';
 import { CardTitle, SmallText, TextBody } from '../assets/styles/typography';
 import { TableBlock } from '../pages/student/dashboard';
@@ -28,61 +26,88 @@ import { StatusTopicButton } from './row-table-action';
 import { CloseIcon } from '../assets/images/icons/close-icon';
 import { LoadProgressIcon } from '../assets/images/icons/load-progress-icon';
 import { CancelIcon } from '../assets/images/icons/cancel-icon';
+import type { CourseTopicProgress } from '../api/courses/details.types';
+import { StudyDayEnum, studyDayLabels } from '../assets/shared/constants/topicDays';
+import { useEffect } from 'react';
+import { useTopicDetailsStudent } from '../assets/shared/hooks/useTopicDetailsStudent';
+import { useNavigate } from 'react-router-dom';
 
-export default function TopicDetailsContent({ activeRow }: { activeRow: ThemeTableRow }) {
+export default function TopicDetailsContent({
+  activeRow,
+}: {
+  activeRow: CourseTopicProgress | undefined;
+}) {
+  const { topic, fetchTopic } = useTopicDetailsStudent();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (activeRow) {
+      void fetchTopic(activeRow.topic_id);
+    }
+  }, [activeRow, fetchTopic]);
+
   return (
     <AnimatePresence mode="wait">
       <motion.div
-        key={activeRow?.id}
+        key={activeRow?.topic_id}
         initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0, y: -12 }}
         transition={{ duration: 0.2 }}
       >
-        <TableBlock
-          className="align-items-start"
-          $padding="28px"
-          $gap={24}
-          $bgColor={COLORS.lighterBg}
-        >
-          <span className="d-flex gap-2 align-items-start">
-            <BlocksElementIcon size={28} />
-            <CardTitle>Тема «{activeRow.topicName}»</CardTitle>
-          </span>
-          <span className="w-100 d-flex flex-column align-items-start  gap-md-2 gap-sm-1">
-            <LabelValue label="Етап:">
-              <TextBody $medium>{activeRow.stage ?? '—'}</TextBody>
-            </LabelValue>
-            <LabelValue label="Прогрес:">
-              {activeRow.progress ? (
-                <span className="d-flex gap-2 align-items-center">
-                  <TextBody
-                    $medium
-                    $color={getColorByPercentage(Number.parseInt(activeRow.progress))}
-                  >
-                    {activeRow.progress}%
-                  </TextBody>
-                  {activeRow.progress === '100' && (
-                    <DoneIcon size={28} color={COLORS.status.success} />
-                  )}
-                </span>
-              ) : (
-                <PasswordIcon size={24} />
-              )}
-            </LabelValue>
-          </span>
-          <ResultStudyingBlock learningOutcomesArr={learningOutcomesTheme} />
-          <GeneralKeywords keywordsArr={keywordsTheme} />
-          <Button
-            className="mt-3"
-            type="large"
-            width="auto"
-            $txtColor={COLORS.background}
-            $brWidth={'1'}
+        {activeRow && topic ? (
+          <TableBlock
+            className="align-items-start"
+            $padding="28px"
+            $gap={24}
+            $bgColor={COLORS.lighterBg}
           >
-            <TextBody $medium>Перейти до теми</TextBody>
-          </Button>
-        </TableBlock>
+            <span className="d-flex gap-2 align-items-start">
+              <BlocksElementIcon size={28} />
+              <CardTitle>Тема «{activeRow.title}»</CardTitle>
+            </span>
+            <span className="w-100 d-flex flex-column align-items-start  gap-md-2 gap-sm-1">
+              <LabelValue label="Етап:">
+                <TextBody $medium>
+                  {activeRow.stage ? studyDayLabels[activeRow.stage as StudyDayEnum] : '—'}
+                </TextBody>
+              </LabelValue>
+              <LabelValue label="Прогрес:">
+                {activeRow.progress_pct !== 0 ? (
+                  <span className="d-flex gap-2 align-items-center">
+                    <TextBody>{activeRow.progress_pct}%</TextBody>
+                    {activeRow.progress_pct === 100 && <DoneIcon color={COLORS.status.success} />}
+                  </span>
+                ) : (
+                  <PasswordIcon size={22} />
+                )}
+              </LabelValue>
+            </span>
+            <ResultStudyingBlock learningOutcomesArr={topic.passport.outcomes} />
+            <GeneralKeywords keywordsArr={topic.passport.keywords} />
+            <Button
+              className="mt-3"
+              $type="large"
+              width="auto"
+              $txtColor={COLORS.background}
+              $brWidth={'1'}
+              onClick={() =>
+                navigate(`/student/study-session/topics/details?id=${activeRow.topic_id}`)
+              }
+            >
+              <TextBody $medium>Перейти до теми</TextBody>
+            </Button>
+          </TableBlock>
+        ) : (
+          <TableBlock
+            className="align-items-start"
+            $padding="28px"
+            $gap={24}
+            $bgColor={COLORS.lighterBg}
+          >
+            <TextBody>Тему не обрано</TextBody>
+          </TableBlock>
+        )}
       </motion.div>
     </AnimatePresence>
   );
@@ -129,7 +154,7 @@ export function TopicTeacherLargeDetailsContent({
           <span className="d-flex w-100 gap-1 align-items-center">
             <Button
               className="mt-3"
-              type="large"
+              $type="large"
               width="auto"
               $txtColor={COLORS.background}
               $brWidth={'1'}
@@ -139,7 +164,7 @@ export function TopicTeacherLargeDetailsContent({
             </Button>
             <Button
               className="mt-3"
-              type="large"
+              $type="large"
               width="auto"
               $bgColor={'transparent'}
               $txtColor={COLORS.accent}
@@ -188,7 +213,7 @@ export function TopicTeacherSmallDetailsContent({ activeRow }: { activeRow: Weak
               $brWidth={'2'}
               $brColor={COLORS.secondary}
               width="auto"
-              type={'small'}
+              $type={'small'}
             >
               <SmallText className="text-nowrap" $medium>
                 {activeRow.course}
@@ -199,7 +224,7 @@ export function TopicTeacherSmallDetailsContent({ activeRow }: { activeRow: Weak
             <TextBody $medium>{activeRow.studentCount}</TextBody>
           </LabelValue>
           <TextBlock>{activeRow.description}</TextBlock>
-          <Button type="large" width="auto" $txtColor={COLORS.background} $brWidth={'1'}>
+          <Button $type="large" width="auto" $txtColor={COLORS.background} $brWidth={'1'}>
             <TextBody $medium>Перейти до теми</TextBody>
           </Button>
         </TableBlock>
@@ -323,7 +348,7 @@ export function ResultStudyingBlock({
                     }
                     $brColor={COLORS.status.success}
                     width="auto"
-                    type={'small'}
+                    $type={'small'}
                     onClick={() => onChange!(item as LearningOutcome, true)}
                   >
                     <DoneIcon
@@ -348,7 +373,7 @@ export function ResultStudyingBlock({
                     }
                     $brColor={COLORS.status.error}
                     width="auto"
-                    type={'small'}
+                    $type={'small'}
                     onClick={() => onChange!(item as LearningOutcome, false)}
                   >
                     <CloseIcon
@@ -404,7 +429,7 @@ export function GeneralKeywords({
               $txtColor={COLORS.status.success}
               $brColor={COLORS.status.success}
               width="auto"
-              type={'small'}
+              $type={'small'}
               className="mx-2"
               disabled={verifiedCount}
             >
@@ -436,7 +461,7 @@ export function GeneralKeywords({
                   width="auto"
                   $brRadius={'8'}
                   $iconSize={20}
-                  type={'small'}
+                  $type={'small'}
                   className="p-0"
                   onClick={() => onChange!(item, false)}
                 >
@@ -464,7 +489,7 @@ export function GeneralKeywords({
                     width="auto"
                     $brRadius={'8'}
                     $iconSize={20}
-                    type={'small'}
+                    $type={'small'}
                     className="p-0"
                     onClick={() => onChange!(item, true)}
                   >

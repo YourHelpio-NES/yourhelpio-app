@@ -43,7 +43,7 @@ export default function StudentsStep() {
         />
         <TextBody className="text-center">або</TextBody>
         <Button
-          type="large"
+          $type="large"
           width="100%"
           className="px-1"
           $bgColor={'transparent'}
@@ -90,7 +90,7 @@ export default function StudentsStep() {
         size="lg"
         footer={
           !isGeneric ? (
-            <Button type="large" onClick={() => setIsGeneric(true)}>
+            <Button $type="large" onClick={() => setIsGeneric(true)}>
               {/* disabled={!newTopicName || !newTopicDesc} onClick={handleAdd} */}
               <TextBody $medium>Згенерувати</TextBody>
             </Button>
@@ -111,7 +111,7 @@ export default function StudentsStep() {
               </Button>
             </span>
           ) : selectedType === 'За email' ? (
-            <Button type="large" onClick={() => setIsGeneric(false)}>
+            <Button $type="large" onClick={() => setIsGeneric(false)}>
               {/* disabled={!newTopicName || !newTopicDesc} onClick={handleAdd} */}
               <TextBody $medium>Надіслати</TextBody>
             </Button>

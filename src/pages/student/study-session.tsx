@@ -1,7 +1,6 @@
 import { useNavigate } from 'react-router-dom';
-import { tasks } from '../../assets/shared/data/courses';
 import { formatDate, getToday, getTomorrow } from '../../assets/shared/utils/date';
-import taskTableCols from '../../assets/shared/utils/table/task-table-column';
+import { getTaskTableCols } from '../../assets/shared/utils/table/task-table-column';
 import { COLORS } from '../../assets/styles/colors';
 import { CardTitle, TextBody } from '../../assets/styles/typography';
 import { BasicBlock } from '../../components/blocks';
@@ -9,12 +8,24 @@ import { Line } from '../../components/status-items';
 import { SimpleTable } from '../../components/table';
 import AppLayout from '../../components/widgets/app/layout';
 import { TableBlock } from './dashboard';
+import { useReviewNeeded } from '../../assets/shared/hooks/useReviewNeeded';
+import { useMemo } from 'react';
 
 export default function StudySessionMainPage() {
+  const { isLoading, overdueItems, todayItems, tomorrowItems } = useReviewNeeded();
   const navigate = useNavigate();
 
+  const tasksColumns = useMemo(
+    () =>
+      getTaskTableCols(
+        (id) => navigate(`/student/study-session/topics/details?id=${id}`),
+        (id) => navigate(`/student/study-plan?course=${id}`)
+      ),
+    [navigate]
+  );
+
   return (
-    <AppLayout>
+    <AppLayout loadingState={isLoading}>
       <BasicBlock>
         <TableBlock $bgColor={COLORS.lighterBg}>
           <span className="d-flex gap-2 align-items-end">
@@ -23,14 +34,20 @@ export default function StudySessionMainPage() {
               ({formatDate(getToday())})
             </TextBody>
           </span>
-          <SimpleTable
-            data={tasks}
-            columns={taskTableCols}
-            isRowDisabled={(row) => row.completed}
-            onRowClick={() => {
-              navigate(`/student/study-session/topics/details?id=1`);
-            }}
-          />
+          {todayItems.length === 0 ? (
+            <span className="d-flex flex-column align-items-start gap-2">
+              <TextBody $medium>Завдань немає</TextBody>
+              <TextBody>
+                Продовжуйте вивчати нові теми – повторення з'являться автоматично.
+              </TextBody>
+            </span>
+          ) : (
+            <SimpleTable
+              data={todayItems}
+              columns={tasksColumns}
+              isRowDisabled={(row) => row.is_overdue}
+            />
+          )}
         </TableBlock>
         <Line />
         <TableBlock $bgColor={COLORS.lighterBg} $titleColor={COLORS.status.success}>
@@ -40,13 +57,39 @@ export default function StudySessionMainPage() {
               ({formatDate(getTomorrow())})
             </TextBody>
           </span>
-          <SimpleTable data={tasks} columns={taskTableCols} />
+          {tomorrowItems.length === 0 ? (
+            <span className="d-flex flex-column align-items-start gap-2">
+              <TextBody $medium>Завдань немає</TextBody>
+              <TextBody>
+                Продовжуйте вивчати нові теми – повторення з'являться автоматично.
+              </TextBody>
+            </span>
+          ) : (
+            <SimpleTable
+              data={tomorrowItems}
+              columns={tasksColumns}
+              isRowDisabled={(row) => row.is_overdue}
+            />
+          )}
         </TableBlock>
         <TableBlock $bgColor={COLORS.lighterBg} $titleColor={COLORS.status.error}>
           <span className="d-flex gap-2 align-items-end">
             <CardTitle>Прострочені завдання</CardTitle>
           </span>
-          <SimpleTable data={tasks} columns={taskTableCols} />
+          {overdueItems.length === 0 ? (
+            <span className="d-flex flex-column align-items-start gap-2">
+              <TextBody $medium>Завдань немає</TextBody>
+              <TextBody>
+                Продовжуйте вивчати нові теми – повторення з'являться автоматично.
+              </TextBody>
+            </span>
+          ) : (
+            <SimpleTable
+              data={overdueItems}
+              columns={tasksColumns}
+              isRowDisabled={(row) => !row.is_overdue}
+            />
+          )}
         </TableBlock>
       </BasicBlock>
     </AppLayout>

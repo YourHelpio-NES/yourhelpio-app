@@ -60,7 +60,7 @@ export default function SignInPage() {
             )}
           />
           <Button
-            type="text"
+            $type="text"
             width="auto"
             $bgColor={'transparent'}
             $txtColor={COLORS.accent}
@@ -74,7 +74,7 @@ export default function SignInPage() {
         </BasicBlock>
         <BasicBlock width="100%" className="align-items-center">
           <Button
-            type="large"
+            $type="large"
             width="65%"
             $brColor={COLORS.accent}
             $brWidth={'2'}
@@ -83,7 +83,7 @@ export default function SignInPage() {
             <TextBody $label>Увійти</TextBody>
           </Button>
           <Button
-            type="large"
+            $type="large"
             width="65%"
             $bgColor={'transparent'}
             $txtColor={COLORS.text}
@@ -100,7 +100,7 @@ export default function SignInPage() {
               Ще не маєте облікового запису?
             </TextBody>
             <Button
-              type="text"
+              $type="text"
               width="auto"
               $bgColor={'transparent'}
               $txtColor={COLORS.primary}

@@ -33,14 +33,18 @@ import BasicInfoStep from './pages/teacher/courses/create/steps/basic-info';
 import TopicsStep from './pages/teacher/courses/create/steps/topics';
 import StudentsStep from './pages/teacher/courses/create/steps/students';
 import ReviewStep from './pages/teacher/courses/create/steps/review';
+import PublicRoute from './components/widgets/routes/public';
+import ProtectedRoute from './components/widgets/routes/protected';
 
 function App() {
   return (
     <Routes>
-      <Route path="sign-in" element={<SignInPage />} />
-      <Route path="sign-up" element={<SignUpPage />} />
+      <Route element={<PublicRoute />}>
+        <Route path="/sign-in" element={<SignInPage />} />
+        <Route path="/sign-up" element={<SignUpPage />} />
+      </Route>
       <Route path="forgot-password" element={<ForgotPasswordPage />} />
-      <Route path="student">
+      <Route path="student" element={<ProtectedRoute />}>
         <Route index element={<Navigate to="dashboard" replace />} />
         <Route path="dashboard" element={<DashboardStudentPage />} />
         <Route path="study-plan" element={<StudyPlanMainPage />} />
@@ -63,7 +67,7 @@ function App() {
         <Route path={'notifications'} element={<NotificationPage />} />
       </Route>
 
-      <Route path="teacher">
+      <Route path="teacher" element={<ProtectedRoute />}>
         <Route index element={<Navigate to="dashboard" replace />} />
         <Route path="dashboard" element={<DashboardPageTeacher />} />
         <Route path="courses">

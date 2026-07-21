@@ -137,7 +137,7 @@ export const RowTableActions = ({ onEdit, onDelete }: RowActionsProps) => {
             {...getFloatingProps()}
           >
             <Button
-              type={'small'}
+              $type={'small'}
               $bgColor={COLORS.accent}
               $txtColor={COLORS.lighterBg}
               $brWidth="2"
@@ -148,7 +148,7 @@ export const RowTableActions = ({ onEdit, onDelete }: RowActionsProps) => {
               <TextBody $medium>Редагувати</TextBody>
             </Button>
             <Button
-              type={'small'}
+              $type={'small'}
               $bgColor={COLORS.lighterBg}
               $txtColor={COLORS.status.error}
               $brColor={COLORS.status.error}
@@ -188,7 +188,7 @@ export const StatusTopicButton = ({
       $brColor={activeColor || COLORS.secondary}
       $brWidth={'2'}
       width={width}
-      type="small"
+      $type="small"
       className={width === '100%' ? 'px-2' : ''}
     >
       <SmallText className="text-nowrap" $medium>
@@ -220,7 +220,7 @@ export const StudentStatusButton = ({
       $brColor={activeColor || COLORS.secondary}
       $brWidth={'2'}
       width={width}
-      type="small"
+      $type="small"
       className={width === '100%' ? 'px-2' : ''}
     >
       <SmallText className="text-nowrap" $medium>

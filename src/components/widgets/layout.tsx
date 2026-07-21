@@ -5,6 +5,7 @@ import { Wrapper } from '../blocks';
 
 export interface LayoutProps {
   className?: string;
+  loadingState?: boolean;
 }
 
 const MainLayout: React.FC<React.PropsWithChildren<LayoutProps>> = ({ className, children }) => {

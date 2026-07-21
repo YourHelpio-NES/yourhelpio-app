@@ -23,7 +23,7 @@ const CustomToast = ({ t, type = ToastTypeEnum.INFO, title, text }: ToastProps) 
       </span>
       <Button
         $bgColor="transparent"
-        type="text"
+        $type="text"
         onClick={() => toast.dismiss(t.id)}
         aria-label="Закрити сповіщення"
       >

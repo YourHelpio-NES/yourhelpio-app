@@ -1,7 +1,6 @@
 import styled from 'styled-components';
 import { StudyQuestionCardIcon } from '../../../assets/images/icons/study-question-card-icon';
 import { testSessionMock } from '../../../assets/shared/data/test-session';
-import { topicDetailsMock } from '../../../assets/shared/data/topic';
 import { COLORS } from '../../../assets/styles/colors';
 import { CardTitle, TextBody } from '../../../assets/styles/typography';
 import { QuestionCardBlock } from '../../../components/question-card';
@@ -23,7 +22,10 @@ import { BREAKPOINTS, media } from '../../../assets/styles/breakpoints';
 export default function StudyingResult() {
   return (
     <AppLayout>
-      <LinkTitle firstTitle={topicDetailsMock.title[0]} secondTitle={topicDetailsMock.title[1]} />
+      <LinkTitle
+        firstTitle={'topicDetailsMock.title[0]'}
+        secondTitle={'topicDetailsMock.title[1]'}
+      />
       <BodyTable className="gap-md-4 gap-3" $gap={24}>
         <QuestionCardBlock className="flex-grow-1" $gap={24}>
           <CardTitle>Сесію завершено!</CardTitle>
@@ -91,7 +93,7 @@ export default function StudyingResult() {
             </StageInfo>
 
             <Button
-              type="large"
+              $type="large"
               width=""
               $bgColor={'transparent'}
               $txtColor={COLORS.secondary}

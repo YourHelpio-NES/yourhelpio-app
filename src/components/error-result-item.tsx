@@ -17,7 +17,7 @@ export default function ErrorItem(error: QuizResultError) {
       <TextBody $medium>
         {error.questionId}. {error.questionText}
       </TextBody>
-      <Button type="text" $txtColor={COLORS.secondaryDark} $bgColor={'transparent'}>
+      <Button $type="text" $txtColor={COLORS.secondaryDark} $bgColor={'transparent'}>
         <ArrowIcon direction="right" color={COLORS.secondaryDark} />
         <TextBody>{error.statusText}</TextBody>
       </Button>

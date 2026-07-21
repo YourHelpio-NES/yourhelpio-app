@@ -37,7 +37,7 @@ export default function TopicsStep() {
       <span className="d-flex gap-3 flex-wrap align-items-center">
         {' '}
         <Button
-          type={'large'}
+          $type={'large'}
           $bgColor={'transparent'}
           $txtColor={COLORS.accent}
           $brWidth="2"
@@ -66,7 +66,7 @@ export default function TopicsStep() {
                 $brColor={COLORS.status.error}
                 $brWidth="2"
                 width="auto"
-                type={'small'}
+                $type={'small'}
                 onClick={() => handleRemove(index)}
               >
                 <SmallText $medium>Видалити</SmallText>
@@ -85,7 +85,7 @@ export default function TopicsStep() {
         title="Додати тему"
         size="lg"
         footer={
-          <Button type="large" disabled={!newTopicName || !newTopicDesc} onClick={handleAdd}>
+          <Button $type="large" disabled={!newTopicName || !newTopicDesc} onClick={handleAdd}>
             <TextBody $medium>Створити</TextBody>
           </Button>
         }

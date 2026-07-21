@@ -55,7 +55,7 @@ const CardFooter = styled.div`
 const ReminderFooter = ({ n }: { n: ReminderNotification }) => (
   <>
     <Button
-      type="text"
+      $type="text"
       $bgColor={'transparent'}
       $txtColor={COLORS.primary}
       $brColor={COLORS.secondary}
@@ -64,7 +64,7 @@ const ReminderFooter = ({ n }: { n: ReminderNotification }) => (
       <SmallText $medium>{n.recommendedLabel}</SmallText>
     </Button>
     <Button
-      type="small"
+      $type="small"
       $bgColor={COLORS.secondary}
       $brColor={COLORS.secondary}
       onClick={() => window.location.assign(n.actionUrl)}
@@ -81,12 +81,12 @@ const AchievementFooter = ({ n }: { n: AchievementNotification }) => (
       $txtColor={COLORS.text}
       $brColor={COLORS.secondary}
       width="auto"
-      type={'small'}
+      $type={'small'}
     >
       <SmallText>{n.courseTitle}</SmallText>
     </Button>
     <Button
-      type="small"
+      $type="small"
       $bgColor={COLORS.secondary}
       $brColor={COLORS.secondary}
       onClick={() => window.location.assign(n.actionUrl)}
@@ -98,7 +98,7 @@ const AchievementFooter = ({ n }: { n: AchievementNotification }) => (
 
 const ReplyFooter = ({ n }: { n: ReplyNotification }) => (
   <Button
-    type="small"
+    $type="small"
     $bgColor={COLORS.secondary}
     $brColor={COLORS.secondary}
     onClick={() => window.location.assign(n.replyUrl)}

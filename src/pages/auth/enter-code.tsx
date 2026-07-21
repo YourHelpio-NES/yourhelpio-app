@@ -34,14 +34,14 @@ export default function ForgotPasswordPage() {
         </BasicBlock>
 
         <BasicBlock width="100%" className="align-items-center">
-          <Button type="large" width="65%" $brColor={COLORS.accent} $brWidth={'2'}>
+          <Button $type="large" width="65%" $brColor={COLORS.accent} $brWidth={'2'}>
             <TextBody $label>Надіслати</TextBody>
           </Button>
         </BasicBlock>
 
         <span className="w-100 d-flex align-items-center justify-content-between">
           <Button
-            type="text"
+            $type="text"
             width="auto"
             $bgColor={'transparent'}
             $txtColor={COLORS.text}
@@ -50,7 +50,7 @@ export default function ForgotPasswordPage() {
             <ArrowIcon />
             <TextBody $label>Назад</TextBody>
           </Button>
-          <Button type="text" width="auto" $bgColor={'transparent'} $txtColor={COLORS.accent}>
+          <Button $type="text" width="auto" $bgColor={'transparent'} $txtColor={COLORS.accent}>
             <TextBody $label $color={COLORS.accent}>
               Надіслати ще раз
             </TextBody>

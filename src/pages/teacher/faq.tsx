@@ -7,7 +7,6 @@ import { Button } from '../../components/button';
 import { LinkTitle } from '../../components/title-section';
 import AppLayout from '../../components/widgets/app/layout';
 import { extremelyRepeating } from '../../assets/shared/data/courses';
-import { QuestionsAccordion } from '../../components/faq-accordion';
 import Input from '../../components/input';
 import { InputTypeEnum } from '../../assets/shared/constants/input';
 
@@ -48,7 +47,7 @@ export default function FaqTeacherPage() {
                 $txtColor={filterType === item[1] ? COLORS.lighterBg : COLORS.text}
                 $brColor={filterType === item[1] ? COLORS.secondary : COLORS.text}
                 width="auto"
-                type={'small'}
+                $type={'small'}
                 key={key}
                 onClick={() => setFilterType(item[1])}
               >
@@ -64,7 +63,7 @@ export default function FaqTeacherPage() {
                 $brWidth={selectCourse === item.course ? '2' : '1'}
                 $brColor={COLORS.secondary}
                 width="auto"
-                type={'small'}
+                $type={'small'}
                 key={key}
                 onClick={() => setSelectCourse(item.course)}
               >
@@ -74,7 +73,7 @@ export default function FaqTeacherPage() {
           </span>
         </BasicBlock>
 
-        <QuestionsAccordion isTeacherMode />
+        {/* <QuestionsAccordion isTeacherMode /> */}
       </BasicBlock>
     </AppLayout>
   );
