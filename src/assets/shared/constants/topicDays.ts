@@ -39,3 +39,10 @@ export const studyDayLabels: Record<StudyDayEnum, string> = {
   [StudyDayEnum.DAY_7]: 'День 7',
   [StudyDayEnum.DAY_14]: 'День 14',
 };
+
+export enum BackendTaskTypeEnum {
+  TRUE_FALSE = 'TRUE_FALSE',
+  MULTIPLE_CHOICE = 'MULTIPLE_CHOICE',
+  FILL_BLANK = 'FILL_BLANK',
+  OPEN = 'OPEN',
+}

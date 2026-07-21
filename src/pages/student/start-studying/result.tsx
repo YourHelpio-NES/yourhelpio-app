@@ -1,6 +1,4 @@
 import styled from 'styled-components';
-import { StudyQuestionCardIcon } from '../../../assets/images/icons/study-question-card-icon';
-import { testSessionMock } from '../../../assets/shared/data/test-session';
 import { COLORS } from '../../../assets/styles/colors';
 import { CardTitle, TextBody } from '../../../assets/styles/typography';
 import { QuestionCardBlock } from '../../../components/question-card';
@@ -9,120 +7,126 @@ import { LabelValue, LabelValueStyle } from '../../../components/topic-details-c
 import AppLayout from '../../../components/widgets/app/layout';
 import { BodyTable } from '../study-plan';
 import { getColorByPercentage } from '../../../assets/shared/utils/color';
-import { testQuizSession } from '../../../assets/shared/data/test-session-result';
 import { DoneIcon } from '../../../assets/images/icons/done-icon';
-import { StageCard, StageInfo } from '../topics/details';
-import { Button } from '../../../components/button';
-import { CalendarIcon } from '../../../assets/images/icons/calendar-icon';
 import { BasicBlock, basicShadow } from '../../../components/blocks';
 import { CancelIcon } from '../../../assets/images/icons/cancel-icon';
 import ErrorItem from '../../../components/error-result-item';
 import { BREAKPOINTS, media } from '../../../assets/styles/breakpoints';
+import { buildSessionStats } from '../../../assets/shared/utils/mapTaskToQuestion';
+import type {
+  QuestionAnswer,
+  StudentProgressResponse,
+} from '../../../assets/shared/constants/questions';
+import { Navigate, useLocation } from 'react-router-dom';
+import { useLearningStages } from '../../../assets/shared/hooks/useLearningStages';
+import { StudyStatusEnum } from '../../../api/courses/learning-stages.types';
+import { StageCard, StageInfo } from '../topics/details';
+import { useEffect, useRef, useState } from 'react';
+
+interface LocationState {
+  answers: QuestionAnswer[];
+  progress: StudentProgressResponse | null;
+}
 
 export default function StudyingResult() {
+  const location = useLocation();
+  const state = location.state as LocationState | null;
+
+  const stages = useLearningStages({
+    currentStage: state?.progress?.stage ?? 0,
+    inRemediation: state?.progress?.in_remediation ?? false,
+  });
+
+  const questionCardRef = useRef<HTMLDivElement>(null);
+  const [matchedHeight, setMatchedHeight] = useState<number | undefined>(undefined);
+
+  useEffect(() => {
+    if (!questionCardRef.current) return;
+
+    const observer = new ResizeObserver(() => {
+      if (questionCardRef.current) {
+        setMatchedHeight(questionCardRef.current.offsetHeight);
+      }
+    });
+
+    observer.observe(questionCardRef.current);
+    return () => observer.disconnect();
+  }, []);
+
+  if (!state?.answers) {
+    return <Navigate to="/student/dashboard" replace />;
+  }
+
+  const stats = buildSessionStats(state.answers);
+
+  const nextStage =
+    stages.find((s) => s.status === StudyStatusEnum.PLANNED) ??
+    stages.find((s) => s.status === StudyStatusEnum.IN_PROGRESS);
+
   return (
     <AppLayout>
-      <LinkTitle
-        firstTitle={'topicDetailsMock.title[0]'}
-        secondTitle={'topicDetailsMock.title[1]'}
-      />
+      <LinkTitle firstTitle={'Тема'} secondTitle={'Результати сесії'} />
       <BodyTable className="gap-md-4 gap-3" $gap={24}>
-        <QuestionCardBlock className="flex-grow-1" $gap={24}>
+        <QuestionCardBlock ref={questionCardRef} className="flex-grow-1" $gap={24}>
           <CardTitle>Сесію завершено!</CardTitle>
-          <CardBody className="">
-            <LabelValue label="Етап:">
-              <TextBody $label $color={COLORS.accent}>
-                {testSessionMock.stage}
-              </TextBody>
-            </LabelValue>
-            <span className="d-flex gap-2 align-items-center ">
-              <StudyQuestionCardIcon size={28} color={COLORS.secondaryDark} />
-              <TextBody $color={COLORS.text}>{testSessionMock.moduleTitle}</TextBody>
-            </span>
-          </CardBody>
+
           <CardBody className="flex-column">
             <LabelValue label="Ваш результат:">
               <span className="d-flex gap-2 align-items-center">
-                <TextBody
-                  $medium
-                  $color={getColorByPercentage(testQuizSession.results.scorePercentage)}
-                >
-                  {testQuizSession.results.scorePercentage}% правильних відповідей
+                <TextBody $medium $color={getColorByPercentage(stats.scorePercentage)}>
+                  {stats.scorePercentage}% правильних відповідей
                 </TextBody>
-                {testQuizSession.results.scorePercentage === 100 && (
+                {stats.scorePercentage === 100 && (
                   <DoneIcon size={28} color={COLORS.status.success} />
                 )}
               </span>
             </LabelValue>
             <LabelValue label="Правильних відповідей:">
-              <span className="d-flex gap-2 align-items-center">
-                <TextBody $medium>
-                  {testQuizSession.results.correctAnswers}/{testQuizSession.results.totalQuestions}
-                </TextBody>
-                {testQuizSession.results.scorePercentage === 100 && (
-                  <DoneIcon size={28} color={COLORS.status.success} />
-                )}
-              </span>
+              <TextBody $medium>
+                {stats.correctAnswers}/{stats.totalQuestions}
+              </TextBody>
             </LabelValue>
             <LabelValue label="Помилки:">
               <span className="d-flex gap-2 align-items-center">
-                <TextBody $medium>{testQuizSession.results.errorsCount}</TextBody>
-                {testQuizSession.results.errorsCount === 0 && (
-                  <DoneIcon size={28} color={COLORS.status.success} />
-                )}
+                <TextBody $medium>{stats.errorsCount}</TextBody>
+                {stats.errorsCount === 0 && <DoneIcon size={28} color={COLORS.status.success} />}
               </span>
             </LabelValue>
             <LabelValue label="Пропущено:">
-              <span className="d-flex gap-2 align-items-center">
-                <TextBody $medium>{testQuizSession.results.skippedCount}</TextBody>
-                {testQuizSession.results.errorsCount === 0 && (
-                  <DoneIcon size={28} color={COLORS.status.success} />
-                )}
-              </span>
+              <TextBody $medium>{stats.skippedCount}</TextBody>
             </LabelValue>
           </CardBody>
-          <StageCard>
-            <StageInfo>
-              <TextBody $label>{testQuizSession.nextStage.title}</TextBody>
 
-              <span>
-                <TextBody>{testQuizSession.nextStage.module}</TextBody>
-                <TextBody>—</TextBody>
-                <TextBody $medium>{testQuizSession.nextStage.type}</TextBody>
-              </span>
-            </StageInfo>
-
-            <Button
-              $type="large"
-              width=""
-              $bgColor={'transparent'}
-              $txtColor={COLORS.secondary}
-              $brColor={COLORS.secondary}
-              $brWidth={'2'}
-              $iconSize={20}
-              //   onClick={() => {
-              //     if (item.status === StudyStatusEnum.IN_PROGRESS)
-              //       navigate('/student/study-session/studying');
-              //   }}
-            >
-              <span className="d-flex gap-2 align-items-center">
-                <CalendarIcon color={COLORS.secondary} />
-                <TextBody $medium>{testQuizSession.nextStage.schedule}</TextBody>
-              </span>
-            </Button>
-          </StageCard>
+          {nextStage && (
+            <StageCard>
+              <StageInfo>
+                <TextBody $label>День {nextStage.day}</TextBody>
+                <span>
+                  <TextBody>{nextStage.module}</TextBody>
+                  <TextBody>—</TextBody>
+                  <TextBody $medium>{nextStage.type}</TextBody>
+                </span>
+              </StageInfo>
+            </StageCard>
+          )}
         </QuestionCardBlock>
-        <ErrorsBlock $bgColor={COLORS.lighterBg}>
-          <span className="d-flex gap-2 align-items-end">
-            <CancelIcon color={COLORS.status.error} />
-            <CardTitle>Ваші помилки</CardTitle>
-          </span>
-          <div data-class="error-items" className="d-flex">
-            {testQuizSession.errors.map((item, i) => (
-              <ErrorItem key={i} {...item} />
-            ))}
-          </div>
-        </ErrorsBlock>
+
+        {stats.errors.length > 0 && (
+          <ErrorsBlock
+            $bgColor={COLORS.lighterBg}
+            style={{ height: matchedHeight, paddingRight: '8px' }}
+          >
+            <span className="d-flex gap-2 align-items-end">
+              <CancelIcon color={COLORS.status.error} />
+              <CardTitle>Ваші помилки</CardTitle>
+            </span>
+            <div data-class="error-items" className="d-flex">
+              {stats.errors.map((item, i) => (
+                <ErrorItem key={i} {...item} />
+              ))}
+            </div>
+          </ErrorsBlock>
+        )}
       </BodyTable>
     </AppLayout>
   );
@@ -130,6 +134,8 @@ export default function StudyingResult() {
 
 export const ErrorsBlock = styled(BasicBlock)<{ $titleColor?: string }>`
   width: 35%;
+  min-height: 0;
+  overflow: hidden;
   background-color: ${COLORS.lighterBg};
   border-radius: 24px;
   ${basicShadow};
@@ -143,6 +149,10 @@ export const ErrorsBlock = styled(BasicBlock)<{ $titleColor?: string }>`
   div[data-class='error-items'] {
     flex-direction: column;
     gap: 24px;
+    overflow-y: auto;
+    min-height: 0;
+    flex: 1;
+    padding-right: 12px;
   }
 
   ${media(1250)} {

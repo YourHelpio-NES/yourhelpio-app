@@ -233,7 +233,7 @@ export default function TopicsDetailsStudentPage() {
                 $brWidth={'2'}
                 onClick={() => {
                   if (item.status === StudyStatusEnum.IN_PROGRESS)
-                    navigate('/student/study-session/studying');
+                    navigate(`/student/study-session/studying?topicId=${topic.id}`);
                 }}
               >
                 <span className="d-flex gap-2 align-items-center">

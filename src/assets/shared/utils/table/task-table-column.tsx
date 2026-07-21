@@ -11,7 +11,7 @@ export const getTaskTableCols = (
 ): ColumnDef<ReviewItem>[] => [
   {
     accessorKey: 'stage',
-    cell: ({ row }) => <RadioButton value={!row.original.is_overdue} type="state" />,
+    cell: ({ row }) => <RadioButton value={row.original.is_overdue} type="state" />,
   },
   {
     accessorKey: 'name',

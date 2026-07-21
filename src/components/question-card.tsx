@@ -1,5 +1,9 @@
 import { type Dispatch, type SetStateAction } from 'react';
-import type { Question, QuestionStatusEnum } from '../assets/shared/constants/questions';
+import {
+  QuestionTypeEnum,
+  type Question,
+  type QuestionStatusEnum,
+} from '../assets/shared/constants/questions';
 import { CardTitle, TextBody } from '../assets/styles/typography';
 import { ProgressDots } from './progress-dots-question-card';
 import Input from './input';
@@ -10,6 +14,7 @@ import { BasicBlock, basicShadow } from './blocks';
 import styled from 'styled-components';
 import ModalWindow from './modal-window';
 import { BREAKPOINTS, media } from '../assets/styles/breakpoints';
+import RadioButton from './radio';
 
 export const QuestionCard = ({
   question,
@@ -42,6 +47,8 @@ export const QuestionCard = ({
   setPendingAction: Dispatch<SetStateAction<'submit' | 'skip' | null>>;
   confirmLastAction: () => void;
 }) => {
+  const isChoiceType = question.type === QuestionTypeEnum.RADIO;
+
   return (
     <>
       <QuestionCardBlock width="65%" $gap={24}>
@@ -64,13 +71,28 @@ export const QuestionCard = ({
         >
           <span className="d-flex flex-column gap-2">
             <CardTitle>{question.text}</CardTitle>
-            <Input
-              type={InputTypeEnum.TEXT}
-              value={answer}
-              setValue={setAnswer}
-              placeholder="Напишіть відповідь тут"
-              label=""
-            />
+
+            {isChoiceType ? (
+              <RadioBlock>
+                {question.options?.map((option) => (
+                  <RadioButton
+                    key={option}
+                    value={option}
+                    selected={answer || null}
+                    setSelected={setAnswer as Dispatch<SetStateAction<string | null>>}
+                  />
+                ))}
+              </RadioBlock>
+            ) : (
+              <Input
+                type={InputTypeEnum.TEXT}
+                value={answer}
+                setValue={setAnswer}
+                placeholder="Напишіть відповідь тут"
+                label=""
+              />
+            )}
+
             {question.hint && <TextBody $color={COLORS.secondary}>{question.hint}</TextBody>}
           </span>
         </form>
@@ -136,6 +158,13 @@ export const QuestionCard = ({
     </>
   );
 };
+
+const RadioBlock = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 8px;
+`;
 
 export const QuestionCardBlock = styled(BasicBlock)`
   border: 1px solid ${COLORS.secondary};

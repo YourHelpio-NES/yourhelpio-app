@@ -1,3 +1,4 @@
+import type { StudentProgressResponse } from '../../assets/shared/constants/questions';
 import { axiosInstance } from '../axios-instance';
 import type {
   AnswerPayload,
@@ -14,4 +15,18 @@ export const topicsApi = {
 
   submitAnswer: (taskId: number, payload: AnswerPayload) =>
     axiosInstance.post<AnswerResponse>(`/tasks/${taskId}/answer`, payload),
+};
+
+export const tasksApi = {
+  submitAnswer: (taskId: number, payload: AnswerPayload) =>
+    axiosInstance.post<AnswerResponse>(`/tasks/${taskId}/answer`, payload),
+
+  completeSession: (topicId: number) =>
+    axiosInstance.post<StudentProgressResponse>(`/topics/${topicId}/session/complete`),
+
+  recordTabSwitch: (topicId: number) =>
+    axiosInstance.post<{ tab_switch_count: number }>(`/topics/${topicId}/tab-switch`),
+
+  setPath: (topicId: number, path: 'BASE' | 'EXPRESS') =>
+    axiosInstance.patch<StudentProgressResponse>(`/topics/${topicId}/path`, { path }),
 };
