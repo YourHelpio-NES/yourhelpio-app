@@ -107,7 +107,7 @@ export default function TopicUpdateMainPageCourseTab() {
                     width="auto"
                     $brRadius={'24'}
                     $iconSize={20}
-                    type={'small'}
+                    $type={'small'}
                     className="p-0"
                     onClick={() =>
                       setActiveRow((prev) => ({
@@ -130,7 +130,7 @@ export default function TopicUpdateMainPageCourseTab() {
           {!isEditFiles && (
             <Button
               className=""
-              type="small"
+              $type="small"
               width="100%"
               $bgColor={COLORS.primary}
               $brColor={COLORS.primary}
@@ -144,7 +144,7 @@ export default function TopicUpdateMainPageCourseTab() {
         </span>
         <Button
           className="text-nowrap mt-auto"
-          type="large"
+          $type="large"
           width="auto"
           $bgColor={COLORS.accent}
           $txtColor={COLORS.lighterBg}
@@ -166,7 +166,7 @@ export default function TopicUpdateMainPageCourseTab() {
               $brColor={COLORS.accent}
               width="auto"
               className="text-nowrap"
-              type={'large'}
+              $type={'large'}
             >
               <SmallText $medium>Згенерувати результати ще раз</SmallText>
             </Button>

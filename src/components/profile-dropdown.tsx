@@ -115,7 +115,7 @@ export const UserProfileDropdown = ({ user, onLogout }: UserProfileDropdownProps
             <Divider />
 
             <Button
-              type="small"
+              $type="small"
               $brColor={COLORS.primary}
               $bgColor={COLORS.primary}
               $txtColor={COLORS.lighterBg}

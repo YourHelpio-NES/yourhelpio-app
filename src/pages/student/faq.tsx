@@ -8,7 +8,6 @@ import { LinkTitle } from '../../components/title-section';
 import AppLayout from '../../components/widgets/app/layout';
 import { BodyTable } from './study-plan';
 import { extremelyRepeating } from '../../assets/shared/data/courses';
-import { QuestionsAccordion } from '../../components/faq-accordion';
 import { ErrorsBlock } from './start-studying/result';
 import { UserIconFaq } from '../../assets/images/icons/user-icon-faq';
 import { Controller } from 'react-hook-form';
@@ -64,7 +63,7 @@ export default function FaqStudentPage() {
                   $txtColor={filterType === item[1] ? COLORS.lighterBg : COLORS.text}
                   $brColor={filterType === item[1] ? COLORS.secondary : COLORS.text}
                   width="auto"
-                  type={'small'}
+                  $type={'small'}
                   key={key}
                   onClick={() => setFilterType(item[1])}
                 >
@@ -80,7 +79,7 @@ export default function FaqStudentPage() {
                   $brWidth={selectCourse === item.course ? '2' : '1'}
                   $brColor={COLORS.secondary}
                   width="auto"
-                  type={'small'}
+                  $type={'small'}
                   key={key}
                   onClick={() => setSelectCourse(item.course)}
                 >
@@ -90,7 +89,7 @@ export default function FaqStudentPage() {
             </span>
           </BasicBlock>
 
-          <QuestionsAccordion />
+          {/* <QuestionsAccordion /> */}
         </BasicBlock>
         <ErrorsBlock
           $bgColor={COLORS.lighterBg}
@@ -160,7 +159,7 @@ export default function FaqStudentPage() {
                     $txtColor={questionType === item[1] ? COLORS.lighterBg : COLORS.text}
                     $brColor={questionType === item[1] ? COLORS.secondary : COLORS.text}
                     width="auto"
-                    type={'small'}
+                    $type={'small'}
                     key={key}
                     onClick={() => setQuestionType(item[1])}
                   >

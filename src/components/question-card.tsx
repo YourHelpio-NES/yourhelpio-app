@@ -76,7 +76,7 @@ export const QuestionCard = ({
         </form>
         <span className="d-flex align-items-center gap-4 w-100">
           <Button
-            type="large"
+            $type="large"
             width="auto"
             $bgColor="transparent"
             $brColor={COLORS.primary}
@@ -88,7 +88,7 @@ export const QuestionCard = ({
             <TextBody $medium>Назад</TextBody>
           </Button>
           <Button
-            type="text"
+            $type="text"
             width="auto"
             $txtColor={COLORS.text}
             $bgColor="transparent"
@@ -96,7 +96,7 @@ export const QuestionCard = ({
           >
             <TextBody $medium>Не знаю відповіді</TextBody>
           </Button>
-          <Button className="ms-auto" type="large" width="auto" onClick={onSubmit}>
+          <Button className="ms-auto" $type="large" width="auto" onClick={onSubmit}>
             <TextBody $medium $color={COLORS.secondary}>
               {isLast ? 'Завершити' : 'Надіслати'}
             </TextBody>
@@ -111,7 +111,7 @@ export const QuestionCard = ({
         footer={
           <>
             <Button
-              type="small"
+              $type="small"
               width="auto"
               $bgColor="transparent"
               $brColor={COLORS.secondary}
@@ -122,7 +122,7 @@ export const QuestionCard = ({
               <TextBody $medium>Скасувати</TextBody>
             </Button>
 
-            <Button type="small" width="auto" onClick={confirmLastAction}>
+            <Button $type="small" width="auto" onClick={confirmLastAction}>
               <TextBody $medium $color={COLORS.secondary}>
                 Продовжити
               </TextBody>

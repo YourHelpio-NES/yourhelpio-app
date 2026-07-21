@@ -1,5 +1,4 @@
 import type { ColumnDef } from '@tanstack/react-table';
-import type { ThemeTableRow } from './row-type';
 import { TextBody } from '../../../styles/typography';
 import { PasswordIcon } from '../../../images/icons/password-icon';
 import { DoneIcon } from '../../../images/icons/done-icon';
@@ -14,30 +13,36 @@ import {
   type TopicTableMeta,
 } from '../../../../components/row-table-action';
 import { getColorByPercentage } from '../color';
+import type { CourseTopicProgress } from '../../../../api/courses/details.types';
+import { StudyDayEnum, studyDayLabels } from '../../constants/topicDays';
 
-const topicsTableCols: ColumnDef<ThemeTableRow>[] = [
+const topicsTableCols: ColumnDef<CourseTopicProgress>[] = [
   {
     accessorKey: 'topicName',
     cell: ({ row }) => (
       <span className="d-flex gap-3 align-items-center">
-        <TextBody>{row.original.id}.</TextBody>
-        <TextBody $medium>{row.original.topicName}</TextBody>
+        <TextBody>{row.original.topic_id}.</TextBody>
+        <TextBody $medium>{row.original.title}</TextBody>
       </span>
     ),
     header: 'Тема',
   },
   {
     accessorKey: 'stage',
-    cell: ({ row }) => <TextBody>{row.original.stage ?? '—'}</TextBody>,
+    cell: ({ row }) => (
+      <TextBody>
+        {row.original.stage ? studyDayLabels[row.original.stage as StudyDayEnum] : '—'}
+      </TextBody>
+    ),
     header: 'Етап',
   },
   {
     accessorKey: 'progress',
     cell: ({ row }) =>
-      row.original.progress ? (
+      row.original.progress_pct !== 0 ? (
         <span className="d-flex gap-2 align-items-center">
-          <TextBody>{row.original.progress}%</TextBody>
-          {row.original.progress === '100' && <DoneIcon color={COLORS.status.success} />}
+          <TextBody>{row.original.progress_pct}%</TextBody>
+          {row.original.progress_pct === 100 && <DoneIcon color={COLORS.status.success} />}
         </span>
       ) : (
         <PasswordIcon size={22} />

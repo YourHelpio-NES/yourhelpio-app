@@ -165,7 +165,7 @@ export default function SignUpPage() {
                     >
                       Реєструючись, ви погоджуєтесь з
                       <Button
-                        type="text"
+                        $type="text"
                         width="auto"
                         $bgColor={'transparent'}
                         $txtColor={COLORS.accent}
@@ -178,7 +178,7 @@ export default function SignUpPage() {
                       </Button>{' '}
                       та
                       <Button
-                        type="text"
+                        $type="text"
                         width="auto"
                         $bgColor={'transparent'}
                         $txtColor={COLORS.accent}
@@ -197,7 +197,7 @@ export default function SignUpPage() {
             <BasicBlock width="100%" className="align-items-center">
               <Button
                 // disabled={!confirmRules}
-                type="large"
+                $type="large"
                 width="65%"
                 $brColor={COLORS.accent}
                 $brWidth={'2'}
@@ -218,7 +218,7 @@ export default function SignUpPage() {
                 <TextBody $label>Зареєструватися</TextBody>
               </Button>
               <Button
-                type="large"
+                $type="large"
                 width="65%"
                 $bgColor={'transparent'}
                 $txtColor={COLORS.text}
@@ -238,7 +238,7 @@ export default function SignUpPage() {
             Уже маєте акаунт?
           </TextBody>
           <Button
-            type="text"
+            $type="text"
             width="auto"
             $bgColor={'transparent'}
             $txtColor={COLORS.accent}

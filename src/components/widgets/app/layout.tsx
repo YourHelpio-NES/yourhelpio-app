@@ -7,8 +7,13 @@ import { COLORS } from '../../../assets/styles/colors';
 import Header from './header';
 import { BREAKPOINTS, media } from '../../../assets/styles/breakpoints';
 import { useEffect, useState } from 'react';
+import { TextBody } from '../../../assets/styles/typography';
 
-const AppLayout: React.FC<React.PropsWithChildren<LayoutProps>> = ({ className, children }) => {
+const AppLayout: React.FC<React.PropsWithChildren<LayoutProps>> = ({
+  className,
+  loadingState,
+  children,
+}) => {
   const [isCollapsed, setIsCollapsed] = useState(
     () => localStorage.getItem('collapsed-panel') === 'true'
   );
@@ -32,7 +37,9 @@ const AppLayout: React.FC<React.PropsWithChildren<LayoutProps>> = ({ className, 
         <Panel isMobile={isMobile} isCollapsed={isCollapsed} setIsCollapsed={setIsCollapsed} />
         <MainContent>
           <Header setIsCollapsed={setIsCollapsed} isBurger={isMobile} />
-          <ContentBody>{children}</ContentBody>
+          <ContentBody>
+            {loadingState ? <TextBody $medium>Завантаження...</TextBody> : children}
+          </ContentBody>
         </MainContent>
       </PageLayout>
 

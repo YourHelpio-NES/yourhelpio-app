@@ -58,7 +58,7 @@ export default function LearningOutcomesDetailsCourseTab() {
             $txtColor={COLORS.text}
             $brColor={filterType === item[0] ? COLORS.boxShadow : COLORS.text}
             width="auto"
-            type={'small'}
+            $type={'small'}
             key={key}
             $brRadius={'10'}
             onClick={() => setFilterType(item[0])}
@@ -80,7 +80,7 @@ export default function LearningOutcomesDetailsCourseTab() {
                   $txtColor={COLORS.secondaryDark}
                   $brColor={COLORS.secondary}
                   width="auto"
-                  type={'small'}
+                  $type={'small'}
                   $brRadius={'12'}
                   className="px-2"
                 >

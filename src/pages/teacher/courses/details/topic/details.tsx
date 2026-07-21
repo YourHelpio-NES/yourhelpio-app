@@ -80,7 +80,7 @@ export default function TopicDetailsMainPageCourseTab() {
         <span className="d-flex w-100 gap-2 align-items-center mt-auto pt-3">
           <Button
             className="text-nowrap flex-grow-1"
-            type="large"
+            $type="large"
             width="auto"
             $bgColor={'transparent'}
             $txtColor={COLORS.accent}
@@ -92,7 +92,7 @@ export default function TopicDetailsMainPageCourseTab() {
           </Button>
           <Button
             className="flex-grow-1"
-            type="large"
+            $type="large"
             width="auto"
             $bgColor={'transparent'}
             $txtColor={COLORS.status.error}
@@ -112,7 +112,7 @@ export default function TopicDetailsMainPageCourseTab() {
         footer={
           <>
             <Button
-              type="small"
+              $type="small"
               width="auto"
               $bgColor="transparent"
               $brColor={COLORS.secondary}
@@ -124,7 +124,7 @@ export default function TopicDetailsMainPageCourseTab() {
             </Button>
 
             <Button
-              type="small"
+              $type="small"
               $bgColor={COLORS.status.error}
               $brColor={COLORS.status.error}
               width="auto"

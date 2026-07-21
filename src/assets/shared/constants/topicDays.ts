@@ -7,14 +7,14 @@ export enum StudyDayEnum {
   DAY_14 = 14,
 }
 
-export enum StudyStatusEnum {
+export enum StudyStatusEnumCode {
   COMPLETED = 'Завершено',
   IN_PROGRESS = 'Почати',
   PLANNED = 'Заплановано',
   MISSED = 'Пропущено',
 }
 
-export enum StudyTypeEnum {
+export enum StudyTypeEnumCode {
   REPETITION = 'Повторення',
   TRAINING = 'Тренування',
   SHORT_CONTROL = 'Короткий контроль',
@@ -27,8 +27,8 @@ export enum StudyTypeEnum {
 export interface StudyStage {
   day: StudyDayEnum;
   module: string;
-  type: StudyTypeEnum;
-  status: StudyStatusEnum;
+  type: StudyTypeEnumCode;
+  status: StudyStatusEnumCode;
 }
 
 export const studyDayLabels: Record<StudyDayEnum, string> = {

@@ -25,6 +25,14 @@ export function getFileIcon(file: File): 'docs' | 'pdf' | 'image' | 'link' | 'ge
   return 'generic';
 }
 
+export function getFileIconByText(file: string): 'docs' | 'pdf' | 'image' | 'link' | 'generic' {
+  if (file === 'text/uri-list') return 'link';
+  if (file.includes('pdf')) return 'pdf';
+  if (file.includes('word') || file.endsWith('.docx') || file.endsWith('.doc')) return 'docs';
+  if (file.includes('image')) return 'image';
+  return 'generic';
+}
+
 // Мок-завантаження — замінити на реальний axios/fetch з onUploadProgress
 export function mockUpload(onProgress: (pct: number) => void, onDone: () => void): () => void {
   let pct = 0;

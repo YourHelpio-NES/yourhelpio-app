@@ -7,17 +7,10 @@ import { CardTitle, SmallText, TextBody } from '../../../../../assets/styles/typ
 import { EmailCell } from '../../../../../assets/shared/utils/table/student';
 import { StudentStatusButton } from '../../../../../components/row-table-action';
 import { StudentStatusEnum } from '../../../../../assets/shared/constants/student';
-import { SimpleTable } from '../../../../../components/table';
-import {
-  coursesProgressData,
-  tasks,
-  topicsTableData,
-} from '../../../../../assets/shared/data/courses';
-import topicsTableCols from '../../../../../assets/shared/utils/table/topics-table-column';
+import { coursesProgressData } from '../../../../../assets/shared/data/courses';
 import { BodyTable } from '../../../../student/study-plan';
 import { TableBlock } from '../../../../student/dashboard';
 import { BlocksElementIcon } from '../../../../../assets/images/icons/blocks-element-icon';
-import taskTableCols from '../../../../../assets/shared/utils/table/task-table-column';
 
 export default function StudentsDetailsCourseTab() {
   const [searchParams] = useSearchParams();
@@ -47,7 +40,7 @@ export default function StudentsDetailsCourseTab() {
       </span>
       <BodyTable $bgColor="transparent">
         <BasicBlock $bgColor="transparent">
-          <SimpleTable data={topicsTableData} columns={topicsTableCols} showHeader />
+          {/* <SimpleTable data={topicsTableData} columns={topicsTableCols} showHeader /> */}
         </BasicBlock>
         <TableBlock
           $titleColor={COLORS.accent}
@@ -95,7 +88,7 @@ export default function StudentsDetailsCourseTab() {
           Аналіз проблемних результатів навчання
         </TextBody>
 
-        <SimpleTable data={tasks} columns={taskTableCols} isRowDisabled={(row) => row.completed} />
+        {/* <SimpleTable data={tasks} columns={taskTableCols} isRowDisabled={(row) => row.completed} /> */}
       </TableBlock>
     </>
   );

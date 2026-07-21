@@ -1,27 +1,36 @@
 import type { ColumnDef } from '@tanstack/react-table';
-import type { TaskTableRow } from './row-type';
 import { TextBody } from '../../../styles/typography';
 import RadioButton from '../../../../components/radio';
+import type { ReviewItem } from '../../../../api/dashboard/dashboard.types';
+import { StudyDayEnum, studyDayLabels } from '../../constants/topicDays';
+import { dotsTextStyle } from '../../../../components/progress-card';
 
-const taskTableCols: ColumnDef<TaskTableRow>[] = [
+export const getTaskTableCols = (
+  onTopicClick: (id: number) => void,
+  onCourseClick: (id: number) => void
+): ColumnDef<ReviewItem>[] => [
   {
     accessorKey: 'stage',
-    cell: ({ row }) => <RadioButton value={row.original.completed} type="state" />,
+    cell: ({ row }) => <RadioButton value={!row.original.is_overdue} type="state" />,
   },
   {
     accessorKey: 'name',
-    cell: ({ row }) => <TextBody $medium>{row.original.name}</TextBody>,
-  },
-  { accessorKey: 'day', cell: ({ row }) => <TextBody>{row.original.day}</TextBody> },
-  { accessorKey: 'type', cell: ({ row }) => <TextBody>{row.original.type}</TextBody> },
-  {
-    accessorKey: 'questions',
-    cell: ({ row }) => <TextBody>{row.original.questions} запитань</TextBody>,
+    cell: ({ row }) => (
+      <TextBody $medium onClick={() => onTopicClick(row.original.topic_id)}>
+        {row.original.topic_title}
+      </TextBody>
+    ),
   },
   {
-    accessorKey: 'duration',
-    cell: ({ row }) => <TextBody>{row.original.duration} хв</TextBody>,
+    accessorKey: 'course_name',
+    cell: ({ row }) => (
+      <TextBody style={dotsTextStyle} onClick={() => onCourseClick(row.original.course_id)}>
+        {row.original.course_title}
+      </TextBody>
+    ),
+  },
+  {
+    accessorKey: 'day',
+    cell: ({ row }) => <TextBody>{studyDayLabels[row.original.stage as StudyDayEnum]}</TextBody>,
   },
 ];
-
-export default taskTableCols;

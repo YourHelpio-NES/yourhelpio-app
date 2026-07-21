@@ -99,26 +99,26 @@ const LinkInput = styled.input`
   }
 `;
 
-const FileList = styled.div`
+export const FileList = styled.div`
   display: flex;
   flex-direction: column;
   gap: 10px;
   margin-top: 12px;
 `;
 
-const FileItem = styled.div`
+export const FileItem = styled.div`
   background: ${COLORS.background};
   border-radius: 10px;
   padding: 10px 12px;
 `;
 
-const FileTop = styled.div`
+export const FileTop = styled.div`
   display: flex;
   align-items: flex-start;
   gap: 10px;
 `;
 
-const FileIconWrap = styled.img<{ $type: string }>`
+export const FileIconWrap = styled.img<{ $type: string }>`
   width: 36px;
   height: 36px;
   padding: 6px;
@@ -133,7 +133,7 @@ const FileIconWrap = styled.img<{ $type: string }>`
     $type === 'pdf' ? '#D4537E' : $type === 'docs' ? COLORS.status.info : 'rgba(0,0,0,0.4)'};
 `;
 
-const FileInfo = styled.div`
+export const FileInfo = styled.div`
   flex: 1;
   min-width: 0;
 `;
@@ -154,7 +154,7 @@ const ProgressFill = styled.div<{ $pct: number }>`
   transition: width 0.3s ease;
 `;
 
-const FileRow = ({ f, onRemove }: { f: UploadFile; onRemove: () => void }) => {
+export const FileRow = ({ f, onRemove }: { f: UploadFile; onRemove: () => void }) => {
   const icon = getFileIcon(f.file);
 
   return (
@@ -189,7 +189,7 @@ const FileRow = ({ f, onRemove }: { f: UploadFile; onRemove: () => void }) => {
           width="auto"
           $brRadius={'8'}
           $iconSize={20}
-          type={'small'}
+          $type={'small'}
           className="p-0"
           onClick={onRemove}
         >
@@ -239,7 +239,6 @@ export const FileUpload = () => {
         role="button"
         aria-label="Зона перетягування файлів"
       >
-        {/* іконка upload — заміни на свою */}
         <FileUploadIcon />
         <TextBody className="text-center" $label>
           Перетягніть файли або <Accent>оберіть</Accent> для завантаження

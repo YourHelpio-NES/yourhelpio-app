@@ -14,7 +14,7 @@ export const Button = styled.button<{
   $brRadius?: string;
   $brWidth?: string;
   width?: string;
-  type?: 'large' | 'small' | 'text';
+  $type?: 'large' | 'small' | 'text';
   $iconSize?: number;
   disabled?: boolean;
 }>`
@@ -24,14 +24,15 @@ export const Button = styled.button<{
   color: ${({ disabled, $txtColor }) =>
     disabled ? COLORS.text : ($txtColor ?? COLORS.background)};
   box-sizing: border-box;
-  border: ${({ type, disabled, $brColor, $brWidth }) =>
+  border: ${({ $type: type, disabled, $brColor, $brWidth }) =>
     type === 'text'
       ? 'none'
       : `${$brWidth ?? 1}px solid ${disabled ? COLORS.secondary : ($brColor ?? COLORS.accent)}`};
 
   border-radius: ${({ $brRadius }) => `${$brRadius ?? 24}px`};
 
-  padding: ${({ type }) => (type === 'text' ? '4px' : type === 'small' ? '6px 20px' : '11px 24px')};
+  padding: ${({ $type: type }) =>
+    type === 'text' ? '4px' : type === 'small' ? '6px 20px' : '11px 24px'};
 
   outline: none;
   transition: all 300ms cubic-bezier(0.25, 0.1, 0.25, 1);
@@ -87,7 +88,8 @@ export const Button = styled.button<{
   }
 
   ${media(BREAKPOINTS.xs)} {
-    padding: ${({ type }) => (type === 'text' ? '0' : type === 'small' ? '4px 16px' : '8px 16px')};
+    padding: ${({ $type: type }) =>
+      type === 'text' ? '0' : type === 'small' ? '4px 16px' : '8px 16px'};
   }
 `;
 

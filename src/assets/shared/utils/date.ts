@@ -11,3 +11,6 @@ export const getTomorrow = () => {
   today.setDate(today.getDate() + 1);
   return today;
 };
+export const getTomorrowDateString = (): string => {
+  return getTomorrow().toISOString().split('T')[0]; // "2026-07-22"
+};

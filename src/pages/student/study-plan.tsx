@@ -1,7 +1,6 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Select } from '../../components/dropdown';
 import AppLayout from '../../components/widgets/app/layout';
-import { extremelyRepeating, topicsTableData } from '../../assets/shared/data/courses';
 import { Controller } from 'react-hook-form';
 import { useFilterForm } from '../../assets/shared/hooks/validators/useFilterDropdown';
 import { BasicBlock, basicShadow } from '../../components/blocks';
@@ -10,7 +9,6 @@ import { getColorByPercentage } from '../../assets/shared/utils/color';
 import { SimpleTable } from '../../components/table';
 import { TableBlock } from './dashboard';
 import { COLORS } from '../../assets/styles/colors';
-import type { ThemeTableRow } from '../../assets/shared/utils/table/row-type';
 import { StatusItem } from '../../components/status-items';
 import styled from 'styled-components';
 import { BREAKPOINTS, media } from '../../assets/styles/breakpoints';
@@ -18,14 +16,40 @@ import * as Dialog from '@radix-ui/react-dialog';
 import { CloseIcon } from '../../assets/images/icons/close-icon';
 import TopicDetailsContent, { LabelValue } from '../../components/topic-details-content';
 import topicsTableCols from '../../assets/shared/utils/table/topics-table-column';
+import { useCourseDetailsStudent } from '../../assets/shared/hooks/useCourseDetailsStudent';
+import { useSearchParams } from 'react-router-dom';
+import { useEnrolledCourses } from '../../assets/shared/hooks/useEnrolledCourses';
+import type { CourseTopicProgress } from '../../api/courses/details.types';
 
 export default function StudyPlanMainPage() {
-  const { form } = useFilterForm(extremelyRepeating[0].id.toString());
+  const { course, fetchCourse, isLoading: courseLoading } = useCourseDetailsStudent();
+  const { courses, isLoading: coursesLoading } = useEnrolledCourses();
+
+  const [searchParams, setSearchParams] = useSearchParams();
+  const id = useMemo(() => {
+    const courseId = searchParams.get('course');
+
+    if (courseId) {
+      return Number(courseId);
+    }
+
+    return courses.length ? courses[0].id : undefined;
+  }, [searchParams, courses]);
+
+  const { form } = useFilterForm(id?.toString() ?? '');
   const {
     control,
+    setValue,
     formState: { errors },
   } = form;
-  const [activeRow, setActiveRow] = useState<ThemeTableRow>(topicsTableData[0]);
+
+  const [activeRowId, setActiveRowId] = useState<number>();
+  const activeRow = useMemo(() => {
+    if (!course) return undefined;
+
+    return course.topics.find((x) => x.topic_id === activeRowId) ?? course.topics[0];
+  }, [course, activeRowId]);
+
   const [isMobile, setIsMobile] = useState(() => window.innerWidth <= BREAKPOINTS.ml);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -35,13 +59,43 @@ export default function StudyPlanMainPage() {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  const handleRowClick = (row: ThemeTableRow) => {
-    setActiveRow(topicsTableData.find((x) => x.id === row.id) ?? topicsTableData[0]);
+  const handleRowClick = (row: CourseTopicProgress) => {
+    setActiveRowId(
+      (course?.topics.find((x) => x.topic_id === row.topic_id) ?? course?.topics[0])?.topic_id
+    );
     if (isMobile) setIsModalOpen(true);
   };
 
+  useEffect(() => {
+    if (!searchParams.get('course') && courses.length) {
+      setSearchParams({
+        course: courses[0].id.toString(),
+      });
+    }
+  }, [courses, searchParams, setSearchParams]);
+
+  useEffect(() => {
+    if (id) {
+      void fetchCourse(id);
+    }
+  }, [id, fetchCourse]);
+
+  useEffect(() => {
+    if (id) {
+      setValue('item', id.toString());
+    }
+  }, [id, setValue]);
+
+  if (!course) {
+    return (
+      <AppLayout>
+        <TextBody>курс не знайдено.</TextBody>
+      </AppLayout>
+    );
+  }
+
   return (
-    <AppLayout>
+    <AppLayout loadingState={courseLoading || coursesLoading}>
       <BasicBlock width="55%">
         <span className="w-100 d-flex align-items-center gap-3">
           <TextBody $medium>Курс:</TextBody>
@@ -54,45 +108,58 @@ export default function StudyPlanMainPage() {
                 onChange={(val) => {
                   field.onChange(val);
                   field.onBlur();
+
+                  setSearchParams((prev) => {
+                    const params = new URLSearchParams(prev);
+
+                    if (val) {
+                      params.set('course', val);
+                    } else {
+                      params.delete('course');
+                    }
+
+                    return params;
+                  });
                 }}
-                options={extremelyRepeating.map((item) => {
+                options={courses.map((item) => {
                   return {
-                    label: item.course,
+                    label: item.title,
                     value: item.id.toString(),
                   };
                 })}
                 errorText={
-                  extremelyRepeating.length === 0
-                    ? 'Немає доступних елементів'
-                    : errors.item?.message
+                  courses.length === 0 ? 'Немає доступних елементів' : errors.item?.message
                 }
               />
             )}
           />
         </span>
         <LabelValue label="Прогрес курсу:">
-          <TextBody $medium $color={getColorByPercentage(30)}>
-            30%
+          <TextBody
+            $medium
+            $color={getColorByPercentage(course?.certificate_progress.completion_pct ?? 0)}
+          >
+            {course?.certificate_progress.completion_pct}%
           </TextBody>
           <TextBody>пройдено</TextBody>
+          <TextBody $medium>
+            {course?.certificate_progress.completed_topics}/
+            {course?.certificate_progress.total_topics}
+          </TextBody>
         </LabelValue>
         <LabelValue label="Тривалість курсу:">
-          <TextBody>12 тем</TextBody>
+          <TextBody>{course?.certificate_progress.total_topics} тем</TextBody>
         </LabelValue>
-        <TextBody>
-          Курс для студентів допоможе визначити тему тип даних, теорія, як їх використовувати на
-          практиці та вміти вільно пояснити всі терміни по темі.
-        </TextBody>
       </BasicBlock>
 
       <BodyTable>
         <BasicBlock>
           <SimpleTable
-            data={topicsTableData}
+            data={course?.topics}
             columns={topicsTableCols}
             showHeader
-            getRowId={(row) => Number.parseInt(row.id)}
-            activeRowId={Number.parseInt(activeRow.id)}
+            getRowId={(row) => row.topic_id}
+            activeRowId={activeRowId}
             onRowClick={handleRowClick}
           />
         </BasicBlock>

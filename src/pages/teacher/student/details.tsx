@@ -7,13 +7,11 @@ import { StudentCardIcon } from '../../../assets/images/icons/student-card-icon'
 import { EmailCell } from '../../../assets/shared/utils/table/student';
 import { TableBlock } from '../../student/dashboard';
 import { COLORS } from '../../../assets/styles/colors';
-import { coursesProgressData, tasks } from '../../../assets/shared/data/courses';
+import { coursesProgressData } from '../../../assets/shared/data/courses';
 import { CourseCard } from '../courses/main';
 import { BlocksElementIcon } from '../../../assets/images/icons/blocks-element-icon';
 import { StudentStatusButton } from '../../../components/row-table-action';
 import { StudentStatusEnum } from '../../../assets/shared/constants/student';
-import { SimpleTable } from '../../../components/table';
-import taskTableCols from '../../../assets/shared/utils/table/task-table-column';
 
 export default function DetailsStudentsPage() {
   const [searchParams] = useSearchParams();
@@ -64,7 +62,7 @@ export default function DetailsStudentsPage() {
           Аналіз проблемних результатів навчання
         </TextBody>
 
-        <SimpleTable data={tasks} columns={taskTableCols} isRowDisabled={(row) => row.completed} />
+        {/* <SimpleTable data={tasks} columns={taskTableCols} isRowDisabled={(row) => row.completed} /> */}
       </TableBlock>
     </AppLayout>
   );

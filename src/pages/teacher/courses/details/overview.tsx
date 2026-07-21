@@ -29,7 +29,7 @@ export default function OverviewDetailsCourseTab() {
             практиці та вміти вільно пояснити всі терміни по темі.
           </TextBody>
         </span>
-        <Button type="large" width="auto" $txtColor={COLORS.background} $brWidth={'1'}>
+        <Button $type="large" width="auto" $txtColor={COLORS.background} $brWidth={'1'}>
           <TextBody $medium>Редагувати</TextBody>
         </Button>
       </BasicBlock>
@@ -51,7 +51,7 @@ export default function OverviewDetailsCourseTab() {
             </LabelValue>
             <span className="d-flex gap-1 pt-1">
               <Button
-                type="small"
+                $type="small"
                 width="auto"
                 $bgColor={'transparent'}
                 $txtColor={COLORS.accent}
@@ -60,7 +60,7 @@ export default function OverviewDetailsCourseTab() {
               >
                 <TextBody $medium>Перейти до тем</TextBody>
               </Button>
-              <Button type="small" width="auto" $txtColor={COLORS.background} $brWidth={'2'}>
+              <Button $type="small" width="auto" $txtColor={COLORS.background} $brWidth={'2'}>
                 <TextBody $medium>Додати тему</TextBody>
               </Button>
             </span>
@@ -74,7 +74,7 @@ export default function OverviewDetailsCourseTab() {
             </LabelValue>
             <span className="d-flex gap-1 pt-1">
               <Button
-                type="small"
+                $type="small"
                 width="auto"
                 $bgColor={'transparent'}
                 $txtColor={COLORS.text}
@@ -84,7 +84,7 @@ export default function OverviewDetailsCourseTab() {
                 <TextBody $medium>Пошук студентів</TextBody>
               </Button>
               <Button
-                type="small"
+                $type="small"
                 width="auto"
                 $bgColor={'transparent'}
                 $txtColor={COLORS.accent}
@@ -130,7 +130,7 @@ export default function OverviewDetailsCourseTab() {
             </span>
           </TableBlock>
           <Button
-            type="text"
+            $type="text"
             width="auto"
             $bgColor={'transparent'}
             $txtColor={COLORS.text}

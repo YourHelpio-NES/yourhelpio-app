@@ -6,7 +6,7 @@ import { COLORS } from '../../../assets/styles/colors';
 import { SmallText, TextBody } from '../../../assets/styles/typography';
 import { Button } from '../../../components/button';
 import AppLayout from '../../../components/widgets/app/layout';
-import { ProgressCard, TableBlock } from '../../student/dashboard';
+import { TableBlock } from '../../student/dashboard';
 import { useEffect, useState } from 'react';
 import { BREAKPOINTS, media } from '../../../assets/styles/breakpoints';
 import { BodyTable, CloseButton, DialogContent, DialogOverlay } from '../../student/study-plan';
@@ -18,6 +18,7 @@ import { CloseIcon } from '../../../assets/images/icons/close-icon';
 import { weakTopicTeacherColumns } from '../../../assets/shared/utils/table/weak-topic-teacher-column';
 import type { WeakTopic } from '../../../assets/shared/constants/course';
 import { useNavigate } from 'react-router-dom';
+import { ProgressCard } from '../../../components/progress-card';
 
 export default function MainCoursesPageTeacher() {
   const [isMobile, setIsMobile] = useState(() => window.innerWidth <= BREAKPOINTS.ml);
@@ -40,7 +41,7 @@ export default function MainCoursesPageTeacher() {
     <AppLayout>
       <BasicBlock className="align-items-start" $gap={24}>
         <Button
-          type={'large'}
+          $type={'large'}
           $bgColor={COLORS.background}
           $txtColor={COLORS.accent}
           $brWidth="2"

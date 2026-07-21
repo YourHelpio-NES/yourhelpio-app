@@ -172,7 +172,7 @@ export default function DashboardPageTeacher() {
                   $txtColor={COLORS.secondaryDark}
                   $brColor={COLORS.secondaryDark}
                   width="auto"
-                  type={'small'}
+                  $type={'small'}
                 >
                   <SmallText>Деталі</SmallText>
                 </Button>
@@ -180,7 +180,7 @@ export default function DashboardPageTeacher() {
             ))}
           </span>
           <Button
-            type="large"
+            $type="large"
             width="auto"
             $bgColor={'transparent'}
             $txtColor={COLORS.accent}
@@ -226,7 +226,7 @@ export default function DashboardPageTeacher() {
             </LabelValue>
           </TableBlock>
           <Button
-            type="large"
+            $type="large"
             width="auto"
             $bgColor={COLORS.accent}
             $txtColor={COLORS.lighterBg}
