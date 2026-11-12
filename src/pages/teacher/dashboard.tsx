@@ -5,65 +5,70 @@ import { COLORS } from '../../assets/styles/colors';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { Button } from '../../components/button';
-import { extremelyRepeating } from '../../assets/shared/data/courses';
 import { BREAKPOINTS, media } from '../../assets/styles/breakpoints';
-import { difficultyTypeData } from '../../assets/shared/constants/course';
-import { StatusItem, StatusTypeItem } from '../../components/status-items';
 import { getColorByPercentage } from '../../assets/shared/utils/color';
-import { useFilterForm } from '../../assets/shared/hooks/validators/useFilterDropdown';
-import { Controller } from 'react-hook-form';
 import { Select } from '../../components/dropdown';
 import { StudentsIcon } from '../../assets/images/icons/students-icon';
 import { Divider } from '../notification';
-import { LabelValue } from '../../components/topic-details-content';
 
 import graphicIcon from '../../assets/images/icons/graphics-icon.png';
 import { WarningTriangleIcon } from '../../assets/images/icons/warning-triangle-icon';
 import { ArrowIcon } from '../../assets/images/icons/arrow-icon';
-import { ProgressBar } from '../../components/progress-bar';
 import { TableBlock } from '../student/dashboard';
+import { useState } from 'react';
+import {
+  useTeacherCourses,
+  useTeacherDashboard,
+  RANK_LABELS,
+} from '../../assets/shared/hooks/useTeacherDashboard';
 
 export default function DashboardPageTeacher() {
   const navigate = useNavigate();
 
-  const { form } = useFilterForm(extremelyRepeating[0].id.toString());
-  const {
-    control,
-    formState: { errors },
-  } = form;
+  const { courses, isLoading: coursesLoading } = useTeacherCourses();
+  const [selectedCourseId, setSelectedCourseId] = useState<number | null>(null);
 
-  const sortedExtremelyRepeating = [...extremelyRepeating].sort(
-    (a, b) =>
-      difficultyTypeData[a.stateRepeating].order - difficultyTypeData[b.stateRepeating].order
-  );
+  const activeCourseId = selectedCourseId ?? courses[0]?.id ?? null;
+
+  const {
+    isLoading: analyticsLoading,
+    studentsCount,
+    averageGrade,
+    rankDistribution,
+    weakestTopics,
+    topFailingQuestions,
+    strugglingStudents,
+    suspiciousStudents,
+  } = useTeacherDashboard(activeCourseId);
+
+  if (courses.length === 0) {
+    return (
+      <AppLayout loadingState={coursesLoading || (analyticsLoading && !studentsCount)}>
+        <TextBody>У вас ще немає створених курсів та статистики</TextBody>
+      </AppLayout>
+    );
+  }
+
+  const dominantRank =
+    Object.entries(rankDistribution).sort((a, b) => b[1] - a[1])[0]?.[0] ?? 'NOVICE';
 
   return (
-    <AppLayout className="">
+    <AppLayout loadingState={coursesLoading || (analyticsLoading && !studentsCount)}>
       <span className="w-100 d-flex align-items-center gap-3">
         <TextBody $medium>Курс:</TextBody>
-        <Controller
-          name="item"
-          control={control}
-          render={({ field }) => (
-            <Select
-              value={field.value}
-              onChange={(val) => {
-                field.onChange(val);
-                field.onBlur();
-              }}
-              options={extremelyRepeating.map((item) => {
-                return {
-                  label: item.course,
-                  value: item.id.toString(),
-                };
-              })}
-              errorText={
-                extremelyRepeating.length === 0 ? 'Немає доступних елементів' : errors.item?.message
-              }
-            />
-          )}
+        <Select
+          value={activeCourseId?.toString() ?? ''}
+          onChange={(value) => {
+            setSelectedCourseId(Number(value));
+          }}
+          options={courses.map((course) => ({
+            label: course.title,
+            value: course.id.toString(),
+          }))}
+          errorText={courses.length === 0 ? 'Немає доступних курсів' : undefined}
         />
       </span>
+
       <BasicBlock
         $direction="row"
         className="flex-md-wrap flex-sm-wrap flex-wrap gap-md-3 gap-sm-2"
@@ -75,38 +80,36 @@ export default function DashboardPageTeacher() {
             <CardTitle>Студенти</CardTitle>
           </span>
           <TextBody $medium $color={COLORS.accent}>
-            120 приєдналось
+            {studentsCount} записано
           </TextBody>
-          <TextBody>із 130 запрошених</TextBody>
           <Divider />
-          <span className="d-flex gap-3 flex-xl-nowrap flex-lg-wrap flex-md-nowrap row-gap-1 align-items-center">
-            <LabelValue label="Активні:">
-              <TextBody $medium>98</TextBody>
-            </LabelValue>
-            <LabelValue label="Неактивні:">
-              <TextBody $medium>22</TextBody>
-            </LabelValue>
-          </span>
+          <TextBody>
+            Середня оцінка:{' '}
+            <TextBody as="span" $medium>
+              {averageGrade} / 5
+            </TextBody>
+          </TextBody>
         </CardItem>
 
         <CardItem>
           <span className="d-flex gap-2 align-items-center">
             <img src={graphicIcon} alt="graphic-icon" />
-            <CardTitle>Середній прогрес</CardTitle>
+            <CardTitle>Розподіл рангів</CardTitle>
           </span>
-          <span className="d-flex gap-1 flex-column align-items-start">
-            <span className="d-flex gap-2 align-items-center">
-              <CardTitle>75%</CardTitle>
-              <TextBody>пройдених тем</TextBody>
-            </span>
-            <SmallText $medium $color={COLORS.secondary}>
-              (+5% за тиждень)
-            </SmallText>
+          <span className="d-flex gap-1 flex-column align-items-start w-100">
+            {Object.entries(rankDistribution).map(([rank, count]) => (
+              <span key={rank} className="d-flex justify-content-between w-100">
+                <TextBody>{RANK_LABELS[rank]}</TextBody>
+                <TextBody $medium>{count}</TextBody>
+              </span>
+            ))}
           </span>
-          <span className="d-flex gap-2 align-items-center">
-            <StatusItem $type={StatusTypeItem.CIRCLE} $color={COLORS.status.warning} />
-            <TextBody>Більшість студентів на середньому рівні</TextBody>
-          </span>
+          <TextBody>
+            Переважний рівень:{' '}
+            <TextBody as="span" $medium>
+              {RANK_LABELS[dominantRank]}
+            </TextBody>
+          </TextBody>
         </CardItem>
 
         <CardItem>
@@ -114,22 +117,19 @@ export default function DashboardPageTeacher() {
             <WarningTriangleIcon color={COLORS.secondary} />
             <CardTitle>Проблемні теми</CardTitle>
           </span>
-          <span className="d-flex gap-2 align-items-center">
-            <CardTitle>12</CardTitle>
-            <SmallText $medium $color={COLORS.secondary}>
-              (+3 нові за останні дні)
-            </SmallText>
-          </span>
+          <CardTitle>{weakestTopics.filter((t) => t.avgProgress < 60).length}</CardTitle>
           <Divider />
-          <span data-type="footer" className="d-flex gap-1 flex-column  align-items-start">
-            <TextBody>Найбільше труднощів:</TextBody>
-            <span className="d-flex gap-2 align-items-center">
-              <TextBody $medium>Boolean –</TextBody>
-              <TextBody $medium $color={COLORS.status.error}>
-                45%
-              </TextBody>
+          {weakestTopics[0] && (
+            <span data-type="footer" className="d-flex gap-1 flex-column align-items-start">
+              <TextBody>Найбільше труднощів:</TextBody>
+              <span className="d-flex gap-2 align-items-center">
+                <TextBody $medium>{weakestTopics[0].title} –</TextBody>
+                <TextBody $medium $color={COLORS.status.error}>
+                  {weakestTopics[0].avgProgress}%
+                </TextBody>
+              </span>
             </span>
-          </span>
+          )}
         </CardItem>
       </BasicBlock>
 
@@ -149,23 +149,18 @@ export default function DashboardPageTeacher() {
           <CardTitle>Теми з низьким засвоєнням</CardTitle>
 
           <span className="d-flex flex-column gap-2 w-100">
-            {sortedExtremelyRepeating.map((item, index) => (
+            {weakestTopics.slice(0, 5).map((item) => (
               <LineCard
                 className="d-flex justify-content-between align-items-center w-100"
-                key={item.id}
+                key={item.topicId}
               >
                 <TextBody className="text-nowrap" $medium $color={COLORS.text}>
-                  {item.topic}
+                  {item.title}
                 </TextBody>
                 <span className="w-auto d-flex align-items-center flex-grow-1">
-                  <TextBody $label $color={getColorByPercentage(item.learning)}>
-                    {item.learning}%
+                  <TextBody $label $color={getColorByPercentage(item.avgProgress)}>
+                    {item.avgProgress}%
                   </TextBody>
-                  {index === 0 && (
-                    <SmallText $color={getColorByPercentage(item.learning)}>
-                      ↓ -10% за тиждень
-                    </SmallText>
-                  )}
                 </span>
                 <Button
                   $bgColor={'transparent'}
@@ -173,6 +168,9 @@ export default function DashboardPageTeacher() {
                   $brColor={COLORS.secondaryDark}
                   width="auto"
                   $type={'small'}
+                  onClick={() =>
+                    navigate(`/teacher/courses/${selectedCourseId}/topics/${item.topicId}`)
+                  }
                 >
                   <SmallText>Деталі</SmallText>
                 </Button>
@@ -185,88 +183,92 @@ export default function DashboardPageTeacher() {
             $bgColor={'transparent'}
             $txtColor={COLORS.accent}
             $brWidth={'2'}
-            onClick={() => navigate('/student/knowledge-tree')}
+            onClick={() => navigate(`/teacher/courses/${selectedCourseId}`)}
           >
             <TextBody $medium>Переглянути всі</TextBody>
             <ArrowIcon direction="right" color={COLORS.accent} />
           </Button>
         </TableBlock>
 
-        <BasicBlock
+        <TableBlock
           className="flex-grow-1 align-items-start"
           width={'auto'}
-          style={{ maxHeight: '100%' }}
           $gap={16}
+          $bgColor={COLORS.lighterBg}
+          $titleColor={COLORS.primary}
         >
-          <TableBlock
-            width={'100%'}
-            style={{ maxHeight: '100%' }}
-            className="h-100"
-            $gap={16}
-            $bgColor={COLORS.lighterBg}
-            $titleColor={COLORS.primary}
-          >
-            <CardTitle>Активність студентів</CardTitle>
-            <ProgressBar
-              value={96}
-              label="52% активні цього тижня"
-              delta="+10% порівняно з минулим"
-              deltaPositive={true}
-            />
-            <span className="d-flex flex-column gap-1">
-              <LabelValue label="Сьогодні:">
-                <TextBody $medium>64</TextBody>
-              </LabelValue>
-              <LabelValue label="Вчора:">
-                <TextBody $medium>58</TextBody>
-              </LabelValue>
-            </span>
-            <LabelValue label="Пік активності:">
-              <TextBody $medium>Вівторок</TextBody>
-            </LabelValue>
-          </TableBlock>
-          <Button
-            $type="large"
-            width="auto"
-            $bgColor={COLORS.accent}
-            $txtColor={COLORS.lighterBg}
-            $brWidth={'2'}
-            onClick={() => navigate('/student/knowledge-tree')}
-          >
-            <TextBody $medium>Переглянути детальніше про курс</TextBody>
-          </Button>
-        </BasicBlock>
+          <CardTitle>Найпроблемніші питання</CardTitle>
+          <span className="d-flex flex-column gap-2 w-100">
+            {topFailingQuestions.map((q) => (
+              <LineCard key={q.task_id} className="flex-column align-items-start">
+                <TextBody $medium $color={COLORS.text}>
+                  {q.question}
+                </TextBody>
+                <span className="d-flex gap-2 align-items-center">
+                  <TextBody $color={COLORS.status.error} $medium>
+                    {q.wrong_rate_pct}% помилок
+                  </TextBody>
+                  <SmallText>({q.total_attempts} спроб)</SmallText>
+                  {q.difficulty_level === 'L1' && q.wrong_rate_pct > 40 && (
+                    <SmallText $color={COLORS.status.warning}>
+                      ⚠ можливо, погане формулювання
+                    </SmallText>
+                  )}
+                </span>
+              </LineCard>
+            ))}
+          </span>
+        </TableBlock>
       </BasicBlock>
 
-      {/* <TableBlock $bgColor={COLORS.lighterBg} $gap={8} $titleColor={COLORS.primary}>
-        <span className="d-flex gap-3 align-items-center">
-          <FaqIcon size={24} color={COLORS.primary} />
-          <CardTitle>Рекомендація системи</CardTitle>
-        </span>
-        <CardCarousel
-          items={extremelyRepeating}
-          renderCard={(card) => (
-            <CarouselCardItem className="">
-              <span>
-                <TextBody>{card.id}. Повторити тему</TextBody>
-                <TextBody $medium>"{card.topic}"</TextBody>
+      <BasicBlock
+        $direction="row"
+        className="flex-md-wrap flex-sm-wrap flex-wrap gap-md-3 gap-sm-2"
+        width={'100%'}
+      >
+        <TableBlock
+          $gap={16}
+          $bgColor={COLORS.lighterBg}
+          $titleColor={COLORS.primary}
+          width="auto"
+          className="flex-grow-1"
+        >
+          <CardTitle>Потребують уваги</CardTitle>
+          <span className="d-flex flex-column gap-2 w-100">
+            {strugglingStudents.map((s) => (
+              <span key={s.student_id} className="d-flex justify-content-between w-100">
+                <TextBody>{s.student_name}</TextBody>
+                <TextBody $medium $color={COLORS.status.error}>
+                  {s.grade}/5
+                </TextBody>
               </span>
-              <TextBody>Ваш рівень засвоєння: {card.learning}%</TextBody>
-              <Button
-                type="small"
-                width="auto"
-                $bgColor={COLORS.background}
-                $brColor={COLORS.secondary}
-                $txtColor={COLORS.secondary}
-                $brWidth={'2'}
-                onClick={() => navigate('/student/knowledge-tree')}
-              >
-                <TextBody $medium>Перейти</TextBody>
-              </Button>
-            </CarouselCardItem>
-          )}
-        />
-      </TableBlock> */}
+            ))}
+          </span>
+        </TableBlock>
+
+        {suspiciousStudents.length > 0 && (
+          <TableBlock
+            $gap={16}
+            $bgColor={COLORS.lighterBg}
+            $titleColor={COLORS.status.warning}
+            width="auto"
+            className="flex-grow-1"
+          >
+            <CardTitle>⚠ Потребує перевірки</CardTitle>
+            <TextBody>Багато перемикань вкладки при високій оцінці</TextBody>
+            <span className="d-flex flex-column gap-2 w-100">
+              {suspiciousStudents.map((s) => (
+                <span key={s.student_id} className="d-flex justify-content-between w-100">
+                  <TextBody>{s.student_name}</TextBody>
+                  <TextBody $medium>
+                    {s.tab_switches} перемикань, {s.grade}/5
+                  </TextBody>
+                </span>
+              ))}
+            </span>
+          </TableBlock>
+        )}
+      </BasicBlock>
     </AppLayout>
   );
 }
@@ -287,7 +289,6 @@ const CardItem = styled.div`
     width: 26px;
     height: 26px;
   }
-
   ${Divider} {
     margin: 8px 0;
   }
@@ -310,7 +311,6 @@ const CardItem = styled.div`
   ${media(657)} {
     max-width: 100%;
     width: 100%;
-
     span[data-type='footer'] {
       flex-direction: row !important;
       gap: 16px !important;
@@ -328,13 +328,10 @@ const LineCard = styled.div`
   ${basicShadow};
   border-radius: 12px;
   background-color: ${COLORS.lighterBg};
-
   ${actionEffect};
-
   div {
     margin-top: 1px;
   }
-
   span {
     display: flex;
     width: 100%;
@@ -342,7 +339,6 @@ const LineCard = styled.div`
     gap: 12px;
     row-gap: 6px;
   }
-
   ${media(BREAKPOINTS.ml)} {
     padding: 14px 16px;
   }

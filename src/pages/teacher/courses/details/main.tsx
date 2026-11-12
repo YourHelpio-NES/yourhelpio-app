@@ -1,4 +1,4 @@
-import { Outlet } from 'react-router-dom';
+import { Navigate, Outlet, useParams } from 'react-router-dom';
 import { detailsTabs } from '../../../../assets/shared/constants/details-course';
 import { COLORS } from '../../../../assets/styles/colors';
 import { CardTitle, SubTitle, TextBody } from '../../../../assets/styles/typography';
@@ -7,43 +7,55 @@ import AppLayout from '../../../../components/widgets/app/layout';
 import styled from 'styled-components';
 import { BasicBlock } from '../../../../components/blocks';
 import { BREAKPOINTS, media } from '../../../../assets/styles/breakpoints';
+import { useCourseDetailsTeacher } from '../../../../assets/shared/hooks/useCourseDetailsStudent';
+import { useTeacherCoursesWithStats } from '../../../../assets/shared/hooks/useTeacherCoursesWithStats';
 
 export default function MainDetailsCoursePage() {
-  console.log(location.pathname);
+  const { courseId } = useParams<{ courseId: string }>();
+  const id = Number(courseId);
+
+  const { course, isLoading } = useCourseDetailsTeacher(id);
+  const { courses, isLoading: coursesLoading } = useTeacherCoursesWithStats();
+
+  const details = courses.find((x) => x.id === id);
+
+  if (!courseId) return <Navigate to="/teacher/courses/main" replace />;
+
+  console.log(course);
+  console.log(courses);
+  console.log(details);
+  console.log(courseId);
+
+  if (!course || !details) {
+    return (
+      <AppLayout>
+        <TextBody>Курс не знайдено</TextBody>
+      </AppLayout>
+    );
+  }
 
   return (
-    <AppLayout>
+    <AppLayout loadingState={isLoading || coursesLoading}>
       <span className="d-flex flex-column gap-1">
         <TextBody $medium>Курс: </TextBody>
-        <SubTitle>Алгоритми проєктування</SubTitle>
+        <SubTitle>{details.title}</SubTitle>
       </span>
       <MainTabsBody $bgColor={COLORS.lighterBg}>
         <TabList className="flex-grow-0 w-100 justify-content-between">
-          {detailsTabs.map((item) => {
-            // const isActive = location.pathname === `/teacher/courses/details/${item.link}`;
-            return (
-              <StyledTab
-                to={item.link}
-                key={JSON.stringify(item)}
-                className={`${(isActive: boolean) => (isActive ? 'active' : '')}`}
-                $color={COLORS.accent}
-              >
-                {({ isActive }) => (
-                  <>
-                    {item.icon({
-                      color: isActive ? COLORS.accent : COLORS.text,
-                      size: 24,
-                    })}
-                    <TextBody $medium>{item.title}</TextBody>
-                  </>
-                )}
-              </StyledTab>
-            );
-          })}
+          {detailsTabs.map((item) => (
+            <StyledTab to={item.link} key={item.link} $color={COLORS.accent}>
+              {({ isActive }) => (
+                <>
+                  {item.icon({ color: isActive ? COLORS.accent : COLORS.text, size: 24 })}
+                  <TextBody $medium>{item.title}</TextBody>
+                </>
+              )}
+            </StyledTab>
+          ))}
         </TabList>
 
         <BasicBlock data-type="main-block">
-          <Outlet />
+          <Outlet context={id} />
         </BasicBlock>
       </MainTabsBody>
     </AppLayout>

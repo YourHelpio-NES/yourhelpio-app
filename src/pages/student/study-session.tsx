@@ -19,7 +19,17 @@ export default function StudySessionMainPage() {
     () =>
       getTaskTableCols(
         (id) => navigate(`/student/study-session/topics/details?id=${id}`),
-        (id) => navigate(`/student/study-plan?course=${id}`)
+        (id) => navigate(`/student/study-plan?course=${id}`),
+        true
+      ),
+    [navigate]
+  );
+  const pastTasksColumns = useMemo(
+    () =>
+      getTaskTableCols(
+        (id) => navigate(`/student/study-session/topics/details?id=${id}`),
+        (id) => navigate(`/student/study-plan?course=${id}`),
+        false
       ),
     [navigate]
   );
@@ -44,7 +54,7 @@ export default function StudySessionMainPage() {
           ) : (
             <SimpleTable
               data={todayItems}
-              columns={tasksColumns}
+              columns={pastTasksColumns}
               isRowDisabled={(row) => row.is_overdue}
             />
           )}
@@ -67,7 +77,7 @@ export default function StudySessionMainPage() {
           ) : (
             <SimpleTable
               data={tomorrowItems}
-              columns={tasksColumns}
+              columns={pastTasksColumns}
               isRowDisabled={(row) => row.is_overdue}
             />
           )}

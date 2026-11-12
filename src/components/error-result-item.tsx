@@ -55,7 +55,7 @@ const fadeIn = keyframes`
   to   { opacity: 1; transform: translateY(0); }
 `;
 
-const ErrorItemWrapper = styled.div<{ $open: boolean }>`
+export const ErrorItemWrapper = styled.div<{ $open: boolean }>`
   padding-bottom: ${({ $open }) => ($open ? '12px' : '0')};
   border-bottom: 1px solid ${({ $open }) => ($open ? COLORS.primary : COLORS.primaryShadow)};
   display: flex;

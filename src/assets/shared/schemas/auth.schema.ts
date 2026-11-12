@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { passwordRegex, requiredField } from '../hooks/validators/common.validators';
+import { RolesEnum } from '../constants/roles';
 
 const emailSchema = z.string().min(1, requiredField).email('Некоректний формат електронної пошти');
 
@@ -24,6 +25,11 @@ export const signUpSchema = z
     confirmRules: z.boolean().refine((val) => val === true, {
       message: 'Необхідно погодитись з умовами',
     }),
+    role: z
+      .nativeEnum(RolesEnum)
+      .refine((role) => role === RolesEnum.STUDENT || role === RolesEnum.TEACHER, {
+        message: 'Оберіть роль: студент або викладач',
+      }),
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: 'Паролі не збігаються',

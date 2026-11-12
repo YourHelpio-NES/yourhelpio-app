@@ -3,7 +3,6 @@ import { useCourseCreate } from '../../../../../assets/shared/hooks/useCourseCre
 import { COLORS } from '../../../../../assets/styles/colors';
 import { SmallText, TextBody } from '../../../../../assets/styles/typography';
 import { BasicBlock } from '../../../../../components/blocks';
-import { Chip } from '../../../../../components/multi-dropdown';
 import { LabelValue } from '../../../../../components/topic-details-content';
 
 export default function ReviewStep() {
@@ -23,31 +22,22 @@ export default function ReviewStep() {
         <LabelValue label="Опис:">
           <TextBody $medium>{formData.description}</TextBody>
         </LabelValue>
-        <LabelValue label="Студенти, які будуть додані до курсу:">
-          <span className="d-flex align-items-center gap-1">
-            {formData.studentIds!.map((item) => (
-              <Chip key={item}>
-                <TextBody $color={COLORS.text}>{item}</TextBody>
-              </Chip>
-            ))}
-          </span>
-        </LabelValue>
       </BasicBlock>
       <BasicBlock $gap={8} className="py-3">
         <TextBody $label>Теми:</TextBody>
-        <SmallText>*Ви зможете редагувати теми після створення курсу</SmallText>
+        <SmallText>
+          Після створення AI автоматично згенерує опис, складність і ключові поняття для кожної теми
+        </SmallText>
 
         {formData.topicIds!.map((item, index) => (
-          <span key={item.name} className="d-flex align-items-center justify-content-between gap-3">
-            <span className="d-flex flex-column gap-1">
-              <TextBody $medium>
-                {index + 1}. {item.name}
-              </TextBody>
-              <TextBody>{item.description}</TextBody>
-            </span>
-          </span>
+          <TextBody key={item.name} $medium>
+            {index + 1}. {item.name}
+          </TextBody>
         ))}
       </BasicBlock>
+      <TextBody $color={COLORS.secondary}>
+        Код запрошення для студентів буде згенеровано автоматично після натискання "Створити курс"
+      </TextBody>
     </BasicBlock>
   );
 }

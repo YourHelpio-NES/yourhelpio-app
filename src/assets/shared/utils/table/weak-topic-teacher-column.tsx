@@ -1,9 +1,9 @@
 import type { ColumnDef } from '@tanstack/react-table';
 import { SmallText, TextBody } from '../../../styles/typography';
 import { getColorByPercentage } from '../color';
-import type { WeakTopic } from '../../constants/course';
+import type { WeakTopicRow } from '../../hooks/useTeacherWeakTopics';
 
-export const weakTopicTeacherColumns: ColumnDef<WeakTopic>[] = [
+export const weakTopicTeacherColumns: ColumnDef<WeakTopicRow>[] = [
   {
     accessorKey: 'title',
     cell: ({ row }) => <TextBody $medium>{row.original.title}</TextBody>,
@@ -11,7 +11,7 @@ export const weakTopicTeacherColumns: ColumnDef<WeakTopic>[] = [
   },
   {
     accessorKey: 'course',
-    cell: ({ row }) => <TextBody $medium>{row.original.course}</TextBody>,
+    cell: ({ row }) => <TextBody $medium>{row.original.courseTitle}</TextBody>,
     header: 'Курс',
   },
   {
@@ -21,10 +21,10 @@ export const weakTopicTeacherColumns: ColumnDef<WeakTopic>[] = [
         <TextBody $medium $color={getColorByPercentage(row.original.masteryPercent)}>
           {row.original.masteryPercent}%
         </TextBody>
-        {row.original.weeklyDelta && (
+        {row.original.masteryPercent && (
           <SmallText>
-            {row.original.weeklyDelta.toString().includes('-') ? '↓' : '↑'}{' '}
-            {row.original.weeklyDelta}% за тиждень
+            {row.original.masteryPercent.toString().includes('-') ? '↓' : '↑'}{' '}
+            {row.original.masteryPercent}% за тиждень
           </SmallText>
         )}
       </span>

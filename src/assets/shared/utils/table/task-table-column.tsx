@@ -7,11 +7,17 @@ import { dotsTextStyle } from '../../../../components/progress-card';
 
 export const getTaskTableCols = (
   onTopicClick: (id: number) => void,
-  onCourseClick: (id: number) => void
+  onCourseClick: (id: number) => void,
+  invertStage?: boolean
 ): ColumnDef<ReviewItem>[] => [
   {
     accessorKey: 'stage',
-    cell: ({ row }) => <RadioButton value={row.original.is_overdue} type="state" />,
+    cell: ({ row }) => (
+      <RadioButton
+        value={invertStage ? !row.original.is_overdue : row.original.is_overdue}
+        type="state"
+      />
+    ),
   },
   {
     accessorKey: 'name',
@@ -31,6 +37,8 @@ export const getTaskTableCols = (
   },
   {
     accessorKey: 'day',
-    cell: ({ row }) => <TextBody>{studyDayLabels[row.original.stage as StudyDayEnum]}</TextBody>,
+    cell: ({ row }) => (
+      <TextBody className="pe-3">{studyDayLabels[row.original.stage as StudyDayEnum]}</TextBody>
+    ),
   },
 ];

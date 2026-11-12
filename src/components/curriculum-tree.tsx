@@ -3,7 +3,7 @@ import styled, { keyframes, css } from 'styled-components';
 import { TextBody } from '../assets/styles/typography';
 import { COLORS } from '../assets/styles/colors';
 import type { CourseProgressResponse } from '../api/courses/details.types';
-import { useTopicDetailsStudent } from '../assets/shared/hooks/useTopicDetailsStudent';
+import { useTopicDetailsStudent } from '../assets/shared/hooks/useTopicDetails';
 
 const fadeSlideUp = keyframes`
   to   { opacity: 1; transform: translateY(0); }
@@ -19,8 +19,6 @@ const pulse = keyframes`
   50%       { box-shadow: 0 0 0 6px rgba(234, 88, 12, 0); }
 `;
 
-// Скрол більше не критичний для розрахунку, тож ховаємо горизонтальний
-// скрол взагалі і даємо чипам переноситись — це і є "адаптивність" під різну к-сть тем
 const Root = styled.div`
   width: 100%;
   box-sizing: border-box;
@@ -55,7 +53,6 @@ const AnimatedPath = styled.path<{ $delay?: number }>`
   animation-delay: ${({ $delay = 0 }) => $delay}ms;
 `;
 
-// wrap замість nowrap + center — довільна к-сть тем лягає симетрично в кілька рядків
 const TopicRow = styled.div`
   display: flex;
   justify-content: center;
@@ -84,7 +81,6 @@ const TopicChip = styled.button<{
   text-align: center;
   z-index: 9;
 
-  /* динамічна ширина замість фіксованих 200px — довгі назви більше не ламають рядок */
   flex: 0 1 auto;
   min-width: 120px;
   max-width: 240px;
@@ -92,7 +88,7 @@ const TopicChip = styled.button<{
   ${TextBody} {
     overflow-wrap: break-word;
     text-align: center;
-    white-space: normal; /* дозволяємо перенос на 2 рядки для довгих назв */
+    white-space: normal;
   }
 
   ${({ $active, $done }) =>
@@ -237,7 +233,7 @@ export default function TopicTree({
                 ref={(el) => {
                   chipRefs.current[t.topic_id] = el;
                 }}
-                $done={t.in_remediation}
+                $done={t.topic_completed}
                 $active={activeId === t.topic_id}
                 onClick={() => handleChipClick(t.topic_id)}
                 aria-pressed={activeId === t.topic_id}
@@ -248,7 +244,6 @@ export default function TopicTree({
             ))}
           </TopicRow>
 
-          {/* Subtopics */}
           {activeTopic && topic?.passport.outcomes && (
             <SubtopicArea>
               <div style={{ height: 60 }} />

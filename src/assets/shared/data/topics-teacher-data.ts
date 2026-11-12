@@ -170,7 +170,7 @@ export const TOPIC_DETAILS_TEACHER: TopicDetailTeacher[] = [
   {
     id: '5',
     topicName: 'Алгоритми сортування',
-    status: TopicDetailsStatusEnum.IN_PROGRESS,
+    status: TopicDetailsStatusEnum.PROCESSING,
     description:
       'Тема охоплює основні алгоритми сортування: бульбашкове, вибірне, вставками, злиттям та швидке сортування. Порівнюється їх складність і практичне застосування.',
     learningOutcomes: [
@@ -214,7 +214,7 @@ export const TOPIC_DETAILS_TEACHER: TopicDetailTeacher[] = [
   {
     id: '6',
     topicName: 'Алгоритми пошуку',
-    status: TopicDetailsStatusEnum.IN_PROGRESS,
+    status: TopicDetailsStatusEnum.PROCESSING,
     description:
       'Студенти ознайомляться з алгоритмами лінійного та бінарного пошуку, їх умовами застосування та порівняльною ефективністю.',
     learningOutcomes: [
@@ -240,7 +240,7 @@ export const TOPIC_DETAILS_TEACHER: TopicDetailTeacher[] = [
   {
     id: '7',
     topicName: 'Графові алгоритми',
-    status: TopicDetailsStatusEnum.IN_PROGRESS,
+    status: TopicDetailsStatusEnum.PROCESSING,
     description:
       'Тема знайомить з поняттям графу та основними алгоритмами обходу: BFS і DFS. Розглядаються задачі пошуку найкоротшого шляху (алгоритм Дейкстри).',
     learningOutcomes: [
@@ -261,7 +261,7 @@ export const TOPIC_DETAILS_TEACHER: TopicDetailTeacher[] = [
   {
     id: '8',
     topicName: 'Дерева та структури даних',
-    status: TopicDetailsStatusEnum.IN_PROGRESS,
+    status: TopicDetailsStatusEnum.PROCESSING,
     description:
       'Студенти вивчають деревоподібні структури даних: бінарні дерева, дерева пошуку (BST), купи. Розглядаються операції вставки, видалення та пошуку.',
     learningOutcomes: [
@@ -277,7 +277,7 @@ export const TOPIC_DETAILS_TEACHER: TopicDetailTeacher[] = [
   {
     id: '9',
     topicName: 'Хеш-таблиці та хешування',
-    status: TopicDetailsStatusEnum.IN_PROGRESS,
+    status: TopicDetailsStatusEnum.PROCESSING,
     description:
       "Тема охоплює принципи хешування, побудову хеш-таблиць та розв'язання колізій. Студенти навчаться оцінювати ефективність хеш-функцій.",
     learningOutcomes: [

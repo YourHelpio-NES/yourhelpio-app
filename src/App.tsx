@@ -35,6 +35,7 @@ import StudentsStep from './pages/teacher/courses/create/steps/students';
 import ReviewStep from './pages/teacher/courses/create/steps/review';
 import PublicRoute from './components/widgets/routes/public';
 import ProtectedRoute from './components/widgets/routes/protected';
+import CourseCreatedPage from './pages/teacher/courses/create/steps/created';
 
 function App() {
   return (
@@ -70,10 +71,12 @@ function App() {
       <Route path="teacher" element={<ProtectedRoute />}>
         <Route index element={<Navigate to="dashboard" replace />} />
         <Route path="dashboard" element={<DashboardPageTeacher />} />
+        <Route path="courses/:id/created" element={<CourseCreatedPage />} />
         <Route path="courses">
           <Route index element={<Navigate to="main" replace />} />
           <Route path="main" element={<MainCoursesPageTeacher />} />
-          <Route path="details" element={<MainDetailsCoursePage />}>
+
+          <Route path=":courseId" element={<MainDetailsCoursePage />}>
             <Route index element={<Navigate to="overview" replace />} />
             <Route path="overview" element={<OverviewDetailsCourseTab />} />
             <Route path="learning-outcomes" element={<LearningOutcomesDetailsCourseTab />} />
@@ -85,7 +88,8 @@ function App() {
             <Route path="topics/details" element={<TopicDetailsMainPageCourseTab />} />
             <Route path="topics/update" element={<TopicUpdateMainPageCourseTab />} />
           </Route>
-          <Route path="/teacher/courses/create" element={<CourseCreateLayout />}>
+
+          <Route path="create" element={<CourseCreateLayout />}>
             <Route index element={<Navigate to="basic-info" replace />} />
             <Route path="basic-info" element={<BasicInfoStep />} />
             <Route path="topics" element={<TopicsStep />} />

@@ -4,6 +4,7 @@ import type { StudentTopic } from '../../constants/student';
 import { TextBody } from '../../../styles/typography';
 import { StudentStatusButton } from '../../../../components/row-table-action';
 import { EmailCell } from './student';
+import type { TeacherStudent } from '../../../../api/courses/courses.types';
 
 export const CopyBtn = styled.button`
   display: inline-flex;
@@ -48,5 +49,22 @@ export const studentsTableColumns: ColumnDef<StudentTopic>[] = [
     accessorKey: 'status',
     header: 'Статус',
     cell: ({ row }) => <StudentStatusButton status={row.original.status} />,
+  },
+];
+
+export const studentsTableTeacherColumns: ColumnDef<TeacherStudent>[] = [
+  {
+    accessorKey: 'fullName',
+    header: "Ім'я / Прізвище студента",
+    cell: ({ row }) => (
+      <TextBody $medium>
+        {row.index + 1}. {row.original.full_name}
+      </TextBody>
+    ),
+  },
+  {
+    accessorKey: 'email',
+    header: 'Email',
+    cell: ({ row }) => <EmailCell email={row.original.email} />,
   },
 ];

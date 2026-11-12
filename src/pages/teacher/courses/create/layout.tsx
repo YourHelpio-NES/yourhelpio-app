@@ -11,11 +11,16 @@ import { Button } from '../../../../components/button';
 import { useCourseCreate } from '../../../../assets/shared/hooks/useCourseCreate';
 import styled from 'styled-components';
 import { BREAKPOINTS, media } from '../../../../assets/styles/breakpoints';
+import { coursesApi } from '../../../../api/courses/courses.api';
+import { ToastTypeEnum } from '../../../../assets/shared/constants/custom-toast';
+import { getErrorMessage } from '../../../../assets/shared/utils/getErrorMessage';
+import showToast from '../../../../components/toast/show';
 
 export default function CourseCreateLayout() {
   const [currentStep, setCurrentStep] = useState<number>(0);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const navigate = useNavigate();
-  const { isStepValid, resetForm } = useCourseCreate();
+  const { formData, isStepValid, resetForm } = useCourseCreate();
 
   const currentStepItem = STEPS_CREATE_COURSE[currentStep];
   const isLast = currentStep === STEPS_CREATE_COURSE.length - 1;
@@ -35,11 +40,35 @@ export default function CourseCreateLayout() {
     navigate(`/teacher/courses/create/${currentStepItem.path}`);
   }, [currentStepItem, navigate]);
 
+  const handleCreateCourse = async () => {
+    setIsSubmitting(true);
+    try {
+      const { data: course } = await coursesApi.createCourse({
+        title: formData.title!,
+        description: formData.description || undefined,
+      });
+      console.log(course.course);
+      const topics = formData.topicIds ?? [];
+      // теми створюємо послідовно, кожна тема одразу тригерить фонову генерацію passport
+      for (const topic of topics) {
+        await coursesApi.createTopic(course.course.id, { title: topic.name });
+      }
+
+      resetForm();
+      navigate(`/teacher/courses/${course.course.id}/created`, {
+        state: { inviteCode: course.course.invite_code, courseTitle: course.course.title },
+      });
+    } catch (err: unknown) {
+      showToast(ToastTypeEnum.ERROR, 'Помилка', getErrorMessage(err, 'Не вдалося створити курс'));
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   const handleNext = () => {
     if (!canProceed) return;
     if (isLast) {
-      navigate(`/teacher/courses/main`);
-      resetForm();
+      void handleCreateCourse();
       return;
     }
     setCurrentStep((s) => s + 1);
@@ -79,14 +108,16 @@ export default function CourseCreateLayout() {
             <Button
               $brWidth="2"
               onClick={handleNext}
-              disabled={!canProceed}
+              disabled={!canProceed || isSubmitting}
               style={{
                 opacity: canProceed ? 1 : 0.45,
                 cursor: canProceed ? 'pointer' : 'not-allowed',
               }}
               title={!canProceed ? "Заповніть обов'язкові поля" : undefined}
             >
-              <TextBody $medium>{isLast ? 'Створити курс' : 'Продовжити'}</TextBody>
+              <TextBody $medium>
+                {isSubmitting ? 'Створюємо...' : isLast ? 'Створити курс' : 'Продовжити'}
+              </TextBody>
             </Button>
           </span>
         </main>

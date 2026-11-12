@@ -3,7 +3,7 @@ import MainLayout from '../../components/widgets/layout';
 import { COLORS } from '../../assets/styles/colors';
 import { TitleSection } from '../../components/title-section';
 import { TextBody } from '../../assets/styles/typography';
-import { useState } from 'react';
+import { useEffect } from 'react';
 import { Button } from '../../components/button';
 import { BasicBlock } from '../../components/blocks';
 import { RolesEnum } from '../../assets/shared/constants/roles';
@@ -18,20 +18,27 @@ import { Controller } from 'react-hook-form';
 import showToast from '../../components/toast/show';
 import { ToastTypeEnum } from '../../assets/shared/constants/custom-toast';
 import { AuthForm, InputsLineBlock } from '../../components/widgets/form';
+import { signUpSchema } from '../../assets/shared/schemas/auth.schema';
 
 export default function SignUpPage() {
   const { form, onSubmit } = useSignUpForm();
   const {
     control,
+    watch,
+    setValue,
     formState: { errors },
   } = form;
   const navigate = useNavigate();
   const location = useLocation();
-
   const courseInfo = new URLSearchParams(location.search).get('course');
-  const [selectedRole, setSelectedRole] = useState<RolesEnum | null>(() =>
-    courseInfo ? RolesEnum.STUDENT : null
-  );
+
+  const selectedRole = watch('role');
+
+  useEffect(() => {
+    if (courseInfo) {
+      setValue('role', RolesEnum.STUDENT);
+    }
+  }, [courseInfo, setValue]);
 
   return (
     <MainLayout>
@@ -53,14 +60,22 @@ export default function SignUpPage() {
           <TextBody $medium $color={COLORS.text}>
             Я реєструюсь як:
           </TextBody>
-          {Object.values(RolesEnum).map((role) => (
-            <RadioButton
-              key={role}
-              value={role}
-              selected={selectedRole}
-              setSelected={setSelectedRole}
-            />
-          ))}
+          <Controller
+            name="role"
+            control={control}
+            render={({ field }) => (
+              <>
+                {Object.values(RolesEnum).map((role) => (
+                  <RadioButton
+                    key={role}
+                    value={role}
+                    selected={field.value}
+                    setSelected={() => field.onChange(role)}
+                  />
+                ))}
+              </>
+            )}
+          />
         </RadioBlock>
         {selectedRole && (
           <AuthBodyBlock>
@@ -203,6 +218,13 @@ export default function SignUpPage() {
                 $brWidth={'2'}
                 onClick={(e) => {
                   console.log(errors);
+                  console.log(selectedRole);
+
+                  console.log('role:', selectedRole);
+                  console.log('role type:', typeof selectedRole);
+                  console.log('role JSON:', JSON.stringify(selectedRole));
+                  console.log(signUpSchema.shape.role);
+
                   if (errors.confirmRules?.message?.length) {
                     showToast(
                       ToastTypeEnum.WARNING,

@@ -7,6 +7,9 @@ import { BasicBlock } from '../../../components/blocks';
 import { QuestionCard } from '../../../components/question-card';
 import { LinkTitle } from '../../../components/title-section';
 import AppLayout from '../../../components/widgets/app/layout';
+import { QuestionTimer } from '../../../components/question-timer';
+import { useTopicDetailsStudent } from '../../../assets/shared/hooks/useTopicDetails';
+import { useEffect } from 'react';
 
 export default function StudyingStep() {
   const [searchParams] = useSearchParams();
@@ -31,15 +34,36 @@ export default function StudyingStep() {
     pendingAction,
     setPendingAction,
     confirmLastAction,
+    timerFormatted,
+    timerSecondsLeft,
   } = useTestSession(Number(topicId));
+
+  const { topic, isLoading: topicLoader, fetchTopic } = useTopicDetailsStudent();
+
+  console.log(timerFormatted);
+  console.log(timerSecondsLeft);
+
+  useEffect(() => {
+    if (topicId) {
+      void fetchTopic(Number(topicId));
+    }
+  }, [topicId, fetchTopic]);
+
+  if (isLoading || topicLoader) {
+    return (
+      <AppLayout>
+        <TextBody>Завантаження...</TextBody>
+      </AppLayout>
+    );
+  }
 
   if (isEmpty) {
     return (
-      <AppLayout>
+      <AppLayout loadingState={isLoading || topicLoader}>
         <BasicBlock>
           <TextBody>
             {nextReviewAt
-              ? `Сесія на сьогодні вже пройдена. Наступна — ${new Date(nextReviewAt).toLocaleString('uk-UA')}`
+              ? `Сесія на сьогодні вже пройдена. Наступна — ${new Date(nextReviewAt).toLocaleDateString('uk-UA')}`
               : 'На сьогодні завдань немає'}
           </TextBody>
         </BasicBlock>
@@ -48,15 +72,21 @@ export default function StudyingStep() {
   }
 
   return (
-    <AppLayout loadingState={isLoading}>
+    <AppLayout loadingState={isLoading || topicLoader}>
       <BasicBlock width="100%">
         <BasicBlock $bgColor="transparent" $gap={12}>
-          <LinkTitle firstTitle={'Тема'} secondTitle={'Навчальна сесія'} />
-          <span className="d-flex gap-2 align-items-center">
-            <StudyQuestionCardIcon size={28} color={COLORS.secondaryDark} />
-            <TextBody $color={COLORS.text}>
-              Питання {currentIndex + 1} з {totalQuestions}
-            </TextBody>
+          <LinkTitle firstTitle={`Тема «${topic?.title}»`} />
+          {/* <LinkTitle firstTitle={'Тема'} secondTitle={'Навчальна сесія'} /> */}
+          <span className="d-flex gap-2 align-items-center justify-content-between">
+            <span className="d-flex gap-2 align-items-center">
+              <StudyQuestionCardIcon size={28} color={COLORS.secondaryDark} />
+              <TextBody $color={COLORS.text}>
+                Питання {currentIndex + 1} з {totalQuestions}
+              </TextBody>
+            </span>
+            {timerSecondsLeft != 0 && (
+              <QuestionTimer formatted={timerFormatted} secondsLeft={timerSecondsLeft} />
+            )}
           </span>
         </BasicBlock>
 

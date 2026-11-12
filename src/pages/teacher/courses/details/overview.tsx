@@ -8,9 +8,37 @@ import { LabelValue } from '../../../../components/topic-details-content';
 import { TableBlock } from '../../../student/dashboard';
 
 import graphIcon from '../../../../assets/images/icons/graph-grow.png';
-import { ArrowIcon } from '../../../../assets/images/icons/arrow-icon';
+import { useCourseDetailsTeacher } from '../../../../assets/shared/hooks/useCourseDetailsStudent';
+import { useParams } from 'react-router-dom';
+import { useTeacherDashboard } from '../../../../assets/shared/hooks/useTeacherDashboard';
+import {
+  useCourseStudentsCount,
+  useCourseTopicsCount,
+} from '../../../../assets/shared/hooks/useStudentStatusBuckets';
+import { useTeacherCoursesWithStats } from '../../../../assets/shared/hooks/useTeacherCoursesWithStats';
 
 export default function OverviewDetailsCourseTab() {
+  const { courseId } = useParams<{ courseId: string }>();
+  const id = Number(courseId);
+
+  const { course, isLoading } = useCourseDetailsTeacher(id);
+  const { courses, isLoading: coursesLoading } = useTeacherCoursesWithStats();
+
+  const { topicsCount } = useCourseTopicsCount(id);
+  const { studentsCount } = useCourseStudentsCount(id);
+  const { averageGrade } = useTeacherDashboard(id);
+
+  console.log(course);
+  console.log(courses);
+  console.log(courseId);
+
+  if (isLoading || !course || coursesLoading || !id) return <TextBody>Завантаження...</TextBody>;
+
+  const details = courses.find((x) => x.id === id);
+  console.log(details);
+
+  if (!details) return <TextBody>Завантаження...</TextBody>;
+
   return (
     <>
       <BasicBlock
@@ -22,12 +50,9 @@ export default function OverviewDetailsCourseTab() {
         <span className="d-flex flex-column gap-3 align-items-start">
           <span className="d-flex gap-2 align-items-start">
             <BlocksElementIcon size={28} />
-            <CardTitle>Алгоритми проєктування</CardTitle>
+            <CardTitle>{details.title}</CardTitle>
           </span>
-          <TextBody>
-            Курс для студентів допоможе визначити тему тип даних, теорія, як їх використовувати на
-            практиці та вміти вільно пояснити всі терміни по темі.
-          </TextBody>
+          <TextBody>{details.description || 'Опис курсу не додано'}</TextBody>
         </span>
         <Button $type="large" width="auto" $txtColor={COLORS.background} $brWidth={'1'}>
           <TextBody $medium>Редагувати</TextBody>
@@ -44,101 +69,45 @@ export default function OverviewDetailsCourseTab() {
         <BasicBlock className="flex-grow-1" width="auto" $gap={24} $bgColor={COLORS.lighterBg}>
           <span className="d-flex flex-column gap-2">
             <LabelValue label="Дата створення:">
-              <TextBody $medium>30.03.2026</TextBody>
+              <TextBody $medium>
+                {new Date(details.created_at).toLocaleDateString('uk-UA')}
+              </TextBody>
             </LabelValue>
             <LabelValue label="Кількість тем:">
-              <TextBody $medium>12</TextBody>
+              <TextBody $medium>{topicsCount}</TextBody>
             </LabelValue>
-            <span className="d-flex gap-1 pt-1">
-              <Button
-                $type="small"
-                width="auto"
-                $bgColor={'transparent'}
-                $txtColor={COLORS.accent}
-                $brColor={COLORS.accent}
-                $brWidth={'2'}
-              >
-                <TextBody $medium>Перейти до тем</TextBody>
-              </Button>
-              <Button $type="small" width="auto" $txtColor={COLORS.background} $brWidth={'2'}>
-                <TextBody $medium>Додати тему</TextBody>
-              </Button>
-            </span>
           </span>
           <span className="d-flex flex-column gap-2">
-            <LabelValue label="Запрошено студентів:">
-              <TextBody $medium>105</TextBody>
+            <LabelValue label="Записано студентів:">
+              <TextBody $medium>{studentsCount}</TextBody>
             </LabelValue>
-            <LabelValue label="Прийняли запрошення:">
-              <TextBody $medium>90</TextBody>
-            </LabelValue>
-            <span className="d-flex gap-1 pt-1">
-              <Button
-                $type="small"
-                width="auto"
-                $bgColor={'transparent'}
-                $txtColor={COLORS.text}
-                $brColor={COLORS.text}
-                $brWidth={'2'}
-              >
-                <TextBody $medium>Пошук студентів</TextBody>
-              </Button>
-              <Button
-                $type="small"
-                width="auto"
-                $bgColor={'transparent'}
-                $txtColor={COLORS.accent}
-                $brColor={COLORS.accent}
-                $brWidth={'2'}
-              >
-                <TextBody $medium>Запросити студента</TextBody>
-              </Button>
-            </span>
+            {/* <LabelValue label="Код запрошення:">
+              <TextBody $medium>{details.invite_code}</TextBody>
+            </LabelValue> */}
           </span>
         </BasicBlock>
+
         <BasicBlock
           className="flex-grow-1 align-items-start"
           width={'auto'}
-          style={{ maxHeight: '100%' }}
           $gap={16}
           $bgColor={COLORS.lighterBg}
         >
           <TableBlock
             width={'100%'}
-            style={{ maxHeight: '100%' }}
-            className="h-100"
             $gap={16}
             $bgColor={COLORS.lighterBg}
-            $brColor={COLORS.secondary}
             $titleColor={COLORS.primary}
           >
             <span className="d-flex gap-2 align-items-center">
               <img src={graphIcon} alt="graph-grow-icon" width={28} height={28} />
               <TextBody $medium>Середній прогрес</TextBody>
               <CardTitle className="ms-auto" style={{ color: COLORS.primary }}>
-                68%
+                {averageGrade}%
               </CardTitle>
             </span>
-            <ProgressBar value={68} deltaPositive={true} showPercent={false} />
-            <span className="d-flex flex-column gap-1">
-              <LabelValue label="Завершили курс:">
-                <TextBody $medium>25%</TextBody>
-              </LabelValue>
-              <LabelValue label="Активні:">
-                <TextBody $medium>60%</TextBody>
-              </LabelValue>
-            </span>
+            <ProgressBar value={averageGrade} showPercent={false} />
           </TableBlock>
-          <Button
-            $type="text"
-            width="auto"
-            $bgColor={'transparent'}
-            $txtColor={COLORS.text}
-            $brWidth={'2'}
-          >
-            <TextBody $medium>Переглянути більше</TextBody>
-            <ArrowIcon color={COLORS.text} direction="right" />
-          </Button>
         </BasicBlock>
       </BasicBlock>
     </>

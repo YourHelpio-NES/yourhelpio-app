@@ -48,9 +48,17 @@ const ProgressDot = styled.div<{ $status: QuestionStatusEnum; $isCurrent: boolea
   width: 16px;
   height: 16px;
   border-radius: 50%;
-  border: 2px solid ${({ $status }) => dotColors[$status]};
+  border: 2px solid
+    ${({ $status }) =>
+      QuestionStatusEnum.CORRECT === $status || QuestionStatusEnum.INCORRECT === $status
+        ? COLORS.status.info
+        : dotColors[$status]};
   background-color: ${({ $status, $isCurrent }) =>
-    $isCurrent ? dotColors[$status] : 'transparent'};
+    $isCurrent
+      ? 'transparent'
+      : QuestionStatusEnum.CORRECT === $status || QuestionStatusEnum.INCORRECT === $status
+        ? COLORS.status.info
+        : dotColors[$status]};
   transition: all 0.2s ease;
 `;
 

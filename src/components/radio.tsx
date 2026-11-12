@@ -48,6 +48,7 @@ const Radio = styled.div<{ $selected: boolean }>`
   justify-content: center;
   transition: border-color 0.15s;
   padding: 4px;
+  flex-shrink: 0;
 
   div {
     width: 100%;

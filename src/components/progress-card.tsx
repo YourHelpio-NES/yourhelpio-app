@@ -25,6 +25,13 @@ export default function ProgressCardItem({ item }: { item: CourseEntity }) {
     void load();
   }, [item.id, fetchCourse]);
 
+  const touchedTopics = details?.topics.filter((t) => t.current_score > 0);
+  const averageResult =
+    touchedTopics && touchedTopics.length > 0
+      ? Math.round(
+          touchedTopics!.reduce((sum, t) => sum + t.progress_pct, 0) / touchedTopics!.length
+        )
+      : 0;
   return (
     <ProgressCard>
       <span className="flex-nowrap align-items-start">
@@ -44,7 +51,12 @@ export default function ProgressCardItem({ item }: { item: CourseEntity }) {
       </span>
       <span>
         <SmallText>Прогрес:</SmallText>
-        <TextBody $label>{item.target_score}%</TextBody>
+        <TextBody
+          $color={getColorByPercentage(details?.certificate_progress.completion_pct ?? 0)}
+          $label
+        >
+          {details?.certificate_progress.completion_pct}%
+        </TextBody>
       </span>
       <span>
         <SmallText>Тем завершено:</SmallText>
@@ -55,12 +67,7 @@ export default function ProgressCardItem({ item }: { item: CourseEntity }) {
       </span>
       <span>
         <SmallText>Середній результат:</SmallText>
-        <TextBody
-          $label
-          $color={getColorByPercentage(details?.certificate_progress.completion_pct ?? 0)}
-        >
-          {details?.certificate_progress.completion_pct}%
-        </TextBody>
+        <TextBody $label>{averageResult}%</TextBody>
       </span>
     </ProgressCard>
   );

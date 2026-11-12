@@ -2,11 +2,7 @@ import styled, { css } from 'styled-components';
 import { BlocksElementIcon } from '../assets/images/icons/blocks-element-icon';
 import { DoneIcon } from '../assets/images/icons/done-icon';
 import { PasswordIcon } from '../assets/images/icons/password-icon';
-import {
-  DifficultyEnum,
-  difficultyTypeData,
-  type WeakTopic,
-} from '../assets/shared/constants/course';
+import { DifficultyEnum, difficultyTypeData } from '../assets/shared/constants/course';
 import { getColorByPercentage } from '../assets/shared/utils/color';
 import { COLORS } from '../assets/styles/colors';
 import { CardTitle, SmallText, TextBody } from '../assets/styles/typography';
@@ -17,9 +13,9 @@ import { StatusItem, StatusTypeItem } from './status-items';
 import { BREAKPOINTS, media } from '../assets/styles/breakpoints';
 import { AnimatePresence, motion } from 'framer-motion';
 import {
+  TopicDetailsStatusEnum,
   TopicMaterialEnum,
   type LearningOutcome,
-  type TopicDetailTeacher,
   type TopicMaterial,
 } from '../assets/shared/constants/details-course';
 import { StatusTopicButton } from './row-table-action';
@@ -29,8 +25,10 @@ import { CancelIcon } from '../assets/images/icons/cancel-icon';
 import type { CourseTopicProgress } from '../api/courses/details.types';
 import { StudyDayEnum, studyDayLabels } from '../assets/shared/constants/topicDays';
 import { useEffect } from 'react';
-import { useTopicDetailsStudent } from '../assets/shared/hooks/useTopicDetailsStudent';
+import { useTopicDetailsStudent } from '../assets/shared/hooks/useTopicDetails';
 import { useNavigate } from 'react-router-dom';
+import type { WeakTopicRow } from '../assets/shared/hooks/useTeacherWeakTopics';
+import type { TopicListItem } from '../api/courses/courses.types';
 
 export default function TopicDetailsContent({
   activeRow,
@@ -118,7 +116,7 @@ export function TopicTeacherLargeDetailsContent({
   clickNavigate,
   clickNavigateEdit,
 }: {
-  activeRow: TopicDetailTeacher;
+  activeRow: TopicListItem;
   clickNavigate: () => void;
   clickNavigateEdit: () => void;
 }) {
@@ -140,16 +138,28 @@ export function TopicTeacherLargeDetailsContent({
           <span className="d-flex w-100 gap-3 align-items-start justify-content-between">
             <span className="d-flex gap-2 align-items-start">
               <BlocksElementIcon size={28} />
-              <CardTitle>Тема «{activeRow.topicName}»</CardTitle>
+              <CardTitle>Тема «{activeRow.title}»</CardTitle>
             </span>
-            <StatusTopicButton status={activeRow.status} width="auto" />
+            <StatusTopicButton status={activeRow.status as TopicDetailsStatusEnum} width="auto" />
           </span>
-          <TextBlock>{activeRow.description}</TextBlock>
+          <TextBlock>{activeRow.passport?.summary ?? '–'}</TextBlock>
 
-          <ResultStudyingBlock
-            learningOutcomesArr={activeRow.learningOutcomes.map((item): string => item.text)}
-          />
-          <GeneralKeywords keywordsArr={activeRow.keyTerms} />
+          {!activeRow.passport ? (
+            <TextBody>Даних паспорту курсу немає</TextBody>
+          ) : (
+            <>
+              {!activeRow.passport.outcomes ? (
+                <TextBody>Даних результатів навчання немає</TextBody>
+              ) : (
+                <ResultStudyingBlock learningOutcomesArr={activeRow.passport.outcomes} />
+              )}
+              {!activeRow.passport.keywords ? (
+                <TextBody>Даних ключових слів немає</TextBody>
+              ) : (
+                <GeneralKeywords keywordsArr={activeRow.passport.keywords} />
+              )}
+            </>
+          )}
 
           <span className="d-flex w-100 gap-1 align-items-center">
             <Button
@@ -181,11 +191,19 @@ export function TopicTeacherLargeDetailsContent({
   );
 }
 
-export function TopicTeacherSmallDetailsContent({ activeRow }: { activeRow: WeakTopic }) {
+export function TopicTeacherSmallDetailsContent({
+  activeRow,
+  summary,
+}: {
+  activeRow: WeakTopicRow;
+  summary: string;
+}) {
+  const navigate = useNavigate();
+
   return (
     <AnimatePresence mode="wait">
       <motion.div
-        key={activeRow?.id}
+        key={activeRow.id}
         initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0, y: -12 }}
@@ -201,10 +219,10 @@ export function TopicTeacherSmallDetailsContent({ activeRow }: { activeRow: Weak
             <BlocksElementIcon size={28} />
             <CardTitle>Тема «{activeRow.title}»</CardTitle>
           </span>
-          <span className="w-100 d-flex align-items-center ">
+          <span className="w-100 d-flex align-items-center">
             <LabelValue label="% засвоєння:">
               <TextBody $medium $color={getColorByPercentage(activeRow.masteryPercent)}>
-                {activeRow.masteryPercent ?? '—'}%
+                {activeRow.masteryPercent}%
               </TextBody>
             </LabelValue>
             <Button
@@ -216,15 +234,23 @@ export function TopicTeacherSmallDetailsContent({ activeRow }: { activeRow: Weak
               $type={'small'}
             >
               <SmallText className="text-nowrap" $medium>
-                {activeRow.course}
+                {activeRow.courseTitle}
               </SmallText>
             </Button>
           </span>
           <LabelValue label="Кількість студентів:">
             <TextBody $medium>{activeRow.studentCount}</TextBody>
           </LabelValue>
-          <TextBlock>{activeRow.description}</TextBlock>
-          <Button $type="large" width="auto" $txtColor={COLORS.background} $brWidth={'1'}>
+          <TextBlock>{summary}</TextBlock>
+          <Button
+            $type="large"
+            width="auto"
+            $txtColor={COLORS.background}
+            $brWidth={'1'}
+            onClick={() =>
+              navigate(`/teacher/courses/${activeRow.courseId}/topics/${activeRow.id}`)
+            }
+          >
             <TextBody $medium>Перейти до теми</TextBody>
           </Button>
         </TableBlock>

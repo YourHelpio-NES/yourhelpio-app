@@ -59,6 +59,14 @@ export default function StudyPlanMainPage() {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
+  const touchedTopics = course?.topics.filter((t) => t.current_score > 0);
+  const averageResult =
+    touchedTopics && touchedTopics.length > 0
+      ? Math.round(
+          touchedTopics!.reduce((sum, t) => sum + t.progress_pct, 0) / touchedTopics!.length
+        )
+      : 0;
+
   const handleRowClick = (row: CourseTopicProgress) => {
     setActiveRowId(
       (course?.topics.find((x) => x.topic_id === row.topic_id) ?? course?.topics[0])?.topic_id
@@ -89,7 +97,7 @@ export default function StudyPlanMainPage() {
   if (!course) {
     return (
       <AppLayout>
-        <TextBody>курс не знайдено.</TextBody>
+        <TextBody>Курс не знайдено.</TextBody>
       </AppLayout>
     );
   }
@@ -149,6 +157,9 @@ export default function StudyPlanMainPage() {
         </LabelValue>
         <LabelValue label="Тривалість курсу:">
           <TextBody>{course?.certificate_progress.total_topics} тем</TextBody>
+        </LabelValue>
+        <LabelValue label="Середній результат:">
+          <TextBody>{averageResult}%</TextBody>
         </LabelValue>
       </BasicBlock>
 

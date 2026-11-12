@@ -56,18 +56,20 @@ export default function DashboardStudentPage() {
             </TextBody>
           </span>
           {todayItems.length === 0 ? (
-            <span className="d-flex flex-column align-items-center gap-2">
+            <span className="d-flex flex-column align-items-start gap-2">
               <TextBody $medium>На сьогодні завдань немає</TextBody>
-              <TextBody className="text-center">
+              <TextBody>
                 Продовжуйте вивчати нові теми – повторення з'являться автоматично.
               </TextBody>
             </span>
           ) : (
-            <SimpleTable
-              data={todayItems}
-              columns={tasksColumns}
-              isRowDisabled={(row) => row.is_overdue}
-            />
+            <span className="pe-3">
+              <SimpleTable
+                data={todayItems}
+                columns={tasksColumns}
+                isRowDisabled={(row) => row.is_overdue}
+              />
+            </span>
           )}
           <ButtonsRow>
             <Button
@@ -75,7 +77,13 @@ export default function DashboardStudentPage() {
               width=""
               $brColor={COLORS.accent}
               $brWidth={'2'}
-              onClick={() => navigate('/student/knowledge-tree')}
+              onClick={() =>
+                navigate(
+                  !todayItems[0]
+                    ? '/student/knowledge-tree'
+                    : `/student/study-session/studying?topicId=${todayItems[0].topic_id}`
+                )
+              }
             >
               <TextBody $medium>Почати навчання</TextBody>
             </Button>
@@ -87,7 +95,7 @@ export default function DashboardStudentPage() {
                 $txtColor={COLORS.secondary}
                 $brColor={COLORS.secondary}
                 $brWidth={'2'}
-                onClick={() => navigate('/student/knowledge-tree')}
+                onClick={() => navigate('/student/study-session')}
               >
                 <TextBody $medium>Показати більше</TextBody>
               </Button>
@@ -105,12 +113,22 @@ export default function DashboardStudentPage() {
 
           {reviewLoading && <TextBody>Завантаження...</TextBody>}
           {!reviewLoading && reviewItems.length === 0 && <TextBody>Все актуально</TextBody>}
-          <span className="d-flex flex-wrap gap-2">
+          <span
+            data-type="progress-cards"
+            className="d-flex flex-wrap gap-2 overflow-y-auto h-100 pe-2"
+          >
             {reviewItems.map((item, index) => (
-              <LineCard key={item.topic_id}>
+              <LineCard
+                key={item.topic_id}
+                onClick={() => navigate(`/student/study-session/studying?topicId=${item.topic_id}`)}
+              >
                 <StatusItem
                   $type={StatusTypeItem.CIRCLE}
-                  $color={Object.values(difficultyTypeData)[index].color}
+                  $color={
+                    Object.values(difficultyTypeData)[
+                      index % Object.values(difficultyTypeData).length
+                    ].color
+                  }
                 />
                 <span>
                   <TextBody $color={COLORS.text}>{item.topic_title}</TextBody>
@@ -126,7 +144,9 @@ export default function DashboardStudentPage() {
             width="auto"
             $brColor={COLORS.accent}
             $brWidth={'2'}
-            onClick={() => navigate('/student/knowledge-tree')}
+            onClick={() =>
+              navigate(`/student/study-session/studying?topicId=${reviewItems[0].topic_id}`)
+            }
           >
             <TextBody $medium>Почати повторення</TextBody>
           </Button>
@@ -181,7 +201,6 @@ export default function DashboardStudentPage() {
                     </TextBody>
                     <TextBody $medium>"{card.topic_title}"</TextBody>
                   </span>
-                  <TextBody>({card.course_title})</TextBody>
                   <Button
                     $type="small"
                     width="auto"
@@ -233,6 +252,10 @@ const LineCard = styled.div`
   ${basicShadow};
   border-radius: 12px;
   background-color: ${COLORS.lighterBg};
+
+  &:hover {
+    cursor: pointer;
+  }
 
   ${actionEffect};
 

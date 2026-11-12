@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { TextBody } from '../assets/styles/typography';
 import { COLORS } from '../assets/styles/colors';
 import type { CourseProgressResponse } from '../api/courses/details.types';
-import { useTopicDetailsStudent } from '../assets/shared/hooks/useTopicDetailsStudent';
+import { useTopicDetailsStudent } from '../assets/shared/hooks/useTopicDetails';
 
 const RootLabel = styled(TextBody)`
   color: ${COLORS.text};

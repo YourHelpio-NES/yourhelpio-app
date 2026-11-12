@@ -21,3 +21,9 @@ export interface WeakTopic {
   studentCount: number;
   description: string;
 }
+
+export interface WeakTopicTeacher {
+  topicId: number;
+  title: string;
+  avgProgress: number;
+}

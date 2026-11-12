@@ -164,6 +164,9 @@ const RadioBlock = styled.div`
   flex-direction: column;
   gap: 12px;
   margin-top: 8px;
+  div {
+    align-items: flex-start !important;
+  }
 `;
 
 export const QuestionCardBlock = styled(BasicBlock)`

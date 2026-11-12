@@ -15,7 +15,7 @@ import { SparklesIcon } from '../../../assets/images/icons/sparkles-icon';
 import { Button } from '../../../components/button';
 import { BREAKPOINTS, media } from '../../../assets/styles/breakpoints';
 import { LinkTitle } from '../../../components/title-section';
-import { useTopicDetailsStudent } from '../../../assets/shared/hooks/useTopicDetailsStudent';
+import { useTopicDetailsStudent } from '../../../assets/shared/hooks/useTopicDetails';
 import { useEffect } from 'react';
 import { useCourseDetailsStudent } from '../../../assets/shared/hooks/useCourseDetailsStudent';
 import { useLearningStages } from '../../../assets/shared/hooks/useLearningStages';
@@ -139,6 +139,7 @@ export default function TopicsDetailsStudentPage() {
                   const icon = getFileIconByText(f.file_path);
                   return (
                     <FileTop
+                      key={f.id}
                       style={{
                         border: `1px solid ${COLORS.boxShadow}`,
                         padding: '8px',

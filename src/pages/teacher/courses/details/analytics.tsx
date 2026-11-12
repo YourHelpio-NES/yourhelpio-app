@@ -9,94 +9,82 @@ import { StudentStatusButton } from '../../../../components/row-table-action';
 import { StudentStatusEnum } from '../../../../assets/shared/constants/student';
 import { SimpleTable } from '../../../../components/table';
 import { topicsProblemTeacherTableCol } from '../../../../assets/shared/utils/table/topics-table-column';
-import { topicProblemMockData } from '../../../../assets/shared/data/topic-students';
+import { useTeacherDashboard } from '../../../../assets/shared/hooks/useTeacherDashboard';
+import { useStudentStatusBuckets } from '../../../../assets/shared/hooks/useStudentStatusBuckets';
+import { useParams } from 'react-router-dom';
 
 export default function AnalyticsDetailsCourseTab() {
+  const { courseId } = useParams<{ courseId: string }>();
+  const id = Number(courseId);
+
+  const { data, averageGrade, weakestTopics } = useTeacherDashboard(id);
+  const buckets = useStudentStatusBuckets(data?.heatmap ?? []);
+
   return (
     <>
       <BasicBlock
         $direction={'row'}
         $gap={16}
-        className="align-items-start justify-content-between flex-lg-row flex-sm-column flex-column"
+        className="align-items-start justify-content-between"
         $bgColor={COLORS.lighterBg}
       >
-        <span className="d-flex flex-column gap-md-2 gap-2 align-items-start">
+        <span className="d-flex flex-column gap-2 align-items-start">
           <CardTitle>Аналітика курсу</CardTitle>
           <TextBody>Огляд прогресу студентів та ефективності навчання</TextBody>
-          <span className="d-flex flex-column mt-3 gap-md-2 gap-2 align-items-start">
-            <TextBody $label>Загальна статистика</TextBody>
-            <TextBody>Ключові показники навчання по курсу</TextBody>
-          </span>
         </span>
         <TableBlock
           width={'30%'}
-          style={{ maxHeight: '100%' }}
-          className="h-100"
           $gap={16}
           $bgColor={COLORS.lighterBg}
-          $brColor={COLORS.secondary}
           $titleColor={COLORS.primary}
         >
           <span className="d-flex gap-1 align-items-center">
             <img src={graphIcon} alt="graph-grow-icon" width={28} height={28} />
             <TextBody $medium>Середній прогрес</TextBody>
             <CardTitle className="ms-auto" style={{ color: COLORS.primary }}>
-              68%
+              {averageGrade}%
             </CardTitle>
           </span>
-          <ProgressBar value={68} deltaPositive={true} showPercent={false} />
+          <ProgressBar value={averageGrade} showPercent={false} />
         </TableBlock>
       </BasicBlock>
-      <BasicBlock $gap={12} className="flex-wrap" $bgColor={'transparent'} $direction={'row'}>
-        <CourseCard className="gap-2 justify-content-start border">
-          <span className="d-flex justify-content-between">
-            <StudentStatusButton status={StudentStatusEnum.IN_PROGRESS} width="auto" />
-            <TextBody $medium>50%</TextBody>
-          </span>
-          <TextBody>Студенти, які активно проходять курс</TextBody>
-        </CourseCard>
-        <CourseCard className="gap-2 justify-content-start border">
-          <span className="d-flex justify-content-between">
-            <StudentStatusButton status={StudentStatusEnum.COMPLETED} width="auto" />
-            <TextBody $medium>30%</TextBody>
-          </span>
-          <TextBody>Частка студентів, які повністю завершили курс</TextBody>
-        </CourseCard>
-        <CourseCard className="gap-2 justify-content-start border">
-          <span className="d-flex justify-content-between">
-            <StudentStatusButton status={StudentStatusEnum.NOT_ASSIGNED} width="auto" />
-            <TextBody $medium>2%</TextBody>
-          </span>
-          <TextBody>Студенти, які не приєднались до курсу</TextBody>
-        </CourseCard>
-        <CourseCard className="gap-2 justify-content-start border">
-          <span className="d-flex justify-content-between">
-            <StudentStatusButton status={StudentStatusEnum.NOT_STARTED} width="auto" />
-            <TextBody $medium>28%</TextBody>
-          </span>
-          <TextBody>Студенти без активності або з низьким рівнем засвоєння</TextBody>
-        </CourseCard>
-      </BasicBlock>
-      <BasicBlock $gap={12} className="flex-wrap" $bgColor={'transparent'} $direction={'row'}>
-        <span className="d-flex flex-column gap-md-2 gap-2 align-items-start">
-          <TextBody $label>Теми, що потребують уваги</TextBody>
-          <TextBody>Теми з найнижчим рівнем засвоєння серед студентів</TextBody>
-        </span>
 
-        <BasicBlock
-          $gap={16}
-          className="align-items-end flex-lg-nowrap flex-md-wrap flex-wrap"
-          $bgColor={'transparent'}
-          $direction={'row'}
-        >
-          <SimpleTable
-            data={topicProblemMockData}
-            columns={topicsProblemTeacherTableCol}
-            showHeader={true}
-            getRowId={(row) => row.id}
-          />
-          <TextBody>Рівень засвоєння показує, наскільки успішно студенти опанували тему</TextBody>
+      {buckets && (
+        <BasicBlock $gap={12} className="flex-wrap" $bgColor="transparent" $direction={'row'}>
+          <CourseCard className="gap-2 justify-content-start border">
+            <span className="d-flex justify-content-between">
+              <StudentStatusButton status={StudentStatusEnum.IN_PROGRESS} width="auto" />
+              <TextBody $medium>{buckets.inProgressPct}%</TextBody>
+            </span>
+            <TextBody>Студенти, які активно проходять курс</TextBody>
+          </CourseCard>
+          <CourseCard className="gap-2 justify-content-start border">
+            <span className="d-flex justify-content-between">
+              <StudentStatusButton status={StudentStatusEnum.COMPLETED} width="auto" />
+              <TextBody $medium>{buckets.completedPct}%</TextBody>
+            </span>
+            <TextBody>Частка студентів, які повністю завершили курс</TextBody>
+          </CourseCard>
+          <CourseCard className="gap-2 justify-content-start border">
+            <span className="d-flex justify-content-between">
+              <StudentStatusButton status={StudentStatusEnum.NOT_STARTED} width="auto" />
+              <TextBody $medium>{buckets.notStartedPct}%</TextBody>
+            </span>
+            <TextBody>Студенти без активності</TextBody>
+          </CourseCard>
         </BasicBlock>
+      )}
+
+      <BasicBlock $gap={12} $bgColor="transparent" $direction={'row'}>
+        <span className="d-flex flex-column gap-2 align-items-start">
+          <TextBody $label>Теми, що потребують уваги</TextBody>
+        </span>
+        <SimpleTable
+          data={weakestTopics.slice(0, 5)}
+          columns={topicsProblemTeacherTableCol}
+          showHeader
+          getRowId={(row) => row.topicId}
+        />
       </BasicBlock>
     </>
   );

@@ -3,9 +3,7 @@ import TopicTree from '../../components/curriculum-tree';
 import AppLayout from '../../components/widgets/app/layout';
 import { BREAKPOINTS } from '../../assets/styles/breakpoints';
 import { MobileTopicTree } from '../../components/curriculum-tree-mobile';
-import { TableBlock } from './dashboard';
-import { COLORS } from '../../assets/styles/colors';
-import { CardTitle, TextBody } from '../../assets/styles/typography';
+import { TextBody } from '../../assets/styles/typography';
 import { Controller } from 'react-hook-form';
 import { useFilterForm } from '../../assets/shared/hooks/validators/useFilterDropdown';
 import { Select } from '../../components/dropdown';
@@ -137,11 +135,11 @@ export default function CurriculumTreeMainPage() {
           />
         )
       )}
-      <TableBlock $bgColor={COLORS.lighterBg} $titleColor={COLORS.primary} $gap={24}>
+      {/* <TableBlock $bgColor={COLORS.lighterBg} $titleColor={COLORS.primary} $gap={24}>
         <CardTitle>Аналіз проблемних результатів навчання</CardTitle>
 
-        {/* <SimpleTable data={tasks} columns={taskTableCols} isRowDisabled={(row) => row.completed} /> */}
-      </TableBlock>
+      </TableBlock> */}
+      {/* <SimpleTable data={tasks} columns={taskTableCols} isRowDisabled={(row) => row.completed} /> */}
     </AppLayout>
   );
 }

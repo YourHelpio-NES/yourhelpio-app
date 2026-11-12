@@ -178,7 +178,7 @@ export const StatusTopicButton = ({
       ? COLORS.status.success
       : status === TopicDetailsStatusEnum.DONE
         ? COLORS.status.info
-        : status === TopicDetailsStatusEnum.IN_PROGRESS
+        : status === TopicDetailsStatusEnum.PROCESSING
           ? COLORS.status.warning
           : status === TopicDetailsStatusEnum.NO_MATERIALS && COLORS.secondary;
   return (

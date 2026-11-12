@@ -10,7 +10,7 @@ import { getColorByPercentage } from '../../../assets/shared/utils/color';
 import { DoneIcon } from '../../../assets/images/icons/done-icon';
 import { BasicBlock, basicShadow } from '../../../components/blocks';
 import { CancelIcon } from '../../../assets/images/icons/cancel-icon';
-import ErrorItem from '../../../components/error-result-item';
+import ErrorItem, { ErrorItemWrapper } from '../../../components/error-result-item';
 import { BREAKPOINTS, media } from '../../../assets/styles/breakpoints';
 import { buildSessionStats } from '../../../assets/shared/utils/mapTaskToQuestion';
 import type {
@@ -22,16 +22,19 @@ import { useLearningStages } from '../../../assets/shared/hooks/useLearningStage
 import { StudyStatusEnum } from '../../../api/courses/learning-stages.types';
 import { StageCard, StageInfo } from '../topics/details';
 import { useEffect, useRef, useState } from 'react';
+import { StudyTypeEnumCode } from '../../../assets/shared/constants/topicDays';
+import { useTopicDetailsStudent } from '../../../assets/shared/hooks/useTopicDetails';
 
 interface LocationState {
   answers: QuestionAnswer[];
   progress: StudentProgressResponse | null;
+  topicId: number;
 }
 
 export default function StudyingResult() {
   const location = useLocation();
   const state = location.state as LocationState | null;
-
+  const { topic, isLoading: topicLoader, fetchTopic } = useTopicDetailsStudent();
   const stages = useLearningStages({
     currentStage: state?.progress?.stage ?? 0,
     inRemediation: state?.progress?.in_remediation ?? false,
@@ -44,6 +47,7 @@ export default function StudyingResult() {
     if (!questionCardRef.current) return;
 
     const observer = new ResizeObserver(() => {
+      console.log(questionCardRef);
       if (questionCardRef.current) {
         setMatchedHeight(questionCardRef.current.offsetHeight);
       }
@@ -52,6 +56,12 @@ export default function StudyingResult() {
     observer.observe(questionCardRef.current);
     return () => observer.disconnect();
   }, []);
+
+  useEffect(() => {
+    if (state?.topicId) {
+      void fetchTopic(Number(state?.topicId));
+    }
+  }, [state?.topicId, fetchTopic]);
 
   if (!state?.answers) {
     return <Navigate to="/student/dashboard" replace />;
@@ -64,8 +74,12 @@ export default function StudyingResult() {
     stages.find((s) => s.status === StudyStatusEnum.IN_PROGRESS);
 
   return (
-    <AppLayout>
-      <LinkTitle firstTitle={'Тема'} secondTitle={'Результати сесії'} />
+    <AppLayout loadingState={topicLoader}>
+      <LinkTitle
+        firstTitle={'Результати сесії'}
+        secondTitle={`Тема «${topic?.title}»`}
+        linkTo={`/student/study-plan?course=${topic?.course_id}`}
+      />
       <BodyTable className="gap-md-4 gap-3" $gap={24}>
         <QuestionCardBlock ref={questionCardRef} className="flex-grow-1" $gap={24}>
           <CardTitle>Сесію завершено!</CardTitle>
@@ -104,7 +118,7 @@ export default function StudyingResult() {
                 <span>
                   <TextBody>{nextStage.module}</TextBody>
                   <TextBody>—</TextBody>
-                  <TextBody $medium>{nextStage.type}</TextBody>
+                  <TextBody $medium>{StudyTypeEnumCode[nextStage.type]}</TextBody>
                 </span>
               </StageInfo>
             </StageCard>
@@ -114,7 +128,7 @@ export default function StudyingResult() {
         {stats.errors.length > 0 && (
           <ErrorsBlock
             $bgColor={COLORS.lighterBg}
-            style={{ height: matchedHeight, paddingRight: '8px' }}
+            style={{ height: matchedHeight ?? 372, paddingRight: '8px' }}
           >
             <span className="d-flex gap-2 align-items-end">
               <CancelIcon color={COLORS.status.error} />
@@ -165,17 +179,22 @@ export const ErrorsBlock = styled(BasicBlock)<{ $titleColor?: string }>`
     width: 100%;
 
     div[data-class='error-items'] {
-      flex-direction: row;
-      flex-wrap: wrap;
-      flex: 1 0 45%;
+      flex-direction: column;
+      flex-wrap: nowrap;
+      flex: 1 0 100%;
       padding: 8px;
+
+      ${ErrorItemWrapper} {
+        max-width: 100%;
+        border-bottom: 1px solid ${COLORS.primaryShadow};
+      }
     }
   }
 
   @media (max-width: 815px) {
     div[data-class='error-items'] {
       flex-direction: column;
-      flex-wrap: wrap;
+      flex-wrap: nowrap;
       flex: 1 0 100%;
       padding: 8px;
     }

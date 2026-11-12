@@ -14,7 +14,7 @@ export const detailsTabs = [
 
 export enum TopicDetailsStatusEnum {
   APPROVED = 'Схвалено',
-  IN_PROGRESS = 'В обробці',
+  PROCESSING = 'В обробці',
   DONE = 'Готово',
   NO_MATERIALS = 'Немає матеріалів',
 }

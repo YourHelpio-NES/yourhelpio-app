@@ -7,7 +7,6 @@ import {
   useDismiss,
   useFloating,
   useInteractions,
-  useTransitionStyles,
 } from '@floating-ui/react';
 import { useState } from 'react';
 import styled from 'styled-components';
@@ -18,6 +17,7 @@ import { SmallText, TextBody } from '../assets/styles/typography';
 import { basicShadow } from './blocks';
 import { ExitIcon } from '../assets/images/icons/exit-icon';
 import { Divider } from '../pages/notification';
+import { motion } from 'framer-motion';
 
 interface User {
   firstName: string;
@@ -31,7 +31,7 @@ interface UserProfileDropdownProps {
   onLogout: () => void;
 }
 
-const DropdownCard = styled.div<{ $visible: boolean }>`
+const DropdownCard = styled.div`
   max-width: 280px;
   background: ${COLORS.lighterBg};
   border: 0.5px solid ${COLORS.boxShadow};
@@ -43,14 +43,13 @@ const DropdownCard = styled.div<{ $visible: boolean }>`
   align-items: flex-start;
   gap: 8px;
   z-index: 200;
-  transition:
-    opacity 0.15s ease,
-    transform 0.15s ease;
 
   ${Button} {
     margin-left: auto;
   }
 `;
+
+const MotionDropdownCard = motion(DropdownCard);
 
 export const UserProfileDropdown = ({ user, onLogout }: UserProfileDropdownProps) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -59,10 +58,9 @@ export const UserProfileDropdown = ({ user, onLogout }: UserProfileDropdownProps
     open: isOpen,
     onOpenChange: setIsOpen,
     middleware: [offset(16), flip(), shift({ padding: 8 })],
+    transform: false,
     placement: 'bottom-end',
   });
-
-  const { styles } = useTransitionStyles(context);
 
   const click = useClick(context);
   const dismiss = useDismiss(context);
@@ -88,46 +86,49 @@ export const UserProfileDropdown = ({ user, onLogout }: UserProfileDropdownProps
         </TextBody>
       </Button>
 
-      {isOpen && (
-        <FloatingPortal>
-          <DropdownCard
-            // eslint-disable-next-line react-hooks/refs
-            ref={refs.setFloating}
-            style={{
-              ...floatingStyles,
-              ...styles,
+      <FloatingPortal>
+        <MotionDropdownCard
+          // eslint-disable-next-line react-hooks/refs
+          ref={refs.setFloating}
+          style={{
+            ...floatingStyles,
+            pointerEvents: isOpen ? 'auto' : 'none',
+          }}
+          {...getFloatingProps()}
+          initial={false}
+          animate={{
+            opacity: isOpen ? 1 : 0,
+            y: isOpen ? 0 : -6,
+          }}
+          transition={{
+            duration: 0.18,
+            ease: 'easeOut',
+          }}
+        >
+          <SmallText>Профіль:</SmallText>
+          <TextBody $label $color={COLORS.text}>
+            {user.fullName}
+          </TextBody>
+          <TextBody $medium $color={COLORS.secondary}>
+            {user.email}
+          </TextBody>
+          <SmallText>{user.role}</SmallText>
 
-              opacity: isPositioned ? 1 : 0,
-              visibility: isPositioned ? 'visible' : 'hidden',
-            }}
-            $visible={isPositioned}
-            {...getFloatingProps()}
+          <Divider />
+
+          <Button
+            $type="small"
+            $brColor={COLORS.primary}
+            $bgColor={COLORS.primary}
+            $txtColor={COLORS.lighterBg}
+            $iconSize={18}
+            onClick={onLogout}
           >
-            <SmallText>Профіль:</SmallText>
-            <TextBody $label $color={COLORS.text}>
-              {user.fullName}
-            </TextBody>
-            <TextBody $medium $color={COLORS.secondary}>
-              {user.email}
-            </TextBody>
-            <SmallText>{user.role}</SmallText>
-
-            <Divider />
-
-            <Button
-              $type="small"
-              $brColor={COLORS.primary}
-              $bgColor={COLORS.primary}
-              $txtColor={COLORS.lighterBg}
-              $iconSize={18}
-              onClick={onLogout}
-            >
-              <ExitIcon color={COLORS.background} size={16} />
-              <SmallText>Вихід</SmallText>
-            </Button>
-          </DropdownCard>
-        </FloatingPortal>
-      )}
+            <ExitIcon color={COLORS.background} size={16} />
+            <SmallText>Вихід</SmallText>
+          </Button>
+        </MotionDropdownCard>
+      </FloatingPortal>
     </>
   );
 };
